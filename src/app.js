@@ -18,7 +18,7 @@ Object.assign(ACTIONS, FlashcardActions.ACTIONS, QuestionActions.ACTIONS, BoardE
 import { brand, TAGLINE } from "./core/branding.js";
 import { nativeTheme } from "./core/native.js";
 import {
-  account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess,
+  account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess, signOutAccount,
 } from "./core/account.js";
 import { isPaidRoute } from "./ui/app-router.js";
 import { recoverPurchase } from "./core/entitlement.js";
@@ -161,7 +161,13 @@ async function main() {
     // A captured payment whose activation was interrupted (expired session,
     // closed tab) finishes here without asking the student to pay again.
     if (isSignedIn() && account.ready && !hasPaidAccess()) {
-      recoverPurchase().then((recovered) => {
+      recoverPurchase().then(async (recovered) => {
+        if (recovered === "auth") {
+          toast("Your session expired. Sign in again to finish activating your payment.", "warn");
+          try { await signOutAccount(); } catch { /* cleared locally regardless */ }
+          location.hash = "#/login";
+          return;
+        }
         if (recovered) {
           toast("Found your payment — full access restored ✓", "ok");
           renderRoute("account");

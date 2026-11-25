@@ -60,7 +60,9 @@ export async function onRequestPost({ request, env }) {
   const userRes = await fetch(`${base}/auth/v1/user`, {
     headers: { apikey: supabaseAnonKey, Authorization: `Bearer ${token}` },
   });
-  if (userRes.status === 401) {
+  // Supabase Auth answers 401 for an expired token and 403 (`bad_jwt`) for an
+  // unreadable one. Both mean "sign in again", not "the server is broken".
+  if (userRes.status === 401 || userRes.status === 403) {
     return json({ error: "Your sign-in expired. Sign in again, then restore your purchase.", authRequired: true }, 401);
   }
   if (!userRes.ok) return json({ error: "Could not read your account. Try again." }, 502);

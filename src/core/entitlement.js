@@ -135,7 +135,9 @@ export async function retryPendingPayment() {
   try {
     await activatePaidAccess(payment);
     return true;
-  } catch {
+  } catch (err) {
+    // A dead session must reach the caller so it can ask for a fresh sign-in.
+    if (err instanceof PaymentAuthError) throw err;
     return false;
   }
 }
@@ -182,6 +184,9 @@ export async function recoverPurchase() {
   try {
     if (await retryPendingPayment()) return true;
     return await autoClaimOnce();
+  } catch (err) {
+    if (err instanceof PaymentAuthError) return "auth";
+    return false;
   } finally {
     recovering = false;
   }
@@ -212,6 +217,7 @@ export async function autoClaimOnce() {
     if (err?.status !== 404) {
       try { store?.removeItem(key); } catch { /* private mode */ }
     }
+    if (err instanceof PaymentAuthError) throw err;
     return false;
   }
 }

@@ -69,10 +69,13 @@ export async function grantPaidAccess({ env, token, uid, email }) {
   const updated = await patch();
   if (!updated.ok) {
     const detail = await updated.text().catch(() => "");
+    const authRequired =
+      updated.status === 401 ||
+      (updated.status === 403 && /jwt|token|pgrst30/i.test(detail));
     return {
       paid: false,
       status: updated.status,
-      authRequired: updated.status === 401,
+      authRequired,
       error: `Could not activate access (HTTP ${updated.status})${detail ? `: ${snippet(detail)}` : ""}.`,
     };
   }
