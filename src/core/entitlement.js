@@ -31,9 +31,21 @@ function storage() {
   try { return globalThis.localStorage || null; } catch { return null; }
 }
 
-/** Keep the verified-payment details until the grant actually sticks. */
+function currentUid() {
+  return account.profile?.id || account.session?.user?.id || null;
+}
+
+/**
+ * Keep the verified-payment details until the grant actually sticks.
+ *
+ * The account id is stored alongside the payment. Two students can share a
+ * browser, and a payment must never be applied to whichever account signs in
+ * next — only to the account that paid.
+ */
 export function rememberPendingPayment(payment) {
-  try { storage()?.setItem(PENDING_KEY, JSON.stringify(payment)); } catch { /* private mode */ }
+  try {
+    storage()?.setItem(PENDING_KEY, JSON.stringify({ ...payment, uid: currentUid() }));
+  } catch { /* private mode */ }
 }
 
 export function pendingPayment() {
@@ -132,6 +144,12 @@ export async function activatePaidAccess({ paymentId, orderId, signature }) {
 export async function retryPendingPayment() {
   const payment = pendingPayment();
   if (!payment || !isSignedIn()) return false;
+  // A payment remembered on this browser belongs to the account that made it.
+  // If someone else is signed in now, drop it instead of granting them access.
+  if (payment.uid && currentUid() && payment.uid !== currentUid()) {
+    forgetPendingPayment();
+    return false;
+  }
   try {
     await activatePaidAccess(payment);
     return true;
