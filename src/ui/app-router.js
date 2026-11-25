@@ -39,7 +39,8 @@ export function parseHash() {
  * · free user on any route      → allowed (paid tabs are locked by the overlay
  *                                in renderRoute, not by a forced redirect)
  *
- * Returning the same name means "allowed"; null means "allowed with no change".
+ * Returning the same name means "allowed, no change"; a different string
+ * means "redirect to that route"; "loading" means "show the loading state".
  *
  * No one is forced through set-username or subject selection before they can
  * see the app. Those steps stay reachable from Settings / Account whenever the
@@ -48,7 +49,7 @@ export function parseHash() {
 export function gateTarget(name) {
   if (!account.ready) return "loading";
   if (account.loadError && isSignedIn()) return "loading";
-  if (!isSignedIn()) return PUBLIC_ROUTES.has(name) ? null : "welcome";
+  if (!isSignedIn()) return PUBLIC_ROUTES.has(name) ? name : "welcome";
 
   // A signed-in student never stays on the sign-in or sign-up page.
   if (name === "login" || name === "signup") {
@@ -56,7 +57,7 @@ export function gateTarget(name) {
   }
   // Every signed-in user can access any route. Paid-content gating is handled
   // by the lock overlay in renderRoute — not by blocking the route here.
-  return null;
+  return name;
 }
 
 /** True when the route shows paid study content that should be locked for free users. */
