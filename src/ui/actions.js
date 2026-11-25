@@ -15,7 +15,8 @@ import {
 } from "../core/reminders.js";
 import { buildShareCard, shareCardKinds } from "../core/shareCard.js";
 import { renderCardPng, renderCardGif } from "./shareRender.js";
-import { ONBOARDING_STEPS, readProfileStep } from "./onboarding.js";
+import { onboardingSteps, readProfileStep } from "./onboarding.js";
+import { startCheckout } from "./checkout.js";
 import {
   signUpAccount, signInAccount, signOutAccount, createProfile,
   hasProfile, initAccount, setPendingEmail, clearPendingEmail,
@@ -408,7 +409,9 @@ export const ACTIONS = {
   },
   /* welcome tour (shown once, for a brand-new install) */
   "onb-next": (el, ctx) => {
-    if ((Number(ctx.ui.onbStep) || 0) === 0) {
+    const steps = onboardingSteps();
+    const cur = Number(ctx.ui.onbStep) || 0;
+    if (cur === 0) {
       const s = store.state.settings;
       const sel = currentSelection(store);
       ctx.ui._onb = {
@@ -421,7 +424,9 @@ export const ACTIONS = {
           : [...CORE_SUBJECT_IDS],
       };
     }
-    ctx.ui.onbStep = Math.min(ONBOARDING_STEPS - 1, (Number(ctx.ui.onbStep) || 0) + 1);
+    // Past the last stage, "next" means finish (the unlock stage can be skipped).
+    if (cur >= steps.length - 1) return ACTIONS["onb-finish"](el, ctx);
+    ctx.ui.onbStep = cur + 1;
     ctx.rerender();
   },
   "onb-back": (el, ctx) => {
@@ -437,6 +442,25 @@ export const ACTIONS = {
     await store.setProfile({ onboarded: true });
     ctx.toast("You're all set. Go get that streak. 🔥", "ok");
     ctx.navigate("#/dashboard");
+  },
+  "onb-upgrade": async (el, ctx) => {
+    const prev = el.textContent;
+    el.disabled = true;
+    el.textContent = "Opening checkout…";
+    try {
+      await startCheckout({
+        receipt: "padhle-onboarding",
+        onPaid: async () => {
+          await store.setProfile({ onboarded: true });
+          ctx.navigate("#/dashboard");
+        },
+      });
+    } catch (err) {
+      ctx.toast(err?.message || "Could not start the payment.", "err");
+    } finally {
+      el.disabled = false;
+      el.textContent = prev;
+    }
   },
 
   "reload": () => location.reload(),  "theme-toggle": async (el, ctx) => {

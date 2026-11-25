@@ -10,11 +10,19 @@ import { esc } from "./dom.js";
 import { subjectMark } from "./components.js";
 import { todayISO } from "../core/dates.js";
 import { brand, TAGLINE } from "../core/branding.js";
-import { account, isSignedIn, accountEmail } from "../core/account.js";
+import { account, isSignedIn, accountEmail, hasPaidAccess } from "../core/account.js";
+import { config } from "../core/config.js";
 import { ALL_SUBJECT_IDS, CORE_SUBJECT_IDS, SUBJECT_MIN } from "../core/subjects.js";
 import { currentSelection } from "./selection.js";
 
+/** The four base stages, plus a final unlock stage for signed-in free students. */
 export const ONBOARDING_STEPS = 4;
+
+export function onboardingSteps() {
+  const steps = ["welcome", "profile", "subjects", "account"];
+  if (isSignedIn() && !hasPaidAccess()) steps.push("upgrade");
+  return steps;
+}
 
 export const AVATARS = ["🦉", "🐯", "🦊", "🐼", "🐧", "🚀", "⚡", "🌟", "📚", "🎯", "🧠", "🔥"];
 
@@ -61,7 +69,7 @@ function stepProfile(ui) {
   const s = ui._onb || {};
   const avatar = s.avatar || "🦉";
   return `<div class="onb-stage" data-stage="profile">
-    <div class="onb-step">Step 2 of ${ONBOARDING_STEPS}</div>
+    <div class="onb-step">Step 2 of ${onboardingSteps().length}</div>
     <h1 class="onb-title">Make it yours, <span class="onb-accent">${esc(s.displayName || "friend")}</span>.</h1>
     <p class="onb-lead">These power your streak, level and share cards. You can change any of it later.</p>
     <form data-form="onboarding" class="onb-form" novalidate>
@@ -112,7 +120,7 @@ function stepSubjects(ctx) {
   const chosen = new Set(ctx.ui._onb?.subjects ?? savedSubjects ?? CORE_SUBJECT_IDS);
   const rows = ALL_SUBJECT_IDS.map((id) => subjectRow(ctx.store, id, { checked: chosen.has(id) })).join("");
   return `<div class="onb-stage" data-stage="subjects">
-    <div class="onb-step">Step 3 of ${ONBOARDING_STEPS}</div>
+    <div class="onb-step">Step 3 of ${onboardingSteps().length}</div>
     <h1 class="onb-title">Which subjects <span class="onb-accent">are you studying?</span></h1>
     <p class="onb-lead">Choose any subjects you want from the eleven below. There are no compulsory or elective groups — pick at least ${SUBJECT_MIN} and change it any time in Settings.</p>
     <form data-form="onboarding-subjects" class="onb-form" novalidate>
@@ -136,10 +144,15 @@ function stepSubjects(ctx) {
 }
 
 function stepAccount(ctx) {
+  // When the unlock stage follows, this step continues into it; otherwise it
+  // is the last step and starts studying straight away.
+  const hasUpgrade = onboardingSteps().includes("upgrade");
+  const nextAct = hasUpgrade ? "onb-next" : "onb-finish";
+  const nextLabel = hasUpgrade ? "Continue" : "Start studying";
   if (isSignedIn()) {
     const username = account.profile?.username ? `@${account.profile.username}` : "your account";
     return `<div class="onb-stage" data-stage="account">
-      <div class="onb-step">Step 4 of ${ONBOARDING_STEPS}</div>
+      <div class="onb-step">Step 4 of ${onboardingSteps().length}</div>
       <h1 class="onb-title">You're signed in, <span class="onb-accent">${esc(username)}</span>.</h1>
       <p class="onb-lead">Your username, avatar, subjects and every study record — planner tasks, ticks, sessions, notes — are saved to your account. Sign in on any device and your workspace is exactly as you left it.</p>
       <div class="onb-account-card">
@@ -148,37 +161,82 @@ function stepAccount(ctx) {
       </div>
       <div class="onb-actions">
         <button type="button" class="btn" data-act="onb-back">← Back</button>
-        <button type="button" class="btn primary onb-big" data-act="onb-finish">Start studying <span aria-hidden="true">→</span></button>
+        <button type="button" class="btn primary onb-big" data-act="${nextAct}">${nextLabel} <span aria-hidden="true">→</span></button>
       </div>
       <p class="xs faint">Manage your profile and subjects any time from Settings.</p>
     </div>`;
   }
   // Signed out — the account step is a prompt, not a blocker.
   return `<div class="onb-stage" data-stage="account">
-    <div class="onb-step">Step 4 of ${ONBOARDING_STEPS}</div>
+    <div class="onb-step">Step 4 of ${onboardingSteps().length}</div>
     <h1 class="onb-title">Study solo, <span class="onb-accent">or sign in later.</span></h1>
     <p class="onb-lead">An account syncs your subjects, theme, preferences and all your study records across devices — planner tasks, ticks, sessions and notes included. You can sign in any time from Settings.</p>
     <div class="onb-actions">
       <button type="button" class="btn" data-act="onb-back">← Back</button>
-      <button type="button" class="btn primary onb-big" data-act="onb-finish">Start studying <span aria-hidden="true">→</span></button>
+      <button type="button" class="btn primary onb-big" data-act="${nextAct}">${nextLabel} <span aria-hidden="true">→</span></button>
     </div>
     <p class="xs faint">Sign in from Settings to sync your subjects and progress.</p>
   </div>`;
 }
 
-// The last step is only about accounts; "Finish" stays true in signed-in and
-// signed-out modes alike.
-const STEP_LABELS = ["Welcome", "Profile", "Subjects", "Finish"];
+const UNLOCK_POINTS = [
+  ["▤", "Whole syllabus", "every chapter and topic, ticked off"],
+  ["◷", "Timed sessions", "focus minutes that actually add up"],
+  ["↻", "Revision ladder", "+1 · +3 · +7 · +21 · +45 day passes"],
+  ["▦", "60-day planner", "a ready-made daily plan"],
+  ["🃏", "Flashcards", "spaced repetition per chapter"],
+  ["✎", "Doubts & notes", "one place for every question"],
+  ["▥", "PYQ insights", "what past papers really asked"],
+  ["✦", "XP, streaks & badges", "momentum you can see"],
+];
+
+function stepUpgrade() {
+  const total = onboardingSteps().length;
+  const configured = Boolean(config.razorpayKeyId);
+  return `<div class="onb-stage onb-upgrade" data-stage="upgrade">
+    <div class="onb-step">Step ${total} of ${total} · last step</div>
+    <h1 class="onb-title">You're set up. <span class="onb-accent">Now unlock it all.</span></h1>
+    <p class="onb-lead">One payment of ₹199 unlocks every feature until <b>10 March 2027</b>. No subscription, no renewals — pay once and study through your boards.</p>
+    <div class="buy-card">
+      <div class="buy-ribbon">one-time · ₹199</div>
+      <h2 class="buy-title">Full access until 10 March 2027</h2>
+      <ul class="onb-unlock-list">
+        ${UNLOCK_POINTS.map(([ico, title, note]) => `<li><span aria-hidden="true">${ico}</span><span><b>${esc(title)}</b> <span class="faint">${esc(note)}</span></span></li>`).join("")}
+      </ul>
+      <div class="buy-actions">
+        <button class="btn primary buy-buy" type="button" data-act="onb-upgrade" ${configured ? "" : "disabled"}>
+          Buy full access →
+        </button>
+        <button class="btn ghost" type="button" data-act="onb-finish">Continue with free access</button>
+      </div>
+      ${!configured ? `<p class="buy-warn">Payments are not configured on this deployment.</p>` : ""}
+    </div>
+    <div class="onb-actions">
+      <button type="button" class="btn" data-act="onb-back">← Back</button>
+    </div>
+  </div>`;
+}
+
+const STEP_LABELS = {
+  welcome: "Welcome",
+  profile: "Profile",
+  subjects: "Subjects",
+  account: "Finish",
+  upgrade: "Unlock",
+};
 
 export function renderOnboarding(ctx) {
-  const step = Math.max(0, Math.min(ONBOARDING_STEPS - 1, Number(ctx.ui.onbStep) || 0));
+  const steps = onboardingSteps();
+  const step = Math.max(0, Math.min(steps.length - 1, Number(ctx.ui.onbStep) || 0));
   ctx.ui.onbStep = step;
-  const body = step === 0 ? stepWelcome(ctx.ui)
-    : step === 1 ? stepProfile(ctx.ui)
-    : step === 2 ? stepSubjects(ctx)
+  const key = steps[step];
+  const body = key === "welcome" ? stepWelcome(ctx.ui)
+    : key === "profile" ? stepProfile(ctx.ui)
+    : key === "subjects" ? stepSubjects(ctx)
+    : key === "upgrade" ? stepUpgrade(ctx)
     : stepAccount(ctx);
-  const rail = STEP_LABELS.map((label, i) =>
-    `<span class="onb-rail-step ${i === step ? "on" : i < step ? "done" : ""}"><i>${i < step ? "✓" : i + 1}</i>${esc(label)}</span>`).join("");
+  const rail = steps.map((k, i) =>
+    `<span class="onb-rail-step ${i === step ? "on" : i < step ? "done" : ""}"><i>${i < step ? "✓" : i + 1}</i>${esc(STEP_LABELS[k] || k)}</span>`).join("");
   return `<div class="onb" role="dialog" aria-modal="true" aria-label="Welcome to ${esc(brand())}">
     <div class="onb-card">
       <div class="onb-rail" aria-hidden="true">${rail}</div>
