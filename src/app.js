@@ -18,11 +18,11 @@ Object.assign(ACTIONS, FlashcardActions.ACTIONS, QuestionActions.ACTIONS, BoardE
 import { brand, TAGLINE } from "./core/branding.js";
 import { nativeTheme } from "./core/native.js";
 import {
-  account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess, accountEmail,
+  account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess,
 } from "./core/account.js";
 import { isPaidRoute } from "./ui/app-router.js";
-import { config } from "./core/config.js";
-import { activatePaidAccess } from "./core/entitlement.js";
+import { recoverPurchase } from "./core/entitlement.js";
+import { startCheckout } from "./ui/checkout.js";
 /* ------------------------------------------------------------- views --- */
 import dashboardView from "./ui/views/dashboard.js";
 import syllabusView from "./ui/views/syllabus.js";
@@ -158,6 +158,16 @@ async function main() {
       try { await hydrateRemoteSettings(); } catch { /* preferences are non-fatal */ }
     }
     renderRoute("account");
+    // A captured payment whose activation was interrupted (expired session,
+    // closed tab) finishes here without asking the student to pay again.
+    if (isSignedIn() && account.ready && !hasPaidAccess()) {
+      recoverPurchase().then((recovered) => {
+        if (recovered) {
+          toast("Found your payment — full access restored ✓", "ok");
+          renderRoute("account");
+        }
+      });
+    }
   });
   renderRoute("boot");
   startClocks();
@@ -329,68 +339,21 @@ export function renderRoute(reason) {
     const btn = shell.viewEl.querySelector('[data-upgrade-pay]');
     if (btn && !btn.dataset.upgradeWired) {
       btn.dataset.upgradeWired = "1";
-      btn.addEventListener("click", () => {
-        const keyId = config.razorpayKeyId;
-        if (!keyId) {
-          toast("Payments are not configured on this deployment.", "err");
-          return;
-        }
+      btn.addEventListener("click", async () => {
         const prev = btn.textContent;
         btn.disabled = true;
-        btn.textContent = "Creating order…";
-        fetch("/api/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 19900, currency: "INR", receipt: `padhle-locked_${Date.now()}` }),
-        })
-          .then((r) => r.json().catch(() => ({})))
-          .then(async (payload) => {
-            if (!payload?.order_id) throw new Error("The payment order came back empty.");
-            // Load Razorpay checkout script if not already loaded.
-            if (!window.Razorpay) {
-              await new Promise((resolve, reject) => {
-                const s = document.createElement("script");
-                s.src = "https://checkout.razorpay.com/v1/checkout.js";
-                s.async = true;
-                s.onload = () => resolve();
-                s.onerror = () => reject(new Error("Could not load the payment provider."));
-                document.head.appendChild(s);
-              });
-            }
-            if (!window.Razorpay) throw new Error("The payment provider did not load.");
-            const options = {
-              key: keyId,
-              amount: payload.amount,
-              currency: payload.currency,
-              order_id: payload.order_id,
-              name: "PADHLE.WTF",
-              description: "Full access until 10 March 2027 — one-time payment ₹199",
-              theme: { color: "#a8c8bb" },
-              prefill: {
-                email: accountEmail() || undefined,
-                name: account.profile?.displayName || undefined,
-              },
-              handler: async (response) => {
-                await activatePaidAccess({
-                  paymentId: response.razorpay_payment_id,
-                  orderId: response.razorpay_order_id,
-                  signature: response.razorpay_signature,
-                });
-                try { await initAccount({ force: true }); } catch { /* best effort */ }
-                if (!hasPaidAccess()) {
-                  toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
-                  return;
-                }
-                shell.ctx?.rerender?.();
-                toast("Full access unlocked until 10 March 2027 ✓", "ok");
-              },
-              modal: { ondismiss: () => toast("Payment wasn't completed. Try again, or contact support if money was debited.", "warn") },
-            };
-            const rzp = new window.Razorpay(options);
-            rzp.open();
-          })
-          .catch((err) => { toast(err?.message || "Could not start the payment. Try again.", "err"); })
-          .finally(() => { btn.disabled = false; btn.textContent = prev; });
+        btn.textContent = "Opening checkout…";
+        try {
+          await startCheckout({
+            receipt: "padhle-locked",
+            onPaid: () => renderRoute("account"),
+          });
+        } catch (err) {
+          toast(err?.message || "Could not start the payment. Try again.", "err");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
       });
     }
     // Skip view.mount for locked routes — no real data or interactions.

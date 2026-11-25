@@ -1886,7 +1886,20 @@ body.onb-open { overflow: hidden; }
   border-radius: var(--r);
   padding: 2px 8px;
 }
+.preview-lock.ok {
+  color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 15%, transparent);
+  border-color: var(--ok);
+}
 .preview-note { margin: var(--sp-4) 0 0; text-align: center; color: var(--muted); font-size: var(--fs-xs); font-style: italic; }
+
+/* Paid landing: the same page without any buy prompt. */
+.landing-paid-note {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-sm);
+  font-weight: 800;
+  color: var(--ok);
+}
 
 [data-theme="dark"] .preview-card { background: var(--ll-slate); border-color: var(--ll-pencil-mark); }
 

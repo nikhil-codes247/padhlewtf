@@ -33,7 +33,7 @@ export function parseHash() {
  * · signed out                  → only the three public pages
  * · signed in, no profile       → the username step
  * · signed in, no subject choice → the subject step
- * · paid user on welcome        → dashboard (skip the paywall)
+ * · paid user on welcome        → allowed (the paid variant has no buy panel)
  * · free user on any route      → allowed (content is locked for paid routes)
  *
  * Returning the same name means "allowed"; null means "allowed with no change".
@@ -45,12 +45,13 @@ export function gateTarget(name) {
   if (!hasProfile()) return name === "set-username" ? null : "set-username";
   if (!hasSelection()) return name === "choose-subjects" ? null : "choose-subjects";
 
-  // A signed-in student never stays on the sign-in or sign-up page.
-  if (name === "login" || name === "signup") return "dashboard";
-  const paid = hasPaidAccess();
-  // Paid students skip the welcome paywall and go straight to the dashboard.
-  if (paid && PUBLIC_ROUTES.has(name)) return "dashboard";
-  // Everyone else (free or paid) can access any route — the lock overlay
+  // A signed-in student never stays on the sign-in or sign-up page. Paid
+  // students land on the welcome page (the same landing, without the buy
+  // panel); free students go straight into the app and the onboarding tour.
+  if (name === "login" || name === "signup") {
+    return hasPaidAccess() ? "welcome" : "dashboard";
+  }
+  // Everyone (free or paid) can access any other route — the lock overlay
   // handles paid-content gating for free users in app.js.
   return null;
 }

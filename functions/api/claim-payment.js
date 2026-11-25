@@ -16,12 +16,12 @@
  *   RAZORPAY_KEY_SECRET
  *   PADHLE_SUPABASE_URL
  *   PADHLE_SUPABASE_ANON_KEY
+ *   PADHLE_SUPABASE_SERVICE_KEY   (optional)
  */
+import { grantPaidAccess, PLAN, EXPIRES_AT } from "../_lib/grant.js";
 
 const AMOUNT_PAISE = 19900;
 const CURRENCY = "INR";
-const PLAN = "full_access";
-const EXPIRES_AT = "2027-03-10T23:59:59+05:30";
 
 const json = (body, status = 200) =>
   Response.json(body, { status, headers: { "Content-Type": "application/json" } });
@@ -50,8 +50,8 @@ export async function onRequestPost({ request, env }) {
   if (!supabaseUrl || !supabaseAnonKey) return json({ error: "The deployment is not connected to Supabase." }, 500);
 
   const token = (request.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
-  const uid = token ? jwtSubject(token) : null;
-  if (!token || !uid) return json({ error: "Sign in first, then restore your purchase." }, 401);
+  const uidFromToken = token ? jwtSubject(token) : null;
+  if (!token || !uidFromToken) return json({ error: "Sign in first, then restore your purchase." }, 401);
 
   const base = supabaseUrl.replace(/\/$/, "");
   const basic = "Basic " + btoa(`${keyId}:${keySecret}`);
@@ -60,10 +60,13 @@ export async function onRequestPost({ request, env }) {
   const userRes = await fetch(`${base}/auth/v1/user`, {
     headers: { apikey: supabaseAnonKey, Authorization: `Bearer ${token}` },
   });
-  if (userRes.status === 401) return json({ error: "Your sign-in expired. Sign in again, then restore your purchase." }, 401);
+  if (userRes.status === 401) {
+    return json({ error: "Your sign-in expired. Sign in again, then restore your purchase.", authRequired: true }, 401);
+  }
   if (!userRes.ok) return json({ error: "Could not read your account. Try again." }, 502);
   const user = await userRes.json().catch(() => ({}));
   const email = user?.email;
+  const uid = user?.id || uidFromToken;
   if (!email) return json({ error: "Your account has no email address to match a payment against." }, 400);
 
   let body = {};
@@ -108,24 +111,14 @@ export async function onRequestPost({ request, env }) {
     return json({ error: `That payment is "${payment.status}", not captured. Nothing to activate yet.` }, 400);
   }
 
-  // 3. Grant access with the student's own JWT (RLS scopes it to their row).
-  const patchRes = await fetch(`${base}/rest/v1/profiles?id=eq.${encodeURIComponent(uid)}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      apikey: supabaseAnonKey,
-      "Content-Type": "application/json",
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify({ plan: PLAN, plan_expires_at: EXPIRES_AT }),
-  });
-  if (!patchRes.ok) {
-    const detail = await patchRes.text().catch(() => "");
-    return json({ error: `Could not activate access (HTTP ${patchRes.status})${detail ? `: ${detail.slice(0, 160)}` : ""}.` }, 502);
-  }
-  const rows = await patchRes.json().catch(() => null);
-  if (Array.isArray(rows) && rows.length === 0) {
-    return json({ error: "No profile row was found for this account, so access could not be saved." }, 409);
+  // 3. Grant access. This also creates a missing profile row.
+  const grant = await grantPaidAccess({ env, token, uid, email });
+  if (!grant.paid) {
+    const status = grant.status === 401 ? 401 : grant.status === 409 ? 409 : 502;
+    return json(
+      { error: grant.error || "Could not activate access on your account.", ...(grant.authRequired ? { authRequired: true } : {}) },
+      status,
+    );
   }
 
   return json({

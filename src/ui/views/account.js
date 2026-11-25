@@ -6,9 +6,10 @@
  */
 import { esc } from "../dom.js";
 import { chip, metricCard } from "../components.js";
-import { account, accountEmail, hasPaidAccess, initAccount } from "../../core/account.js";
+import { account, accountEmail, hasPaidAccess } from "../../core/account.js";
 import { config } from "../../core/config.js";
-import { activatePaidAccess, claimPurchase } from "../../core/entitlement.js";
+import { claimPurchase } from "../../core/entitlement.js";
+import { startCheckout } from "../checkout.js";
 import { CORE_SUBJECT_IDS, selectionSubjectIds } from "../../core/subjects.js";
 import { toast } from "../app-toasts.js";
 import { shell } from "../app-state.js";
@@ -143,22 +144,6 @@ function planPanel(ctx) {
   </section>`;
 }
 
-let razorpayLoading = null;
-
-function loadRazorpay() {
-  if (window.Razorpay) return Promise.resolve();
-  if (razorpayLoading) return razorpayLoading;
-  razorpayLoading = new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Could not load the payment provider."));
-    document.head.appendChild(script);
-  });
-  return razorpayLoading;
-}
-
 async function handlePay(ctx) {
   if (!config.razorpayKeyId) {
     toast("Payments are not configured on this deployment.", "err");
@@ -167,66 +152,15 @@ async function handlePay(ctx) {
 
   const btn = shell.viewEl?.querySelector('[data-plan-pay]');
   const prevLabel = btn ? btn.textContent : "";
-  let handled = false;
-
   try {
-    if (btn) { btn.disabled = true; btn.textContent = "Creating order…"; }
-
-    // STEP 1: ask the backend to create a Razorpay order (server fixes the amount).
-    const res = await fetch("/api/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 19900, currency: "INR", receipt: `padhle_${Date.now()}` }),
-    });
-    const payload = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(payload?.error || "Could not create the payment order.");
-    if (!payload?.order_id) throw new Error("The payment order came back empty.");
-
-    // Load the Razorpay checkout script, then open the modal.
-    await loadRazorpay();
-    if (!window.Razorpay) throw new Error("The payment provider did not load.");
-
-    const options = {
-      key: config.razorpayKeyId,
-      amount: payload.amount,
-      currency: payload.currency,
-      order_id: payload.order_id,
-      name: "PADHLE.WTF",
-      description: "Full access until 10 March 2027 — one-time payment ₹199",
-      theme: { color: "#a8c8bb" },
-      prefill: {
-        email: accountEmail() || undefined,
-        name: account.profile?.displayName || undefined,
-      },
-      handler: async (response) => {
-        handled = true;
-        // STEP 2: server checks the signature and grants access.
-        await activatePaidAccess({
-          paymentId: response.razorpay_payment_id,
-          orderId: response.razorpay_order_id,
-          signature: response.razorpay_signature,
-        });
-
-        // Refresh the profile so the plan panel flips to "Full access".
-        try { await initAccount({ force: true }); } catch { /* best effort */ }
-        if (!hasPaidAccess()) {
-          toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
-          return;
-        }
+    if (btn) { btn.disabled = true; btn.textContent = "Opening checkout…"; }
+    await startCheckout({
+      receipt: "padhle-account",
+      onPaid: () => {
         ctx.rerender();
         toast(`Full access activated until ${planExpiryLabel(account.profile?.planExpiresAt || "10 March 2027")}. ✓`, "ok");
       },
-      modal: {
-        ondismiss: () => {
-          if (!handled) {
-            toast("Payment wasn't completed. Try again, or contact support if money was debited.", "warn");
-          }
-        },
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+    });
   } catch (err) {
     toast(err?.message || "Could not start the payment. Try again.", "err");
   } finally {
@@ -257,7 +191,6 @@ export default {
         restore.textContent = "Checking Razorpay…";
         try {
           await claimPurchase();
-          try { await initAccount({ force: true }); } catch { /* best effort */ }
           ctx.rerender();
           toast("Full access restored until 10 March 2027 ✓", "ok");
         } catch (err) {

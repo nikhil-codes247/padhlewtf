@@ -2,18 +2,18 @@
  * welcome.js — the public landing page.
  *
  * Signed-out visitors see the marketing landing. Signed-in FREE students see
- * a preview of every feature (read-only, can't interact) plus the buy panel
- * at the bottom. Signed-in PAID students are redirected to the dashboard by
- * the router and never land here.
+ * a preview of every feature (read-only, can't interact); the buy panel appears
+ * only after onboarding, so a new account is never asked to pay mid-setup.
+ * Signed-in PAID students see the same landing with no buy panel and a
+ * "full access" badge instead.
  */
 import { esc, fmtNum } from "../dom.js";
 import { chip } from "../components.js";
 import { brand, TAGLINE } from "../../core/branding.js";
-import {
-  isSignedIn, account, accountEmail, hasPaidAccess, initAccount,
-} from "../../core/account.js";
+import { isSignedIn, hasPaidAccess } from "../../core/account.js";
 import { config } from "../../core/config.js";
-import { activatePaidAccess, claimPurchase } from "../../core/entitlement.js";
+import { claimPurchase } from "../../core/entitlement.js";
+import { startCheckout } from "../checkout.js";
 import { ALL_SUBJECT_IDS } from "../../core/subjects.js";
 import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js";
 import { mascot } from "../mascot.js";
@@ -76,74 +76,15 @@ function heroPreview(store) {
   </div>`;
 }
 
-let welcomeRazorpayLoading = null;
-
-function loadWelcomeRazorpay() {
-  if (window.Razorpay) return Promise.resolve();
-  if (welcomeRazorpayLoading) return welcomeRazorpayLoading;
-  welcomeRazorpayLoading = new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Could not load the payment provider."));
-    document.head.appendChild(script);
-  });
-  return welcomeRazorpayLoading;
-}
-
 async function handleWelcomePay() {
   const btn = document.querySelector('[data-welcome-pay]');
   const prev = btn ? btn.textContent : "";
-  if (btn) { btn.disabled = true; btn.textContent = "Creating order…"; }
+  if (btn) { btn.disabled = true; btn.textContent = "Opening checkout…"; }
   try {
-    const keyId = config.razorpayKeyId;
-    if (!keyId) {
-      toast("Payments are not configured on this deployment.", "err");
-      return;
-    }
-    const res = await fetch("/api/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 19900, currency: "INR", receipt: `padhle-welcome_${Date.now()}` }),
+    await startCheckout({
+      receipt: "padhle-welcome",
+      onPaid: () => { shell.ctx?.rerender?.(); },
     });
-    const payload = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(payload?.error || "Could not create the payment order.");
-    if (!payload?.order_id) throw new Error("The payment order came back empty.");
-
-    await loadWelcomeRazorpay();
-    if (!window.Razorpay) throw new Error("The payment provider did not load.");
-
-    const options = {
-      key: keyId,
-      amount: payload.amount,
-      currency: payload.currency,
-      order_id: payload.order_id,
-      name: "PADHLE.WTF",
-      description: "Full access until 10 March 2027 — one-time payment ₹199",
-      theme: { color: "#a8c8bb" },
-      prefill: {
-        email: accountEmail() || undefined,
-        name: account.profile?.displayName || undefined,
-      },
-      handler: async (response) => {
-        await activatePaidAccess({
-          paymentId: response.razorpay_payment_id,
-          orderId: response.razorpay_order_id,
-          signature: response.razorpay_signature,
-        });
-        try { await initAccount({ force: true }); } catch { /* best effort */ }
-        if (!hasPaidAccess()) {
-          toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
-          return;
-        }
-        shell.ctx?.rerender?.();
-        toast("Full access unlocked until 10 March 2027 ✓", "ok");
-      },
-      modal: { ondismiss: () => toast("Payment wasn't completed. Try again, or contact support if money was debited.", "warn") },
-    };
-    const rzp = new window.Razorpay(options);
-    rzp.open();
   } catch (err) {
     toast(err?.message || "Could not start the payment. Try again.", "err");
   } finally {
@@ -222,25 +163,24 @@ function buyPanel(signedIn = true) {
 }
 
 /**
- * Feature preview grid — shown to free students. Each card is visually
- * disabled (can't interact) with a small "upgrade" hint, so they can see
- * everything the app offers but can't use it until they pay.
+ * Feature grid. Free students see locked previews (a real look, no data); paid
+ * students see the same cards unlocked, with no upgrade prompt anywhere.
  */
-function featurePreviews() {
+function featurePreviews(paid = false) {
   return `
   <section class="welcome-preview">
-    <h2 class="preview-head">Everything you'll unlock</h2>
+    <h2 class="preview-head">${paid ? "Everything you have" : "Everything you'll unlock"}</h2>
     <div class="preview-grid">
-      ${FEATURES.map((f, i) => `
-        <article class="preview-card locked" data-locked>
+      ${FEATURES.map((f) => `
+        <article class="preview-card${paid ? "" : " locked"}"${paid ? "" : " data-locked"}>
           <span class="preview-ico">${f.ico}</span>
           <h3>${esc(f.title)}</h3>
           <p class="preview-text">${esc(f.text)}</p>
-          <div class="preview-lock">🔒 upgrade</div>
+          <div class="preview-lock${paid ? " ok" : ""}">${paid ? "✓ included" : "🔒 upgrade"}</div>
         </article>
       `).join("")}
     </div>
-    <p class="preview-note">These tabs are real — once you pay, they all start working instantly.</p>
+    <p class="preview-note">${paid ? "All of these are active on your account." : "These tabs are real — once you pay, they all start working instantly."}</p>
   </section>
   `;
 }
@@ -252,6 +192,7 @@ export default {
     const { store } = ctx;
     const signedIn = isSignedIn();
     const paid = hasPaidAccess();
+    const onboarded = Boolean(store.state.settings.onboarded);
     const { subjects: subjectCount, chapters: chapterCount, topics: topicCount } = syllabusTotals();
     const allSubjects = ALL_SUBJECT_IDS.map((id) => subjectName(store, id));
 
@@ -279,6 +220,7 @@ export default {
           <h1 class="landing-title">Your whole Class 10 syllabus,<br><span class="landing-hl">finally in one place.</span></h1>
           <p class="landing-lead">${esc(brand())} turns the official CBSE Class 10 syllabus into a daily plan you can finish — chapters, checklists, timed sessions, revision and past-paper insight, all in one calm dashboard.</p>
           <div class="landing-actions">${cta}</div>
+          ${paid ? `<p class="landing-paid-note">✓ Full access active until 10 March 2027</p>` : ""}
           <ul class="landing-points">
             <li>✓ Built on the official CBSE 2026–27 syllabus</li>
             <li>✓ Your progress follows you on every device</li>
@@ -310,20 +252,7 @@ export default {
         ${stat("60-day plan", "60")}
       </section>
 
-      <section class="welcome-preview">
-        <h2 class="preview-head">Everything you'll unlock</h2>
-        <div class="preview-grid">
-          ${FEATURES.map((f, i) => `
-            <article class="preview-card locked" data-locked>
-              <span class="preview-ico">${f.ico}</span>
-              <h3>${esc(f.title)}</h3>
-              <p class="preview-text">${esc(f.text)}</p>
-              <div class="preview-lock">🔒 upgrade</div>
-            </article>
-          `).join("")}
-        </div>
-        <p class="preview-note">These tabs are real — once you pay, they all start working instantly.</p>
-      </section>
+      ${featurePreviews(paid)}
 
       <section class="landing-section" aria-labelledby="landing-steps-title">
         <div class="landing-section-head">
@@ -357,7 +286,7 @@ export default {
       </section>
 
       <section class="landing-cta" aria-label="Get started">
-        ${paid ? "" : buyPanel(signedIn)}
+        ${paid || (signedIn && !onboarded) ? "" : buyPanel(signedIn)}
         <div>
           <span class="eyebrow">Ready when you are</span>
           <h2>Start with today's plan.</h2>
@@ -370,7 +299,9 @@ export default {
         <div class="landing-foot-brand">${esc(brand())} <span class="faint">${esc(TAGLINE)}</span></div>
         <div class="small muted">A study workspace for CBSE Class 10 · 2026–27</div>
         <div class="row gap-2">
-          <a class="small" href="#/login">Log in</a><span class="faint">·</span><a class="small" href="#/signup">Sign up</a>
+          ${signedIn
+            ? `<a class="small" href="#/account">Account</a><span class="faint">·</span><a class="small" href="#/dashboard">Dashboard</a>`
+            : `<a class="small" href="#/login">Log in</a><span class="faint">·</span><a class="small" href="#/signup">Sign up</a>`}
         </div>
       </footer>
     </div>`;
@@ -392,7 +323,6 @@ export default {
         restore.textContent = "Checking Razorpay…";
         try {
           await claimPurchase();
-          try { await initAccount({ force: true }); } catch { /* best effort */ }
           shell.ctx?.rerender?.();
           toast("Full access restored until 10 March 2027 ✓", "ok");
         } catch (err) {

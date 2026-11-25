@@ -5,10 +5,13 @@
  * opens Checkout, and `/api/verify-payment` decides whether access is granted.
  * Callers pass `onPaid` for whatever should happen after the grant succeeds
  * (rerender a panel, close the onboarding tour, navigate).
+ *
+ * Every failure is surfaced. A Razorpay success screen is not a grant: the
+ * handler waits for `activatePaidAccess` to confirm the plan really changed.
  */
 import { config } from "../core/config.js";
-import { account, accountEmail, initAccount } from "../core/account.js";
-import { activatePaidAccess } from "../core/entitlement.js";
+import { account, accountEmail, signOutAccount } from "../core/account.js";
+import { activatePaidAccess, PaymentAuthError } from "../core/entitlement.js";
 import { toast } from "./app-toasts.js";
 
 let loading = null;
@@ -25,6 +28,16 @@ function loadRazorpay() {
     document.head.appendChild(script);
   });
   return loading;
+}
+
+async function requireSignIn(err) {
+  if (!(err instanceof PaymentAuthError)) return false;
+  toast(err.message, "warn");
+  // The payment is stored locally before verification, so signing in again
+  // finishes the activation instead of asking for another payment.
+  try { await signOutAccount(); } catch { /* local state is cleared regardless */ }
+  location.hash = "#/login";
+  return true;
 }
 
 /**
@@ -70,10 +83,10 @@ export async function startCheckout({ receipt = "padhle", onPaid } = {}) {
           orderId: response.razorpay_order_id,
           signature: response.razorpay_signature,
         });
-        try { await initAccount({ force: true }); } catch { /* best effort */ }
         toast("Full access unlocked until 10 March 2027 ✓", "ok");
         await onPaid?.();
       } catch (err) {
+        if (await requireSignIn(err)) return;
         toast(err?.message || "Payment could not be verified. Contact support if money was debited.", "err");
       }
     },
