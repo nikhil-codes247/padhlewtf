@@ -11,7 +11,7 @@
  * upgrade.
  */
 import { account } from "../core/account.js";
-import { isSignedIn, hasProfile, hasSelection, hasPaidAccess } from "../core/account.js";
+import { isSignedIn, hasPaidAccess } from "../core/account.js";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
