@@ -1,22 +1,16 @@
 # ---------------------------------------------------------------------------
 # Cloudflare Pages — PADHLE.WTF SaaS
 #
-# Connect your GitHub repo (nikhil-codes247/padhle) to Cloudflare Pages and
-# set these environment variables in the Cloudflare dashboard:
-#   Dashboard → Your site → Settings → Environment variables
+# Connect your GitHub repo (nikhil-codes247/padhlewtf) to Cloudflare Pages.
+# Environment variables are set in the Cloudflare dashboard:
+#   Dashboard → Workers & Pages → Your site → Settings → Environment variables
 # ---------------------------------------------------------------------------
 
 name = "padhle-wtf"
 compatibility_date = "2026-11-25"
 
-[build]
-  command = "npm install"
-  functions = "functions"
-  # dist/ is pre-built and committed; no build step needed for static files.
-  # If you want Cloudflare to build from source, set:
-  #   publish = "dist"
+# Cloudflare Pages auto-deploys from Git. No build command needed for pre-built
+# static files. Functions in /functions are auto-detected as Pages Functions.
 
 [env.production]
-  # Production environment variables are set in the Cloudflare dashboard,
-  # not here. Add them via: Settings → Environment variables → Production
   required = ["RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "PADHLE_SUPABASE_URL", "PADHLE_SUPABASE_ANON_KEY"]
