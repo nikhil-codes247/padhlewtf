@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = Object.freeze({
   supabaseAnonKey: "",
   siteUrl: "",
   environment: "development",
+  razorpayKeyId: "",
 });
 
 function trimUrl(value) {
@@ -61,6 +62,7 @@ export function readConfig(raw = {}) {
     supabaseAnonKey,
     siteUrl,
     environment: String(raw.environment || DEFAULT_CONFIG.environment),
+    razorpayKeyId: String(raw.razorpayKeyId ?? "").trim(),
     errors,
   };
 }

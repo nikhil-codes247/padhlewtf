@@ -129,7 +129,6 @@ kbd {
   gap: var(--sp-3);
   padding: 10px clamp(var(--sp-3), 1.8vw, var(--sp-5));
   box-shadow: 0 1px 0 var(--studio-hair);
-  overflow-x: hidden;
 }
 
 .topbar-lead {
@@ -769,9 +768,9 @@ kbd {
   display: none;
 }
 
-/* Close button styled for collapsed state */
+/* Close button styled for collapsed state — only visible on small screens
+   (see @media max-width: 1080px below). On desktop this stays hidden. */
 .app-shell .sidebar.collapsed .sidebar-close {
-  display: inline-grid;
   place-items: center;
   width: 32px;
   height: 32px;

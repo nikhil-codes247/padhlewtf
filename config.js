@@ -2,7 +2,7 @@
 window.PADHLE_CONFIG = {
   "supabaseUrl": "https://joyzfnsppohprpfuhsyd.supabase.co",
   "supabaseAnonKey": "sb_publishable_F6F_T7yq2Mg3ptS1TN59ig_I3eaH79A",
-  "siteUrl": "http://127.0.0.1:4173",
-  "environment": "development",
+  "siteUrl": "https://padhlewtf.pages.dev",
+  "environment": "production",
   "razorpayKeyId": "rzp_test_U4KNjocoNfom30"
 };
