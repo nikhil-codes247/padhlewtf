@@ -1,1 +1,18 @@
-name = 'padhlewtf'
+# ---------------------------------------------------------------------------
+# PADHLE.WTF — Cloudflare Pages
+#
+# Cloudflare builds this repo with `wrangler deploy`, which requires
+# `pages_build_output_dir` to know it is a Pages project and where the static
+# assets live. Without it the build fails with:
+#   "Missing entry-point to Worker script or to assets directory"
+#
+# Static files (index.html, config.js, src/, fonts/) sit at the repo root, so
+# the output directory is ".". Pages Functions in functions/ are auto-detected.
+#
+# Secrets live in the dashboard:
+#   Workers & Pages → padhlewtf → Settings → Variables and Secrets
+# ---------------------------------------------------------------------------
+
+name = "padhlewtf"
+compatibility_date = "2026-11-25"
+pages_build_output_dir = "."
