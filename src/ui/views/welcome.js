@@ -77,6 +77,11 @@ function heroPreview(store) {
 }
 
 async function handleWelcomePay() {
+  if (!isSignedIn()) {
+    // A payment without an account cannot be tied to anyone; sign up first.
+    location.hash = "#/signup";
+    return;
+  }
   const btn = document.querySelector('[data-welcome-pay]');
   const prev = btn ? btn.textContent : "";
   if (btn) { btn.disabled = true; btn.textContent = "Opening checkout…"; }
@@ -96,6 +101,10 @@ function openUpgradeModal() {
   const paid = hasPaidAccess();
   if (paid) {
     location.hash = "#/dashboard";
+    return;
+  }
+  if (!isSignedIn()) {
+    location.hash = "#/signup";
     return;
   }
   const configured = Boolean(config.razorpayKeyId);
@@ -196,11 +205,12 @@ export default {
     const { subjects: subjectCount, chapters: chapterCount, topics: topicCount } = syllabusTotals();
     const allSubjects = ALL_SUBJECT_IDS.map((id) => subjectName(store, id));
 
+    // A signed-in student always goes to the dashboard from here. The old
+    // "Open your dashboard" opened the upgrade modal, which asked brand-new
+    // accounts to pay before the onboarding tour had even started.
     const cta = signedIn
-      ? paid
-        ? `<a class="btn primary onb-big" href="#/dashboard">Open your dashboard <span aria-hidden="true">→</span></a>`
-        : `<a class="btn onb-big" href="#/dashboard" data-open-dashboard>Open your dashboard <span aria-hidden="true">→</span></a>
-           <a class="btn onb-big" href="#/settings">Settings</a>`
+      ? `<a class="btn ${paid ? "primary " : ""}onb-big" href="#/dashboard">Open your dashboard <span aria-hidden="true">→</span></a>
+         <a class="btn onb-big" href="#/settings">Settings</a>`
       : `<a class="btn primary onb-big" href="#/signup">Create your account <span aria-hidden="true">→</span></a>
          <a class="btn onb-big" href="#/login">Log in</a>`;
 
@@ -252,7 +262,7 @@ export default {
         ${stat("60-day plan", "60")}
       </section>
 
-      ${featurePreviews(paid)}
+      ${signedIn && !onboarded ? "" : featurePreviews(paid)}
 
       <section class="landing-section" aria-labelledby="landing-steps-title">
         <div class="landing-section-head">
@@ -333,17 +343,6 @@ export default {
         }
       });
     }
-
-    // "Open your dashboard" for free users → open upgrade modal
-    document.querySelectorAll('[data-open-dashboard]').forEach((el) => {
-      if (!el.dataset.dashboardWired) {
-        el.dataset.dashboardWired = "1";
-        el.addEventListener("click", (ev) => {
-          ev.preventDefault();
-          openUpgradeModal();
-        });
-      }
-    });
 
     // Locked feature cards → open upgrade modal
     document.querySelectorAll('[data-locked]').forEach((el) => {
