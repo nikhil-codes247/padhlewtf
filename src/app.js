@@ -261,7 +261,14 @@ function renderLockedView(routeName) {
   <div class="locked-view" data-locked-route="${esc(routeName)}">
     <div class="locked-backdrop" aria-hidden="true"></div>
     <div class="locked-glass">
-      <div class="lock-icon">🔒</div>
+      <div class="lock-icon">
+        <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 22c0-5 6-9 14-9s14 4 14 9" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <rect x="18" y="22" width="36" height="36" rx="6" ry="6" stroke="currentColor" stroke-width="3" fill="var(--ll-card)"/>
+          <circle cx="36" cy="34" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M32 38h8l-2 4h-4z" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
       <h2 class="locked-title">Upgrade to access <span class="locked-route">${esc(label)}</span></h2>
       <p class="locked-note">This feature is part of full access. Pay once — ₹199 — and unlock everything until 10 March 2027.</p>
       <button class="btn locked-btn" type="button" data-upgrade-pay>Buy full access →</button>
