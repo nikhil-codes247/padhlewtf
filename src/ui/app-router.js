@@ -16,7 +16,9 @@ import { isSignedIn, hasProfile, hasSelection, hasPaidAccess } from "../core/acc
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
 // Dashboard is the home base after onboarding; every feature tab stays locked.
-const FREE_ROUTES = new Set(["welcome", "dashboard", "settings", "account", "profile"]);
+// set-username / choose-subjects remain reachable (not forced) so a student can
+// complete them from Settings whenever they want.
+const FREE_ROUTES = new Set(["welcome", "dashboard", "settings", "account", "profile", "set-username", "choose-subjects"]);
 
 export function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");
@@ -32,28 +34,28 @@ export function parseHash() {
  *
  * · configuring / restoring     → "loading"
  * · signed out                  → only the three public pages
- * · signed in, no profile       → the username step
- * · signed in, no subject choice → the subject step
+ * · signed in                   → any route they ask for
  * · paid user on welcome        → allowed (the paid variant has no buy panel)
- * · free user on any route      → allowed (content is locked for paid routes)
+ * · free user on any route      → allowed (paid tabs are locked by the overlay
+ *                                in renderRoute, not by a forced redirect)
  *
  * Returning the same name means "allowed"; null means "allowed with no change".
+ *
+ * No one is forced through set-username or subject selection before they can
+ * see the app. Those steps stay reachable from Settings / Account whenever the
+ * student wants to complete them.
  */
 export function gateTarget(name) {
   if (!account.ready) return "loading";
   if (account.loadError && isSignedIn()) return "loading";
   if (!isSignedIn()) return PUBLIC_ROUTES.has(name) ? null : "welcome";
-  if (!hasProfile()) return name === "set-username" ? null : "set-username";
-  if (!hasSelection()) return name === "choose-subjects" ? null : "choose-subjects";
 
-  // A signed-in student never stays on the sign-in or sign-up page. Paid
-  // students land on the welcome page (the same landing, without the buy
-  // panel); free students go straight into the app and the onboarding tour.
+  // A signed-in student never stays on the sign-in or sign-up page.
   if (name === "login" || name === "signup") {
     return hasPaidAccess() ? "welcome" : "dashboard";
   }
-  // Everyone (free or paid) can access any other route — the lock overlay
-  // handles paid-content gating for free users in app.js.
+  // Every signed-in user can access any route. Paid-content gating is handled
+  // by the lock overlay in renderRoute — not by blocking the route here.
   return null;
 }
 

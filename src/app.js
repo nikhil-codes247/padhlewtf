@@ -312,18 +312,10 @@ export function renderRoute(reason) {
 
   shell.cleanupView = null;
 
-  let html = "";
-  try {
-    html = view.render(shell.ctx);
-  } catch (err) {
-    console.error("[padhle] view failed to render", err);
-    html = `<section class="card"><h2>This page hit an error</h2>
-      <p class="muted">The rest of your data is safe. ${esc(err?.message || "Unknown error")}</p>
-      <div class="row gap-2"><a class="btn primary" href="#/dashboard">Back to the dashboard</a>
-      <button class="btn" data-act="theme-toggle">Toggle theme</button></div></section>`;
-  }
-  // Lock paid content for free (non-paid) students: blur + big lock +
-  // skeleton placeholders (no real data). Nav bar and shell stay visible.
+  // Lock paid content for free (non-paid) students BEFORE rendering the view:
+  // the nav bar and shell stay visible behind the glassfrost overlay, and the
+  // tab content is never touched. No one is forced through set-username or
+  // subject selection first — those stay reachable from Settings / Account.
   const paid = hasPaidAccess();
   if (!paid && isPaidRoute(route.name)) {
     shell.viewEl.innerHTML = renderLockedView(route.name);
@@ -360,6 +352,17 @@ export function renderRoute(reason) {
     tickGlobalTimer();
     syncOnboarding();
     return;
+  }
+
+  let html = "";
+  try {
+    html = view.render(shell.ctx);
+  } catch (err) {
+    console.error("[padhle] view failed to render", err);
+    html = `<section class="card"><h2>This page hit an error</h2>
+      <p class="muted">The rest of your data is safe. ${esc(err?.message || "Unknown error")}</p>
+      <div class="row gap-2"><a class="btn primary" href="#/dashboard">Back to the dashboard</a>
+      <button class="btn" data-act="theme-toggle">Toggle theme</button></div></section>`;
   }
 
   shell.viewEl.innerHTML = html;
