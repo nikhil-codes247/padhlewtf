@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#a8c8bb">
+<title>PADHLE.WTF — Work Towards Finals 💀</title>
+<meta name="description" content="PADHLE.WTF — Work Towards Finals 💀. A study workspace for CBSE Class 10: syllabus tracking, daily planning, timed sessions, spaced revision, doubts, PYQ insights and progress streaks.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23D97724'/%3E%3Crect x='1.5' y='1.5' width='29' height='29' rx='5' fill='none' stroke='%231A1A1A' stroke-width='2'/%3E%3Cpath d='M10 24V8h6.4a5.2 5.2 0 0 1 0 10.4H13V24h-3Zm3-8.6h3.1a2.4 2.4 0 0 0 0-4.8H13v4.8Z' fill='%231A1A1A'/%3E%3C/svg%3E">
+<link rel="preload" as="font" type="font/woff2" href="fonts/kevin-sans-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/kevin-sans-700.woff2" crossorigin>
+<link rel="stylesheet" href="src/fonts.css">
+<link rel="stylesheet" href="src/styles.css">
+<link rel="stylesheet" href="src/styles/looseleaf.css">
+<link rel="stylesheet" href="src/styles/studio.css">
+<script src="config.js"></script>
+<script>
+  /*
+   * The Android shell injects its bridge before the document is ever parsed, so
+   * this can set the shell theme attribute before the first paint. In a browser
+   * the bridge is absent and nothing happens. Kept inline and dependency-free on
+   * purpose: it has to run before paint, so a deferred module is too late.
+   */
+  (function () {
+    try {
+      var bridge = window.PADHLE_WTF || window.Padhle;
+      if (bridge && typeof bridge.platform === "function") {
+        document.documentElement.setAttribute("data-brand", "padhle-wtf");
+        document.title = "PADHLE.WTF";
+      }
+    } catch (e) { /* the shell is optional; on failure, browser branding applies */ }
+  })();
+</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Hand-drawn study doodles. Kept outside #app so the static boot screen
+       and the account gate can both reference the same symbols. -->
+  <svg class="boot-doodle-sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;overflow:hidden">
+    <symbol id="doodle-book" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 15c7-3 14-3 21 1v34c-7-4-14-4-21-1V15Z" fill="var(--surface)"/>
+        <path d="M28 16c7-4 14-4 21-1v34c-7-3-14-3-21 1V16Z" fill="var(--surface)"/>
+        <path d="M13 22c4-1 8-1 11 1M13 29c4-1 8-1 11 1M13 36c4-1 8-1 11 1"/>
+        <path d="M34 23c3-2 7-2 11-1M34 30c3-2 7-2 11-1M34 37c3-2 7-2 11-1"/>
+      </g>
+    </symbol>
+    <symbol id="doodle-pencil" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 49 47 17l8 8-32 32-11 3 3-11Z" fill="var(--surface)"/>
+        <path d="m43 21 8 8M15 49l11-3"/>
+      </g>
+      <path d="m12 52 3-11 8 8-11 3Z" fill="var(--ll-sticky-yellow)" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="doodle-notebook" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="15" y="9" width="36" height="46" rx="3" fill="var(--surface)"/>
+        <path d="M22 9v46M22 16h-4M22 24h-4M22 32h-4M22 40h-4M22 48h-4"/>
+        <path d="M29 20h15M29 28h15M29 36h10"/>
+      </g>
+    </symbol>
+    <symbol id="doodle-sticky" viewBox="0 0 64 64">
+      <path d="M18 12h28v28L36 52H14V22l4-10Z" fill="var(--ll-sticky-yellow)" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M36 40h10L36 52V40Z" fill="var(--ll-sticky-green)" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M21 24h16M21 31h12M21 38h9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="doodle-ruler" viewBox="0 0 64 64">
+      <g transform="rotate(-7 32 32)" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="24" width="54" height="14" rx="2" fill="var(--surface)"/>
+        <path d="M14 27v6M22 26v4M30 26v6M38 25v5M46 25v7"/>
+      </g>
+    </symbol>
+    <symbol id="doodle-clip" viewBox="0 0 64 64">
+      <path d="M23 45c-6 0-10-5-9-10 1-3 3-5 6-5l20-20c4-4 10-4 13 0 3 4 2 9-1 12L33 41c-2 2-5 2-7 0-2-2-2-5 0-7l17-17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="doodle-calc" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="15" y="8" width="34" height="48" rx="3" fill="var(--surface)"/>
+        <rect x="21" y="14" width="22" height="10" rx="1" fill="var(--ll-sticky-green)"/>
+        <circle cx="24" cy="33" r="1.7" fill="currentColor" stroke="none"/>
+        <circle cx="32" cy="33" r="1.7" fill="currentColor" stroke="none"/>
+        <circle cx="40" cy="33" r="1.7" fill="currentColor" stroke="none"/>
+        <circle cx="24" cy="41" r="1.7" fill="currentColor" stroke="none"/>
+        <circle cx="32" cy="41" r="1.7" fill="currentColor" stroke="none"/>
+        <circle cx="40" cy="41" r="1.7" fill="currentColor" stroke="none"/>
+      </g>
+    </symbol>
+    <symbol id="doodle-bulb" viewBox="0 0 64 64">
+      <path d="M25 39c-6-4-8-12-4-18 4-6 12-8 18-4 5 4 7 11 4 16-1 3-3 4-5 6v3H27v-3Z" fill="var(--ll-sticky-yellow)" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M27 49h10M29 54h6M32 16V9M19 21l-5-4M45 21l5-4M18 32h-6M46 32h6"/>
+      </g>
+    </symbol>
+    <symbol id="doodle-books" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 44h44v9H10zM14 35h36v9H14zM19 26h26v9H19z" fill="var(--surface)"/>
+        <path d="M16 44v9M38 44v9M22 35v9M40 35v9M27 26v9M39 26v9"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <div id="app" class="app">
+    <div class="boot" id="boot">
+      <div class="boot-doodles" aria-hidden="true">
+        <span class="boot-doodle doodle-book"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-book"></use></svg></span>
+        <span class="boot-doodle doodle-pencil"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-pencil"></use></svg></span>
+        <span class="boot-doodle doodle-notebook"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-notebook"></use></svg></span>
+        <span class="boot-doodle doodle-sticky"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-sticky"></use></svg></span>
+        <span class="boot-doodle doodle-ruler"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-ruler"></use></svg></span>
+        <span class="boot-doodle doodle-clip"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-clip"></use></svg></span>
+        <span class="boot-doodle doodle-calc"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-calc"></use></svg></span>
+        <span class="boot-doodle doodle-bulb"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-bulb"></use></svg></span>
+        <span class="boot-doodle doodle-books"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#doodle-books"></use></svg></span>
+      </div>
+      <div class="boot-card" role="status" aria-live="polite">
+        <div class="brand-header boot-brand">
+          <span class="sidebar-brand">
+            <span class="brand-name">PADHLE</span><span class="brand-dot">.</span><span class="brand-wtf">WTF</span>
+          </span>
+          <svg class="ink ink-underline ink-brand" viewBox="0 0 150 10" preserveAspectRatio="none" aria-hidden="true" focusable="false" style="opacity:1"><path d="M2.00 4.89 Q12.43 5.20 17.64 5.88 Q22.86 6.57 28.07 6.55 Q33.29 6.52 38.50 6.62 Q43.71 6.72 48.93 6.62 Q54.14 6.52 59.36 6.98 Q64.57 7.44 69.79 7.04 Q75.00 6.63 80.21 6.98 Q85.43 7.32 90.64 7.24 Q95.86 7.17 101.07 6.63 Q106.29 6.10 111.50 6.41 Q116.71 6.73 121.93 6.41 Q127.14 6.10 132.36 5.50 Q137.57 4.90 142.79 5.60 L148.00 6.30" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity="1"/><path d="M2.00 7.44 Q12.43 8.45 17.64 7.76 Q22.86 7.07 28.07 7.48 Q33.29 7.90 38.50 8.35 Q43.71 8.80 48.93 8.50 Q54.14 8.20 59.36 8.10 Q64.57 8.01 69.79 7.80 Q75.00 7.58 80.21 7.78 Q85.43 7.99 90.64 7.95 Q95.86 7.91 101.07 8.13 Q106.29 8.36 111.50 7.79 Q116.71 7.22 121.93 7.26 Q127.14 7.30 132.36 7.58 Q137.57 7.86 142.79 7.85 L148.00 7.84" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" opacity="0.55"/></svg>
+          <div class="brand-tagline">Work Towards Finals 💀</div>
+        </div>
+        <div class="boot-progress" aria-hidden="true"><span></span></div>
+        <p class="boot-status">Opening your study workspace…</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="onboarding-root"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toasts" role="status" aria-live="polite" aria-label="Notifications"></div>
+
+  <script type="module" src="src/app.js"></script>
+  <noscript>
+    <div class="noscript">PADHLE.WTF needs JavaScript. Your account data is protected by the service; study data is stored in your browser.</div>
+  </noscript>
+</body>
+</html>

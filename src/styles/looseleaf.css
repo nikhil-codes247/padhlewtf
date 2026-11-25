@@ -1,0 +1,1031 @@
+/* ==========================================================================
+   PADHLE.WTF — "Looseleaf" design
+   --------------------------------------------------------------------------
+   The single design language for the whole app, in both light and dark modes.
+   Paper desk, handwriting ink, Kevin Sans type, marker accents. Applied
+   globally so there is no "classic" fallback to maintain.
+
+   The grammar of this skin:
+     · Paper, not glass — warm off-white sheets on a green desk.
+     · Ink, not borders — thin pencil strokes and slightly wobbly corners.
+     · Handwriting — Kevin Sans for UI, Space Mono for labels.
+     · Marker colour — highlighter yellow and a felt-tip orange carry emphasis.
+     · Sticky notes and tape — colour is a physical object, not a gradient.
+   ========================================================================== */
+
+/* Kevin Sans — MIT, bundled by Looseleaf. Self-hosted like every other font. */
+@font-face {
+  font-family: "Kevin Sans";
+  src: url("../../fonts/kevin-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Kevin Sans";
+  src: url("../../fonts/kevin-sans-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------ 1. tokens -- */
+:root,
+:root[data-theme="light"] {
+  --ll-desk: #a8c8bb;
+  --ll-desk-deep: #93b4a7;
+  --ll-paper: #f8f5ee;
+  --ll-paper-shade: #ece6da;
+  --ll-slip: #fbf8f1;
+  --ll-card: #fbf6e9;
+  --ll-graph: #f4f7ef;
+  --ll-kraft: #dcc8a3;
+  --ll-pad: #f8f2de;
+  --ll-photo: #fffdf6;
+
+  --ll-rule-blue: #8fb0d4;
+  --ll-rule-red: #d9776a;
+
+  --ll-sticky-yellow: #f7e38a;
+  --ll-sticky-green: #cfe6a8;
+  --ll-sticky-orange: #f7c08e;
+  --ll-sticky-pink: #f6b8b0;
+  --ll-sticky-blue: #bcd8f0;
+
+  --ll-ink: #2a2420;
+  --ll-ink-soft: #4a423b;
+  --ll-ink-muted: #4a433c;
+  --ll-ink-you: #2c4f9e;
+  --ll-pencil: #6b6660;
+  --ll-pencil-text: #5a554e;
+  --ll-pencil-mark: #b9ac96;
+  --ll-red: #c2412d;
+  --ll-green: #3b7a4b;
+  --ll-marker: #df6b3c;
+  --ll-orange-text: #a4502a;
+  --ll-hi: #f8dc4c;
+  --ll-hi-deep: #a87f0c;
+  --ll-focus: #2c4f9e;
+
+  --ll-tape: rgb(246 244 236 / 0.55);
+  --ll-tape-edge: rgb(140 135 120 / 0.35);
+
+  /* --- alias the app's semantic tokens onto the paper palette ---------- */
+  --bg: var(--ll-desk);
+  --surface: var(--ll-paper);
+  --surface-2: var(--ll-sticky-yellow);
+  --surface-3: var(--ll-graph);
+  --surface-4: var(--ll-sticky-pink);
+  --surface-5: var(--ll-pad);
+  --surface-6: var(--ll-sticky-blue);
+
+  --ink: #7d7364;
+  --text: var(--ll-ink);
+  --text-strong: var(--ll-ink);
+  --text-muted: var(--ll-ink-muted);
+  --muted: var(--ll-ink-muted);
+  --faint: var(--ll-pencil-text);
+  --line: #c9bfa9;
+  --black: var(--ll-ink);
+  --white: #fffdf6;
+
+  --primary: var(--ll-marker);
+  --primary-text: var(--ll-ink);
+  --on-accent: var(--ll-ink);
+  --yellow: var(--ll-hi);
+  --yellow-light: #fbf0c0;
+  --red: var(--ll-red);
+
+  --pastel-1: var(--ll-sticky-yellow);
+  --pastel-2: var(--ll-sticky-blue);
+  --pastel-3: var(--ll-sticky-pink);
+  --pastel-4: var(--ll-sticky-orange);
+
+  --ok: var(--ll-sticky-green);
+  --warn: var(--ll-sticky-orange);
+  --bad: var(--ll-sticky-pink);
+  --info: var(--ll-sticky-blue);
+  --extra: var(--ll-kraft);
+
+  --ok-ink: var(--ll-green);
+  --warn-ink: var(--ll-orange-text);
+  --bad-ink: var(--ll-red);
+  --ok-light: #eef4e3;
+  --warn-light: #fbeee2;
+  --bad-light: #fbe7e4;
+  --info-light: #e9f1f8;
+  --extra-light: #f2ead9;
+  --accent-light: #fbf0c0;
+  --accent-text: var(--ll-orange-text);
+
+  --card-front: var(--ll-photo);
+  --card-back: #2c4f9e;
+  --card-back-text: #fffdf6;
+  --chart-grid: rgb(42 36 32 / 0.09);
+  --scrim: rgb(42 36 32 / 0.18);
+  --focus: var(--ll-focus);
+
+  /* --- typography ------------------------------------------------------ */
+  --font: "Kevin Sans", "Segoe Script", "Comic Sans MS", ui-rounded, system-ui, sans-serif;
+  --font-heading: "Kevin Sans", "Segoe Script", "Comic Sans MS", ui-rounded, system-ui, sans-serif;
+  --font-display: "Kevin Sans", "Segoe Script", "Comic Sans MS", ui-rounded, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-script: "Kevin Sans", "Segoe Script", cursive;
+
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs: 15px;
+  --fs-lg: 18px;
+  --fs-xl: 24px;
+  --fs-2xl: 32px;
+
+  /* --- shape ----------------------------------------------------------- */
+  --r: 6px 9px 5px 8px / 8px 5px 9px 6px;
+  --r-sm: 4px 6px 3px 5px / 5px 3px 6px 4px;
+  --r-pill: 14px 18px 15px 19px / 18px 14px 19px 15px;
+  --border-w: 1.4px;
+  --border-w-thin: 1px;
+  --border-w-thick: 1.8px;
+  --border-dash: 1px dashed var(--ll-pencil-mark);
+
+  --shadow-sm: 0 1px 0 rgb(58 44 30 / 0.10);
+  --shadow: 0 1px 2px rgb(58 44 30 / 0.12), 0 6px 14px -10px rgb(58 44 30 / 0.38);
+  --shadow-lg: 0 2px 3px rgb(58 44 30 / 0.12), 0 14px 30px -18px rgb(58 44 30 / 0.5);
+  --shadow-xl: 0 4px 8px rgb(58 44 30 / 0.14), 0 24px 48px -24px rgb(58 44 30 / 0.55);
+  --shadow-hover: 0 3px 6px rgb(58 44 30 / 0.14), 0 16px 34px -20px rgb(58 44 30 / 0.5);
+  --shadow-sm-hover: 0 2px 6px rgb(58 44 30 / 0.14);
+  --shadow-none: none;
+
+  --grid: none;
+}
+
+/* Night desk: same paper language, printed on dark card stock. */
+html[data-theme="dark"] {
+  --ll-desk: #232a24;
+  --ll-desk-deep: #1b211c;
+  --ll-paper: #2d2b25;
+  --ll-paper-shade: #24221d;
+  --ll-slip: #34312a;
+  --ll-card: #33302a;
+  --ll-graph: #2b2f27;
+  --ll-kraft: #4a4030;
+  --ll-pad: #343026;
+
+  --ll-ink: #f2ead9;
+  --ll-ink-soft: #d6ccb7;
+  --ll-ink-muted: #c4b9a2;
+  --ll-pencil: #a89d87;
+  --ll-pencil-text: #b7ac96;
+  --ll-pencil-mark: #6b6252;
+  --ll-hi: #d8b93c;
+  --ll-hi-deep: #f0d46a;
+
+  --bg: var(--ll-desk);
+  --surface: var(--ll-paper);
+  --surface-2: #3d382c;
+  --surface-3: var(--ll-graph);
+  --surface-4: #40302c;
+  --surface-5: var(--ll-pad);
+  --surface-6: #2f3a44;
+
+  --ink: #6b6252;
+  --text: var(--ll-ink);
+  --text-strong: var(--ll-ink);
+  --text-muted: var(--ll-ink-muted);
+  --muted: var(--ll-ink-muted);
+  --faint: var(--ll-pencil-text);
+  --line: #504a3d;
+  --black: var(--ll-ink);
+  --white: #232a24;
+
+  --ok-ink: #a9d18a;
+  --warn-ink: #eab487;
+  --bad-ink: #e8a29a;
+
+  --ok-light: #2f3a2c;
+  --warn-light: #3d332a;
+  --bad-light: #3d2d2b;
+  --info-light: #2c3742;
+  --extra-light: #3a342a;
+
+  /* Inputs are paper too, not white cards. Sticky notes stay bright objects,
+     so anything printed on them keeps dark ink (set below). */
+  --ll-photo: #33302a;
+  --on-accent: #2a2420;
+  --primary-text: #2a2420;
+}
+
+/* -------------------------------------------------------------- 2. base --- */
+ body {
+  background-color: var(--ll-desk);
+  background-image:
+    radial-gradient(rgb(0 0 0 / 0.035) 1px, transparent 1px),
+    linear-gradient(118deg, rgb(255 255 255 / 0.10), rgb(0 0 0 / 0.05));
+  background-size: 4px 4px, 100% 100%;
+  background-attachment: fixed;
+  color: var(--ll-ink);
+}
+html[data-theme="dark"] body {
+  background-image:
+    radial-gradient(rgb(255 255 255 / 0.028) 1px, transparent 1px),
+    linear-gradient(118deg, rgb(255 255 255 / 0.05), rgb(0 0 0 / 0.18));
+}
+
+ h1,
+ h2,
+ h3,
+ h4 {
+  text-transform: none;
+  letter-spacing: -0.005em;
+  font-weight: 700;
+  color: var(--ll-ink);
+}
+ h1 { font-size: clamp(26px, 3vw, 34px); }
+ .eyebrow,
+ .crumb,
+ .mono,
+ th,
+ .metric .k {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  color: var(--ll-pencil-text);
+}
+ a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+ a:not(.btn):not(.tile):not(.card):not(.metric-link):not(.suggest-item):not(.chip):hover {
+  background: color-mix(in srgb, var(--ll-hi) 62%, transparent);
+  color: var(--ll-ink);
+}
+ ::selection { background: var(--ll-hi); color: var(--ll-ink); }
+ mark { background: var(--ll-hi); border-bottom-color: var(--ll-ink); }
+ :focus-visible { outline: 2.5px solid var(--ll-focus); outline-offset: 3px; }
+ ::placeholder { color: var(--ll-pencil-text); }
+
+/* Ink decorations are always visible now — Looseleaf is the only design. */
+.ink { display: block; color: var(--ll-pencil-mark); }
+.ink-brand { width: 132px; height: 10px; margin: -2px 0 0 2px; color: var(--ll-marker); }
+.ink-hero { width: min(280px, 62%); height: 12px; margin: -4px 0 6px; color: var(--ll-marker); }/* --------------------------------------------------------- 3. app chrome -- */
+ .sidebar {
+  background: var(--ll-paper);
+  border-right: 1.4px solid var(--ll-pencil-mark);
+  box-shadow: 4px 0 0 rgb(58 44 30 / 0.06);
+}
+ .sidebar-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+ .brand-tagline {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ll-pencil-text);
+}.nav a,
+ .nav a:nth-child(n) {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ll-ink-soft);
+  border-radius: 5px;
+  padding: 9px 11px;
+}
+ .nav a:hover {
+  background: color-mix(in srgb, var(--ll-hi) 38%, transparent);
+  color: var(--ll-ink);
+  border-color: transparent;
+  box-shadow: none;
+}
+ .nav a.active {
+  background: var(--ll-hi) !important;
+  color: var(--ll-ink) !important;
+  border-color: color-mix(in srgb, var(--ll-hi-deep) 45%, transparent);
+  box-shadow: none;
+}
+ .nav a.active .count {
+  background: var(--ll-paper); color: var(--ll-ink); border-color: var(--ll-pencil-mark);
+}
+ .nav a .count {
+  background: var(--ll-slip); color: var(--ll-ink-soft); border: 1px solid var(--ll-pencil-mark);
+  border-radius: 999px;
+}
+
+ .topbar {
+  background: var(--ll-paper);
+  border-bottom: 1.4px dashed var(--ll-pencil-mark);
+  backdrop-filter: none;
+}
+ .topbar h1 { text-transform: none; letter-spacing: -0.01em; }
+ .band {
+  height: 6px;
+  border-bottom: 1px solid var(--ll-pencil-mark);
+  background: repeating-linear-gradient(90deg,
+    var(--ll-rule-blue) 0 14px,
+    transparent 14px 18px,
+    var(--ll-rule-red) 18px 32px,
+    transparent 32px 36px);
+  opacity: 0.7;
+}
+ .avatar-menu { position: relative; }
+.avatar-popup {
+position: absolute;
+top: calc(100% + 8px);
+right: 0;
+width: 210px;
+display: none;
+background: var(--ll-slip) !important;
+border: 1.4px solid var(--ll-pencil-mark) !important;
+border-radius: var(--r);
+box-shadow: var(--shadow-lg);
+z-index: 50;
+}
+.avatar-popup.open { display: block; }
+.avatar-popup-item { width: 100%; text-align: left; }
+ .app-footer {
+  background: transparent;
+  color: var(--ll-pencil-text);
+  border-top: 1px dashed var(--ll-pencil-mark);
+}
+
+/* ------------------------------------------------------------ 4. surfaces -- */
+ .card {
+  background: var(--ll-paper);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  color: var(--ll-ink);
+}
+
+/* The hero is the big sheet on the desk. Marker colour, not a filled block. */
+ .card.hero {
+  background:
+    linear-gradient(180deg, var(--ll-pad), var(--ll-paper));
+  color: var(--ll-ink);
+  border-width: 1.6px;
+  border-color: var(--ll-pencil-mark);
+  box-shadow: 0 2px 0 rgb(58 44 30 / 0.12), 0 16px 34px -22px rgb(58 44 30 / 0.55);
+  padding: var(--sp-6);
+}
+ .card.hero h1,
+ .card.hero h2,
+ .card.hero h3,
+ .card.hero .metric .v { color: var(--ll-ink); }
+ .card.hero .eyebrow,
+ .card.hero .faint { color: var(--ll-pencil-text); }
+ .card.hero .muted { color: var(--ll-ink-muted); }
+ .card.hero .hero-num {
+  color: var(--ll-marker);
+  font-size: clamp(46px, 10vw, 78px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+ .card.hero .bar { background: color-mix(in srgb, var(--ll-ink) 12%, transparent); }
+ .card.hero .bar > span { background: var(--ll-marker); }
+ .card.hero .btn { background: var(--ll-slip); color: var(--ll-ink); }
+ .card.hero .btn.primary { background: var(--ll-marker); color: #fff9ef; }
+ .card.hero .btn.ghost { background: transparent; color: var(--ll-ink-soft); box-shadow: none; }
+ .card.hero .stat-line { border-bottom: 1px dashed var(--ll-pencil-mark); }
+
+ .card.stripe {
+  border-left: 6px solid var(--stripe, var(--ll-marker));
+}
+ .card-title h2::before,
+ .card-title h3::before {
+  width: 9px; height: 9px;
+  background: var(--ll-marker);
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 2px 3px 2px 3px;
+}
+ .card-note {
+  background: color-mix(in srgb, var(--ll-hi) 34%, var(--ll-paper));
+  border: 1px dashed var(--ll-pencil-mark);
+  border-left: 4px solid var(--ll-marker);
+  border-radius: 3px;
+  color: var(--ll-ink-soft);
+  font-size: var(--fs-sm);
+}
+ .eyebrow { color: var(--ll-pencil-text); }
+
+/* Sticky note: the tile/quest surface gains a taped top edge. */
+ .quest,
+ .tile,
+ .suggest-item,
+ .list-item {
+  background: var(--ll-slip);
+  border: 1.2px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  box-shadow: 0 1px 0 rgb(58 44 30 / 0.08);
+}
+ .quest:hover,
+ .tile:hover,
+ .suggest-item:hover {
+  transform: translateY(-2px) rotate(-0.25deg);
+  box-shadow: var(--shadow-hover);
+}
+ .tile.tinted:nth-child(4n+1) { background: color-mix(in srgb, var(--ll-sticky-yellow) 40%, var(--ll-slip)); }
+ .tile.tinted:nth-child(4n+2) { background: color-mix(in srgb, var(--ll-sticky-blue) 34%, var(--ll-slip)); }
+ .tile.tinted:nth-child(4n+3) { background: color-mix(in srgb, var(--ll-sticky-pink) 30%, var(--ll-slip)); }
+ .tile.tinted:nth-child(4n+4) { background: color-mix(in srgb, var(--ll-sticky-orange) 30%, var(--ll-slip)); }
+
+/* ------------------------------------------------------------- 5. buttons -- */
+ .btn {
+  background: var(--ll-slip);
+  color: var(--ll-ink);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  box-shadow: 0 1px 0 var(--ll-pencil-mark), 0 2px 0 rgb(58 44 30 / 0.08);
+  font-family: var(--font);
+  font-weight: 400;
+  letter-spacing: 0;
+  transform: none;
+  transition: transform 120ms, box-shadow 120ms, background 120ms;
+}
+ .btn:hover {
+  background: color-mix(in srgb, var(--ll-hi) 32%, var(--ll-slip));
+  transform: translateY(-1px);
+  box-shadow: 0 1px 0 var(--ll-pencil-mark), 0 4px 8px -4px rgb(58 44 30 / 0.4);
+}
+ .btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--ll-pencil-mark);
+}
+ .btn.primary {
+  background: var(--ll-marker);
+  color: #fff9ef;
+  border-color: color-mix(in srgb, var(--ll-marker) 70%, var(--ll-ink));
+}
+ .btn.primary:hover {
+  background: color-mix(in srgb, var(--ll-marker) 86%, var(--ll-hi));
+}
+ .btn.ok { background: var(--ll-sticky-green); color: var(--ll-ink); }
+ .btn.danger { background: var(--ll-sticky-pink); color: var(--ll-ink); }
+ .btn.red { background: var(--ll-red); color: #fff9ef; }
+ .btn.ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--ll-ink-soft);
+}
+ .btn.ghost:hover {
+  background: color-mix(in srgb, var(--ll-hi) 30%, transparent);
+  border-color: transparent;
+  box-shadow: none;
+}
+ .btn[disabled],
+ .btn[aria-disabled="true"] {
+  background: var(--ll-paper-shade);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.6;
+}
+ .btn.sm { box-shadow: 0 1px 0 var(--ll-pencil-mark); }
+ .btn-group .btn { border-radius: 0; }
+ .btn-group .btn:first-child { border-radius: var(--r-sm) 0 0 var(--r-sm); }
+ .btn-group .btn:last-child { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+
+/* ----------------------------------------------------------------- 6. chips -- */
+ .chip,
+ .badge {
+  background: var(--ll-slip);
+  color: var(--ll-ink-soft);
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: var(--r-pill);
+  box-shadow: none;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+ .chip.soft { background: color-mix(in srgb, var(--ll-hi) 22%, var(--ll-slip)); }
+ .chip.plain { background: var(--ll-slip); }
+ .chip.ok { background: var(--ll-sticky-green); color: var(--ll-ink); }
+ .chip.warn { background: var(--ll-sticky-orange); color: var(--ll-ink); }
+ .chip.bad { background: var(--ll-sticky-pink); color: var(--ll-ink); }
+ .chip.info { background: var(--ll-sticky-blue); color: var(--ll-ink); }
+ .chip.acc { background: var(--ll-sticky-yellow); color: var(--ll-ink); }
+
+/* ---------------------------------------------------------------- 7. forms -- */
+ .input,
+ .select,
+ .textarea,
+ input[type="date"],
+ input[type="time"],
+ input[type="number"],
+ input[type="search"] {
+  background: var(--ll-photo);
+  color: var(--ll-ink);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 1px 2px rgb(58 44 30 / 0.06);
+}
+ .input:focus,
+ .select:focus,
+ .textarea:focus,
+ input:focus {
+  background: var(--ll-photo);
+  box-shadow: inset 0 1px 2px rgb(58 44 30 / 0.06);
+  transform: none;
+}
+ .field > label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--ll-ink-soft);
+}
+ .check .box {
+  background: var(--ll-photo);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: 3px 4px 3px 4px;
+  box-shadow: none;
+}
+ .check input:checked + .box {
+  background: var(--ll-sticky-green);
+}
+ .check .box::after { color: var(--ll-green); }
+
+/* ------------------------------------------------------------- 8. progress -- */
+ .bar {
+  height: 10px;
+  background: color-mix(in srgb, var(--ll-ink) 8%, var(--ll-paper-shade));
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 6px 9px 7px 10px / 9px 6px 10px 7px;
+  overflow: hidden;
+}
+ .bar > span {
+  background: var(--ll-marker);
+  border-radius: inherit;
+}
+ .bar.ok > span { background: var(--ll-green); }
+ .bar.warn > span { background: var(--ll-marker); }
+ .bar.bad > span { background: var(--ll-red); }
+ .bar.thin { height: 7px; }
+ .meter .pct { font-family: var(--font-mono); color: var(--ll-ink-soft); }
+ .xp-bar {
+  background: color-mix(in srgb, var(--ll-ink) 8%, var(--ll-paper-shade));
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 6px;
+}
+ .xp-bar > span { background: var(--ll-hi); }
+
+/* -------------------------------------------------------------- 9. metrics -- */
+ .metric .k { color: var(--ll-pencil-text); }
+ .metric .v {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ll-ink);
+}
+ .metric .s { color: var(--ll-ink-muted); }
+ .metrics .card:nth-child(4n+1) { background: color-mix(in srgb, var(--ll-sticky-yellow) 26%, var(--ll-paper)); }
+ .metrics .card:nth-child(4n+2) { background: color-mix(in srgb, var(--ll-sticky-blue) 22%, var(--ll-paper)); }
+ .metrics .card:nth-child(4n+3) { background: color-mix(in srgb, var(--ll-sticky-pink) 18%, var(--ll-paper)); }
+ .metrics .card:nth-child(4n+4) { background: color-mix(in srgb, var(--ll-sticky-green) 22%, var(--ll-paper)); }
+
+/* ---------------------------------------------------------- 10. misc blocks -- */
+ .toast {
+  background: var(--ll-sticky-yellow);
+  color: var(--ll-ink);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow);
+}
+ .modal {
+  background: var(--ll-paper);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-xl);
+}
+ .table-wrap {
+  border: 1.2px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  background: var(--ll-photo);
+}
+ table thead th {
+  background: var(--ll-paper-shade);
+  border-bottom: 1.5px solid var(--ll-pencil-mark);
+}
+ table tbody td { border-bottom: 1px dashed var(--ll-pencil-mark); }
+ .empty {
+  background: color-mix(in srgb, var(--ll-paper) 70%, transparent);
+  border: 1.5px dashed var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: none;
+}
+ .empty .em-ico { filter: saturate(0.8); }
+ .callout {
+  background: color-mix(in srgb, var(--ll-sticky-orange) 34%, var(--ll-paper));
+  border: 1.2px solid var(--ll-pencil-mark);
+  border-left: 4px solid var(--ll-marker);
+  border-radius: var(--r-sm);
+}
+ .callout.warn { background: color-mix(in srgb, var(--ll-sticky-orange) 34%, var(--ll-paper)); }
+ .suggest-rank {
+  background: var(--ll-hi);
+  color: var(--ll-ink);
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+}
+ .streak-day {
+  background: var(--ll-slip);
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 3px;
+}
+ .streak-day.done { background: var(--ll-sticky-green); }
+ .streak-day.current { outline: 2px solid var(--ll-marker); outline-offset: 1px; }
+
+/* ------------------------------------------------------- 11. public shell -- */
+ .public-shell {
+  background: transparent;
+  color: var(--ll-ink);
+}
+ .public-top,
+ .public-foot {
+  background: var(--ll-paper);
+  border-color: var(--ll-pencil-mark);
+  border-style: solid;
+}
+ .public-top { border-width: 0 0 1.4px; }
+ .public-foot { border-width: 1.4px 0 0; }
+ .public-main { color: var(--ll-ink); }
+ .boot-card {
+  background: var(--ll-paper);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+}.boot-progress {
+  background: color-mix(in srgb, var(--ll-ink) 8%, var(--ll-paper-shade));
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 6px;
+}
+ .boot-progress > span { background: var(--ll-marker); }
+
+/* Reduced motion: paper does not wobble. */
+@media (prefers-reduced-motion: reduce) {
+   * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+   .tile:hover,
+   .quest:hover,
+   .suggest-item:hover { transform: none; }
+}
+
+/* ------------------------------------------------- 13. contrast + fixes --- */
+
+/* The marker button carries dark ink, not cream: the orange is too light for
+   white type in either theme, and Looseleaf's own buttons do the same. */
+ .btn.primary,
+ .card.hero .btn.primary,
+ .landing-cta .btn.primary { color: #2a2420; }
+
+/* Sticky notes are always light, so their text is always dark. */
+ .toast,
+ .toast * { color: #2a2420; }
+
+/* The D-Day card was a loud filled block; here it is a hand-written warning
+   note pinned to the desk — paper with red ink, which stays readable. */
+ .board-countdown {
+  background: color-mix(in srgb, var(--ll-sticky-pink) 42%, var(--ll-paper)) !important;
+  color: var(--ll-ink) !important;
+  border: 1.4px solid var(--ll-pencil-mark) !important;
+  border-left: 6px solid var(--ll-red) !important;
+  box-shadow: var(--shadow) !important;
+}
+ .board-countdown * { color: var(--ll-ink) !important; }
+ .board-countdown .eyebrow { color: var(--ll-red) !important; }
+ .board-countdown .countdown-big {
+  color: var(--ll-red) !important;
+  text-shadow: none;
+}
+ .board-countdown .countdown-big::after { display: none; }
+ .board-countdown .btn.danger {
+  background: var(--ll-red) !important;
+  color: #fff9ef !important;
+  border-color: var(--ll-red) !important;
+}
+ .board-countdown .btn.ghost {
+  background: transparent !important;
+  color: var(--ll-ink) !important;
+  border: 1px solid var(--ll-pencil-mark) !important;
+}
+ .board-countdown .btn.ghost:hover {
+  background: var(--ll-hi) !important;
+  color: var(--ll-ink) !important;
+}
+
+/* Landing page: the accent bar was covering the first letter of each label. */
+ .landing-stat { padding-left: calc(var(--sp-4) + 14px); }
+ .landing-stat::before {
+  left: var(--sp-4);
+  width: 4px;
+  border-radius: 2px;
+  background: var(--ll-marker);
+}
+ .landing-stat:nth-child(2)::before { background: var(--ll-rule-blue); }
+ .landing-stat:nth-child(3)::before { background: var(--ll-green); }
+ .landing-stat:nth-child(4)::before { background: var(--ll-kraft); }
+
+/* The closing CTA is a warm paper notice, not a solid orange slab. */
+ .landing-cta {
+  background: color-mix(in srgb, var(--ll-sticky-orange) 48%, var(--ll-paper));
+  color: var(--ll-ink);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+}
+ .landing-cta .eyebrow { color: var(--ll-red); }
+ .landing-cta .muted { color: var(--ll-ink-muted); }
+ .landing-cta .btn { background: var(--ll-slip); color: var(--ll-ink); }
+ .landing-cta .btn.primary { background: var(--ll-marker); color: #2a2420; }
+
+@media (max-width: 900px) {
+  /* The streak chip carries an inline display:flex, so this needs weight. */
+   .topbar-streak { display: none !important; }
+   .topbar h1 { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+   .topbar > .grow { min-width: 84px; }
+}
+@media (max-width: 560px) {
+   #global-search { width: 112px !important; font-size: 12.5px; padding: 8px 10px; }
+   .topbar > .grow { min-width: 88px; }
+   .topbar h1 { font-size: 16px; }
+   .topbar { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+}
+
+/* The "100% offline" sticker sat on top of the preview's footer. Pin it to the
+   lower-right corner instead, outside the sheet. */
+ .landing-pill {
+  left: auto;
+  right: -8px;
+  bottom: -14px;
+  background: var(--ll-hi);
+  color: #2a2420;
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 3px;
+  transform: rotate(2.5deg);
+  z-index: 2;
+}
+
+/* Sticky notes are physical objects: bright paper in both themes, always with
+   dark ink on top. This keeps chips, stickers and note cards readable at night
+   without forcing the whole palette light. */
+ .chip.ok,
+ .chip.warn,
+ .chip.bad,
+ .chip.info,
+ .chip.acc,
+ .btn.accent2,
+ .btn.ok,
+ .btn.danger,
+ .sticker,
+ .suggest-rank,
+ .nav a.active,
+ .streak-day.done,
+ .landing-step-n,
+ .card.colorful-1,
+ .card.colorful-2,
+ .card.colorful-3,
+ .card.colorful-4 { color: #2a2420; }
+
+/* ==========================================================================
+   14. Dark-theme completion
+   --------------------------------------------------------------------------
+   The light palette's sticky notes are physical objects; their *tints* still
+   need night values so panels that paint with --accent-light / --ok-light do
+   not keep a pale background while inheriting pale type.
+   ========================================================================== */
+html[data-theme="dark"] {
+  --accent: var(--ll-marker);
+  --accent-light: #3a3028;
+  --accent-text: #eab487;
+  --yellow-light: #3a3324;
+  --pastel-1: #3d382c;
+  --pastel-2: #2f3a44;
+  --pastel-3: #40302c;
+  --pastel-4: #3d332a;
+  --ok: #3d4a34;
+  --warn: #4a3a2c;
+  --bad: #4a2f2c;
+  --info: #2f3d48;
+  --extra: #433a2c;
+  --on-accent: #2a2420;
+  --card-front: #33302a;
+  --chart-grid: rgb(242 234 217 / 0.12);
+  --scrim: rgb(0 0 0 / 0.55);
+}
+
+/* Panels that stay a pale sticky note in both themes keep dark ink on top. */
+.streak-spotlight-side,
+.card-note,
+.callout,
+.toast,
+.sticker,
+.suggest-rank { color: var(--ll-ink, #2a2420); }
+
+/* The D-Day note is a pinned sticky note, so it stays legible at night. */
+html[data-theme="dark"] .board-countdown {
+  background: color-mix(in srgb, var(--ll-sticky-pink) 82%, #fffdf6) !important;
+  color: #2a2420 !important;
+}
+html[data-theme="dark"] .board-countdown * { color: #2a2420 !important; }
+html[data-theme="dark"] .board-countdown .eyebrow { color: var(--ll-red) !important; }
+html[data-theme="dark"] .board-countdown .countdown-big { color: var(--ll-red) !important; }
+html[data-theme="dark"] .board-countdown .btn.ghost {
+  color: #2a2420 !important;
+  border-color: var(--ll-pencil-mark) !important;
+}
+html[data-theme="dark"] .board-countdown .btn.ghost:hover { background: var(--ll-hi) !important; }
+html[data-theme="dark"] .board-countdown .btn.danger { color: #fff9ef !important; }
+
+/* ==========================================================================
+   15. Hand-drawn controls
+   ========================================================================== */
+
+/* Selects: swap the OS chevron for a wobbly pencil stroke. */
+select,
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='12' viewBox='0 0 18 12'><path d='M2.2 3.4c2.2 2.2 4 4 6.8 5.6 2.3-1.7 4.5-3.8 6.5-5.4' fill='none' stroke='%235a554e' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 11px;
+  padding-right: 38px;
+}
+html[data-theme="dark"] select,
+html[data-theme="dark"] .select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='12' viewBox='0 0 18 12'><path d='M2.2 3.4c2.2 2.2 4 4 6.8 5.6 2.3-1.7 4.5-3.8 6.5-5.4' fill='none' stroke='%23b7ac96' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+select::-ms-expand { display: none; }
+
+/* Checkboxes: a marker tick on sticky-green, always dark ink. */
+.check .box {
+  border-radius: 3px 5px 2px 4px / 4px 3px 5px 3px;
+  background: var(--ll-photo);
+  border-color: var(--ll-pencil-mark);
+}
+.check:hover .box { background: color-mix(in srgb, var(--ll-hi) 42%, var(--ll-photo)); }
+.check input:checked + .box {
+  background: var(--ll-sticky-green);
+  border-color: var(--ll-green);
+  box-shadow: 1px 2px 0 var(--ll-pencil-mark);
+}
+.check .box::after { color: var(--ll-ink); font-family: var(--font); font-size: 15px; }
+html[data-theme="dark"] .check .box::after { color: #2a2420; }/* Calendar: paper cells, marker ring around today instead of a solid slab. */
+.cal-cell {
+  border-radius: var(--r-sm);
+  border-color: var(--ll-pencil-mark);
+  background: var(--ll-slip);
+}
+.cal-cell.today {
+  background: var(--ll-hi);
+  color: #2a2420;
+  box-shadow: inset 0 0 0 2px var(--ll-marker), 1px 2px 0 rgb(58 44 30 / 0.14);
+  transform: rotate(-0.35deg);
+}
+.cal-cell.today .dnum { color: #2a2420; }
+.cal-cell.sel { box-shadow: inset 0 0 0 1.6px var(--ll-focus); }
+
+/* Tabs: highlighter underline, not a big filled block. */
+.tabs { border-bottom: 1.5px solid var(--ll-pencil-mark); }
+.tab {
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  color: var(--ll-pencil-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.tab:hover { background: color-mix(in srgb, var(--ll-hi) 32%, transparent); color: var(--ll-ink); }
+.tab.active {
+  background: color-mix(in srgb, var(--ll-hi) 58%, var(--ll-slip));
+  color: var(--ll-ink);
+  border-color: var(--ll-pencil-mark);
+  box-shadow: inset 0 -3px 0 var(--ll-marker);
+}
+
+/* Charts: pencil grid, inked bars, hand font on the axes. */
+.chart .grid-line { stroke: var(--chart-grid); stroke-dasharray: 2 5; }
+.chart .axis-text { font-family: var(--font); fill: var(--ll-pencil-text); }.chart .bar,
+.chart .bar-ok,
+.chart .donut-seg { stroke: var(--ll-ink); stroke-width: 0.8; }
+.chart .bar { fill: var(--ll-marker); }
+.chart .line { stroke-width: 2.6; }
+.chart .donut-track { stroke: color-mix(in srgb, var(--ll-ink) 12%, var(--ll-paper-shade)); }
+.chart-legend .swatch { border: 1px solid var(--ll-pencil-mark); border-radius: 2px; }
+.chart-tip {
+  background: var(--ll-slip);
+  color: var(--ll-ink);
+  border: 1.2px solid var(--ll-pencil-mark);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow);
+}
+
+/* Choice pills (e.g. "All papers") that are not .btn/.chip. */
+.seg, .segmented {
+  border: 1.2px solid var(--ll-pencil-mark) !important;
+  border-radius: var(--r-sm);
+  background: var(--ll-slip);
+}
+
+/* Details / disclosure triangles look like pencil arrows. */
+details.disclosure summary::marker { color: var(--ll-marker); }
+
+/* Inline code and keycaps on paper. */
+kbd {
+  background: var(--ll-slip);
+  border: 1.2px solid var(--ll-pencil-mark);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  box-shadow: none;
+  font-family: var(--font-mono);
+}
+
+/* Bottom-sheet / modal scrims read as a sheet of tracing paper. */
+.modal-backdrop, .scrim { background: rgb(42 36 32 / 0.34); }html[data-theme="dark"] .modal-backdrop { background: rgb(0 0 0 / 0.62); }
+
+/* Focus rings: a second pencil line rather than a neon halo. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2.5px solid var(--ll-focus);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   16. Component overrides that carried the old palette
+   ========================================================================== */
+
+/* Practice-question cards were glassy radial gradients with a neon glow.
+   On paper they are index cards: flat stock, pencil edge, marker reveal. */
+.pq-card,
+html[data-theme="dark"] .pq-card {
+  background: var(--ll-card) !important;
+  color: var(--ll-ink);
+  border: 1.4px solid var(--ll-pencil-mark);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+}
+.pq-card.is-revealed {
+  border-color: var(--ll-marker);
+  box-shadow: var(--shadow-lg), 0 0 0 3px color-mix(in srgb, var(--ll-marker) 22%, transparent);
+}
+.pq-spark { display: none; }
+.pq-explanation,
+html[data-theme="dark"] .pq-explanation {
+  background: color-mix(in srgb, var(--ll-hi) 30%, var(--ll-slip));
+  border-left: 3px solid var(--ll-marker);
+  color: var(--ll-ink);
+}/* Activity heatmap uses the sticky-note family rather than old greys. */
+.hm-cell {
+  border: 1px solid var(--ll-pencil-mark);
+  border-radius: 2px;
+  background: var(--ll-slip);
+}
+.hm-cell.lvl0 { background: color-mix(in srgb, var(--ll-ink) 7%, var(--ll-paper-shade)); }
+.hm-cell.lvl1 { background: color-mix(in srgb, var(--ll-hi) 38%, var(--ll-slip)); }
+.hm-cell.lvl2 { background: var(--ll-hi); }
+.hm-cell.lvl3 { background: var(--ll-sticky-orange); }
+.hm-cell.lvl4 { background: var(--ll-sticky-green); }
+html[data-theme="dark"] .hm-cell.lvl0 { background: color-mix(in srgb, var(--ll-ink) 10%, var(--ll-paper-shade)); }
+
+/* Sticker/back-of-card faces on flashcards. */
+.card-back {
+  background: var(--card-back);
+  color: var(--card-back-text);
+}
+.card-back::after { border-color: color-mix(in srgb, var(--card-back-text) 28%, transparent); }
+
+/* Segmented controls that were filled with the primary colour. */
+.segmented .active, .seg .active {
+  background: color-mix(in srgb, var(--ll-hi) 58%, var(--ll-slip));
+  color: var(--ll-ink);
+  box-shadow: inset 0 -3px 0 var(--ll-marker);
+}
+
+/* ==========================================================================
+   17. Highlighter marks
+   ========================================================================== */
+
+/* Inline emphasis reads as a swipe of highlighter, not a filled box. */
+.landing-hl,
+.onb-accent {
+  background: linear-gradient(180deg,
+    transparent 54%,
+    color-mix(in srgb, var(--ll-hi) 84%, transparent) 54% 93%,
+    transparent 93%);
+  box-shadow: none;
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+html[data-theme="dark"] .landing-hl,
+html[data-theme="dark"] .onb-accent {
+  background: linear-gradient(180deg,
+    transparent 54%,
+    color-mix(in srgb, var(--ll-hi) 46%, transparent) 54% 93%,
+    transparent 93%);
+  box-shadow: none;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "padhle-wtf-cloudflare",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PADHLE.WTF — Deploy-ready Cloudflare Pages folder (static site + Razorpay payment functions)"
+}
