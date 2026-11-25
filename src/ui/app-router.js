@@ -15,7 +15,8 @@ import { isSignedIn, hasProfile, hasSelection, hasPaidAccess } from "../core/acc
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
-const FREE_ROUTES = new Set(["welcome", "settings", "account", "profile"]);
+// Dashboard is the home base after onboarding; every feature tab stays locked.
+const FREE_ROUTES = new Set(["welcome", "dashboard", "settings", "account", "profile"]);
 
 export function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");

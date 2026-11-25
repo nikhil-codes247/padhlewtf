@@ -260,21 +260,7 @@ function renderLockedView(routeName) {
   return `
   <div class="locked-view" data-locked-route="${esc(routeName)}">
     <div class="locked-backdrop" aria-hidden="true"></div>
-    <div class="locked-skeletons" aria-hidden="true">
-      <div class="skeleton-line skeleton-title"></div>
-      <div class="skeleton-line skeleton-subtitle"></div>
-      <div class="skeleton-grid">
-        <div class="skeleton-block"></div>
-        <div class="skeleton-block"></div>
-        <div class="skeleton-block"></div>
-        <div class="skeleton-block"></div>
-        <div class="skeleton-block"></div>
-        <div class="skeleton-block"></div>
-      </div>
-      <div class="skeleton-line skeleton-footer"></div>
-      <div class="skeleton-line skeleton-footer"></div>
-    </div>
-    <div class="locked-card">
+    <div class="locked-glass">
       <div class="lock-icon">🔒</div>
       <h2 class="locked-title">Upgrade to access <span class="locked-route">${esc(label)}</span></h2>
       <p class="locked-note">This feature is part of full access. Pay once — ₹199 — and unlock everything until 10 March 2027.</p>

@@ -117,6 +117,9 @@ export default {
               </p>
             </div>
             <div class="row gap-2">
+              <a class="btn sm ghost" href="#/revision">
+                <span aria-hidden="true">←</span> Back to Revision Centre
+              </a>
               <button class="btn ghost flex-1" data-act="qc-change-selection" type="button">
                 <span aria-hidden="true">🔀</span> Change selection
               </button>
@@ -464,7 +467,11 @@ function renderPicker(ctx, subjectId, chapterId, difficulty, countParam) {
             <h1 style="margin:6px 0">Pick a subject &amp; chapter</h1>
             <p class="small muted" style="margin:0">Practise exactly what you want — only the chapter you pick is downloaded.</p>
           </div>
-          <div class="row gap-2"></div>
+          <div class="row gap-2">
+            <a class="btn sm ghost" href="#/revision" style="margin-left:auto">
+              <span aria-hidden="true">←</span> Back to Revision Centre
+            </a>
+          </div>
         </div>
       `,
     }),
