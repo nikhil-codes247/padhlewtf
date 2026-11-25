@@ -1,16 +1,10 @@
 # ---------------------------------------------------------------------------
 # Cloudflare Pages — PADHLE.WTF SaaS
 #
-# Connect your GitHub repo (nikhil-codes247/padhlewtf) to Cloudflare Pages.
-# Environment variables are set in the Cloudflare dashboard:
-#   Dashboard → Workers & Pages → Your site → Settings → Environment variables
+# This file is for local development with `wrangler dev` only.
+# When deploying from GitHub to Cloudflare Pages, settings are configured
+# in the dashboard: Settings → Builds & deployments
 # ---------------------------------------------------------------------------
 
 name = "padhle-wtf"
 compatibility_date = "2026-11-25"
-
-# Cloudflare Pages auto-deploys from Git. No build command needed for pre-built
-# static files. Functions in /functions are auto-detected as Pages Functions.
-
-[env.production]
-  required = ["RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "PADHLE_SUPABASE_URL", "PADHLE_SUPABASE_ANON_KEY"]
