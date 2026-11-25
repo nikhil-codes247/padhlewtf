@@ -13,6 +13,7 @@ import {
   isSignedIn, account, accountEmail, hasPaidAccess, initAccount,
 } from "../../core/account.js";
 import { config } from "../../core/config.js";
+import { activatePaidAccess, claimPurchase } from "../../core/entitlement.js";
 import { ALL_SUBJECT_IDS } from "../../core/subjects.js";
 import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js";
 import { mascot } from "../mascot.js";
@@ -126,16 +127,16 @@ async function handleWelcomePay() {
         name: account.profile?.displayName || undefined,
       },
       handler: async (response) => {
-        const { razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature } = response;
-        const headers = { "Content-Type": "application/json" };
-        const token = account.session?.access_token;
-        if (token) headers.Authorization = `Bearer ${token}`;
-        const vres = await fetch("/api/verify-payment", { method: "POST", headers, body: JSON.stringify({ razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature }) });
-        const vbody = await vres.json().catch(() => ({}));
-        if (!vres.ok || !vbody.ok) {
-          throw new Error(vbody?.error || "Payment could not be verified. If money was debited, contact support — it will be refunded.");
-        }
+        await activatePaidAccess({
+          paymentId: response.razorpay_payment_id,
+          orderId: response.razorpay_order_id,
+          signature: response.razorpay_signature,
+        });
         try { await initAccount({ force: true }); } catch { /* best effort */ }
+        if (!hasPaidAccess()) {
+          toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
+          return;
+        }
         shell.ctx?.rerender?.();
         toast("Full access unlocked until 10 March 2027 ✓", "ok");
       },
@@ -191,7 +192,7 @@ function openUpgradeModal() {
  * Buy panel — shown ONLY to free (unpaid) students, at the bottom of the
  * welcome page, in the app's looseleaf hand-drawn theme.
  */
-function buyPanel() {
+function buyPanel(signedIn = true) {
   const paid = hasPaidAccess();
   if (paid) return "";
 
@@ -205,11 +206,16 @@ function buyPanel() {
       <h2 class="buy-title">Unlock everything — just ₹199</h2>
       <p class="buy-note">Pay once, no subscription. Full access until <b>${esc(expiry)}</b>, then it reverts to free.</p>
       <div class="buy-actions">
-        <button class="btn buy-buy" type="button" data-welcome-pay>
-          Buy full access →
-        </button>
+        ${signedIn
+          ? `<button class="btn buy-buy" type="button" data-welcome-pay>
+               Buy full access →
+             </button>`
+          : `<a class="btn buy-buy" href="#/signup">Create an account to buy <span aria-hidden="true">→</span></a>
+             <a class="btn ghost" href="#/login">I already have one</a>`}
       </div>
-      ${!configured ? `<p class="buy-warn">Payments not configured on this deployment.</p>` : ""}
+      ${signedIn ? `<div style="text-align:center;margin-top:10px"><button class="btn ghost sm" type="button" data-welcome-restore>Already paid? Restore access</button></div>` : ""}
+      ${signedIn && !configured ? `<p class="buy-warn">Payments not configured on this deployment.</p>` : ""}
+      ${!signedIn ? `<p class="buy-note" style="margin-top:10px">Access is tied to your account, so sign in first — then pay and it unlocks instantly.</p>` : ""}
     </div>
   </section>
   `;
@@ -351,7 +357,7 @@ export default {
       </section>
 
       <section class="landing-cta" aria-label="Get started">
-        ${paid ? "" : buyPanel()}
+        ${paid ? "" : buyPanel(signedIn)}
         <div>
           <span class="eyebrow">Ready when you are</span>
           <h2>Start with today's plan.</h2>
@@ -375,6 +381,27 @@ export default {
     if (payBtn && !payBtn.dataset.welcomePayWired) {
       payBtn.dataset.welcomePayWired = "1";
       payBtn.addEventListener("click", handleWelcomePay);
+    }
+
+    const restore = document.querySelector('[data-welcome-restore]');
+    if (restore && !restore.dataset.welcomeRestoreWired) {
+      restore.dataset.welcomeRestoreWired = "1";
+      restore.addEventListener("click", async () => {
+        const prev = restore.textContent;
+        restore.disabled = true;
+        restore.textContent = "Checking Razorpay…";
+        try {
+          await claimPurchase();
+          try { await initAccount({ force: true }); } catch { /* best effort */ }
+          shell.ctx?.rerender?.();
+          toast("Full access restored until 10 March 2027 ✓", "ok");
+        } catch (err) {
+          toast(err?.message || "Could not restore your purchase.", "err");
+        } finally {
+          restore.disabled = false;
+          restore.textContent = prev;
+        }
+      });
     }
 
     // "Open your dashboard" for free users → open upgrade modal

@@ -90,6 +90,18 @@ export const hasPaidAccess = () => {
 export const accountEmail = () => account.session?.user?.email || account.user?.email || "";
 export const accountUsername = () => account.profile?.username || "";
 
+/**
+ * A usable access token, refreshing a session that is close to expiry first.
+ * Payment verification writes to `profiles` with the student's own JWT, so it
+ * must never send the stale copy that has been sitting in `account.session`
+ * since the page loaded — that is a 401 and a payment that never activates.
+ */
+export async function accessToken() {
+  const session = await getSession();
+  if (session) account.session = session;
+  return session?.access_token || "";
+}
+
 /** Validate a username before it reaches the network. */
 export function validateUsername(value) {
   const name = String(value ?? "").trim();

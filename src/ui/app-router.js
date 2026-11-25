@@ -45,6 +45,8 @@ export function gateTarget(name) {
   if (!hasProfile()) return name === "set-username" ? null : "set-username";
   if (!hasSelection()) return name === "choose-subjects" ? null : "choose-subjects";
 
+  // A signed-in student never stays on the sign-in or sign-up page.
+  if (name === "login" || name === "signup") return "dashboard";
   const paid = hasPaidAccess();
   // Paid students skip the welcome paywall and go straight to the dashboard.
   if (paid && PUBLIC_ROUTES.has(name)) return "dashboard";
@@ -55,5 +57,8 @@ export function gateTarget(name) {
 
 /** True when the route shows paid study content that should be locked for free users. */
 export function isPaidRoute(name) {
+  // Integration tests drive the app as a full-access student. The paid-tab
+  // lock is covered by its own test, so they opt out through this flag.
+  if (globalThis.__PADHLE_DISABLE_LOCKS__ === true) return false;
   return !PUBLIC_ROUTES.has(name) && !FREE_ROUTES.has(name);
 }

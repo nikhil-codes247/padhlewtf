@@ -22,6 +22,7 @@ import {
 } from "./core/account.js";
 import { isPaidRoute } from "./ui/app-router.js";
 import { config } from "./core/config.js";
+import { activatePaidAccess } from "./core/entitlement.js";
 /* ------------------------------------------------------------- views --- */
 import dashboardView from "./ui/views/dashboard.js";
 import syllabusView from "./ui/views/syllabus.js";
@@ -370,16 +371,16 @@ export function renderRoute(reason) {
                 name: account.profile?.displayName || undefined,
               },
               handler: async (response) => {
-                const { razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature } = response;
-                const headers = { "Content-Type": "application/json" };
-                const token = account.session?.access_token;
-                if (token) headers.Authorization = `Bearer ${token}`;
-                const vres = await fetch("/api/verify-payment", { method: "POST", headers, body: JSON.stringify({ razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature }) });
-                const vbody = await vres.json().catch(() => ({}));
-                if (!vres.ok || !vbody.ok) {
-                  throw new Error(vbody?.error || "Payment could not be verified. If money was debited, contact support — it will be refunded.");
-                }
+                await activatePaidAccess({
+                  paymentId: response.razorpay_payment_id,
+                  orderId: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
+                });
                 try { await initAccount({ force: true }); } catch { /* best effort */ }
+                if (!hasPaidAccess()) {
+                  toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
+                  return;
+                }
                 shell.ctx?.rerender?.();
                 toast("Full access unlocked until 10 March 2027 ✓", "ok");
               },

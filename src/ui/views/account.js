@@ -6,8 +6,9 @@
  */
 import { esc } from "../dom.js";
 import { chip, metricCard } from "../components.js";
-import { account, accountEmail, initAccount } from "../../core/account.js";
+import { account, accountEmail, hasPaidAccess, initAccount } from "../../core/account.js";
 import { config } from "../../core/config.js";
+import { activatePaidAccess, claimPurchase } from "../../core/entitlement.js";
 import { CORE_SUBJECT_IDS, selectionSubjectIds } from "../../core/subjects.js";
 import { toast } from "../app-toasts.js";
 import { shell } from "../app-state.js";
@@ -133,7 +134,10 @@ function planPanel(ctx) {
         <h1 style="margin:6px 0">Buy full access</h1>
         <p class="small muted" style="margin:0">One-time payment of ₹199 unlocks everything in PADHLE.WTF until 10 March 2027. No subscription, no recurring charge — pay once and study through your boards.</p>
       </div>
-      <div>${buyButton}</div>
+      <div class="row wrap gap-2" style="justify-content:flex-end">
+        ${buyButton}
+        <button class="btn ghost sm" type="button" data-plan-restore>Already paid? Restore access</button>
+      </div>
     </div>
     <p class="small muted mt-4" style="margin:0">Powered by Razorpay. Your card details are handled by Razorpay; PADHLE.WTF never sees them.</p>
   </section>`;
@@ -196,21 +200,19 @@ async function handlePay(ctx) {
       },
       handler: async (response) => {
         handled = true;
-        const { razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature } = response;
-
-        // STEP 2: send the three tokens to the backend for signature verification.
-        const headers = { "Content-Type": "application/json" };
-        const token = account.session?.access_token;
-        if (token) headers.Authorization = `Bearer ${token}`;
-
-        const vres = await fetch("/api/verify-payment", { method: "POST", headers, body: JSON.stringify({ razorpay_payment_id: paymentId, razorpay_order_id: orderId, razorpay_signature: signature }) });
-        const vbody = await vres.json().catch(() => ({}));
-        if (!vres.ok || !vbody.ok) {
-          throw new Error(vbody?.error || "Payment could not be verified. If money was debited, contact support — it will be refunded.");
-        }
+        // STEP 2: server checks the signature and grants access.
+        await activatePaidAccess({
+          paymentId: response.razorpay_payment_id,
+          orderId: response.razorpay_order_id,
+          signature: response.razorpay_signature,
+        });
 
         // Refresh the profile so the plan panel flips to "Full access".
         try { await initAccount({ force: true }); } catch { /* best effort */ }
+        if (!hasPaidAccess()) {
+          toast("Payment went through, but access did not stick. Contact support with your payment id.", "warn");
+          return;
+        }
         ctx.rerender();
         toast(`Full access activated until ${planExpiryLabel(account.profile?.planExpiresAt || "10 March 2027")}. ✓`, "ok");
       },
@@ -244,6 +246,27 @@ export default {
     if (btn && !btn.dataset.planPayWired) {
       btn.dataset.planPayWired = "1";
       btn.addEventListener("click", () => handlePay(ctx));
+    }
+
+    const restore = shell.viewEl?.querySelector('[data-plan-restore]');
+    if (restore && !restore.dataset.restoreWired) {
+      restore.dataset.restoreWired = "1";
+      restore.addEventListener("click", async () => {
+        const prev = restore.textContent;
+        restore.disabled = true;
+        restore.textContent = "Checking Razorpay…";
+        try {
+          await claimPurchase();
+          try { await initAccount({ force: true }); } catch { /* best effort */ }
+          ctx.rerender();
+          toast("Full access restored until 10 March 2027 ✓", "ok");
+        } catch (err) {
+          toast(err?.message || "Could not restore your purchase.", "err");
+        } finally {
+          restore.disabled = false;
+          restore.textContent = prev;
+        }
+      });
     }
     return null;
   },
