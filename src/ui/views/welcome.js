@@ -96,7 +96,7 @@ async function handleWelcomePay() {
   const prev = btn ? btn.textContent : "";
   if (btn) { btn.disabled = true; btn.textContent = "Creating order…"; }
   try {
-    const keyId = config.razorpayKeyId;
+    const keyId = window.PADHLE_CONFIG?.razorpayKeyId;
     if (!keyId) {
       toast("Payments are not configured on this deployment.", "err");
       return;
@@ -156,7 +156,7 @@ function openUpgradeModal() {
     location.hash = "#/dashboard";
     return;
   }
-  const configured = Boolean(config.razorpayKeyId);
+  const configured = Boolean(window.PADHLE_CONFIG?.razorpayKeyId);
   const expiry = "10 March 2027";
 
   openModal({
@@ -195,7 +195,7 @@ function buyPanel() {
   const paid = hasPaidAccess();
   if (paid) return "";
 
-  const configured = Boolean(config.razorpayKeyId);
+  const configured = Boolean(window.PADHLE_CONFIG?.razorpayKeyId);
   const expiry = "10 March 2027";
 
   return `
