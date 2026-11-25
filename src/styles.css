@@ -1907,10 +1907,10 @@ body.onb-open { overflow: hidden; }
 
 
 /* ------------------------------------------------------------ locked view -- */
-/* Heavy glassmorphism lock: a full-screen frosted backdrop over the whole tab
-   container, with a translucent glass card on top holding the upgrade CTA.
-   Free (non-paid) students see the nav bar and shell behind the blur; only
-   the tab content is covered. */
+/* Heavy glassmorphism lock over the main content area only. It lives inside
+   #main (position: relative), so it covers the tab content but not the
+   sidebar navbar, the topbar header, or the footer. Free (non-paid) students
+   keep the shell chrome visible; only the locked tab is frosted over. */
 .locked-view {
   position: absolute;
   inset: 0;
@@ -2501,6 +2501,7 @@ label.subject-pick:hover { transform: translate(-2px, -2px); box-shadow: var(--s
   min-height: 0;
   display: block;
   width: 100%;
+  position: relative;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
