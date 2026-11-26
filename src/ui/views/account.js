@@ -85,7 +85,33 @@ function supabasePanel(ctx) {
     </ul>
   </section>`;
 
-  const panels = [header, profile, subjects, privacy];
+  const support = `<section class="card stripe" style="--stripe:var(--accent)">
+    <h2 style="margin-top:0">Help &amp; support</h2>
+    <div class="row wrap gap-2 mt-4">
+      <div class="card tight">
+        <h3 style="margin:0 0 4px 0">General help</h3>
+        <p class="small muted" style="margin:0">Stuck on something? Need help with your account, planner or revision?</p>
+        <a class="btn sm" href="mailto:support@padhle.wtf" style="margin-top:6px">Email support@padhle.wtf</a>
+      </div>
+      <div class="card tight">
+        <h3 style="margin:0 0 4px 0">Payments &amp; invoices</h3>
+        <p class="small muted" style="margin:0">Questions about your ₹199 payment, invoice or refund?</p>
+        <a class="btn sm" href="mailto:billing@padhle.wtf" style="margin-top:6px">Email billing@padhle.wtf</a>
+      </div>
+      <div class="card tight">
+        <h3 style="margin:0 0 4px 0">Feedback &amp; suggestions</h3>
+        <p class="small muted" style="margin:0">Have an idea to make PADHLE.WTF better?</p>
+        <a class="btn sm" href="mailto:feedback@padhle.wtf" style="margin-top:6px">Email feedback@padhle.wtf</a>
+      </div>
+      <div class="card tight">
+        <h3 style="margin:0 0 4px 0">Founder directly</h3>
+        <p class="small muted" style="margin:0">Want to reach the founder personally?</p>
+        <a class="btn sm" href="mailto:founder@padhle.wtf" style="margin-top:6px">Email founder@padhle.wtf</a>
+      </div>
+    </div>
+  </section>`;
+
+  const panels = [header, profile, subjects, privacy, support];
   // Pricing / buy UI appears only after onboarding is complete — never during
   // the welcome tour, so the student isn't interrupted before they're set up.
   if (ctx.store?.state?.settings?.onboarded) {
@@ -118,6 +144,7 @@ function planPanel(ctx) {
           <span class="eyebrow">Plan &amp; access</span>
           <h1 style="margin:6px 0">Full access</h1>
           <p class="small muted" style="margin:0">You have paid access to PADHLE.WTF until ${esc(planExpiryLabel(p.planExpiresAt))}. Your plan is tied to your account — sign in on any device and it is still there.</p>
+        <p class="small muted" style="margin-top:6px">Invoice or payment questions? Email <b>billing@padhle.wtf</b>.</p>
         </div>
         <div>${chip("active until " + esc(planExpiryLabel(p.planExpiresAt)), "ok")}</div>
       </div>
@@ -141,6 +168,7 @@ function planPanel(ctx) {
       </div>
     </div>
     <p class="small muted mt-4" style="margin:0">Powered by Razorpay. Your card details are handled by Razorpay; PADHLE.WTF never sees them.</p>
+    <p class="small muted mt-2">Payment or invoice questions? Email <b>billing@padhle.wtf</b>.</p>
   </section>`;
 }
 

@@ -3,7 +3,7 @@
 This folder contains the complete, deployable SaaS: the static website plus the Razorpay payment backend (Cloudflare Pages Functions).
 
 ## What's inside
-- `config.js`, `index.html`, `src/`, `fonts/`, `404.html` — the built website (synced from `updatedapp/dist/`)
+- `config.js`, `index.html`, `src/`, `fonts/`, `404.html` — the built website (synced from `build-src/dist/`)
 - `functions/api/create-order.js` — Creates the ₹199 Razorpay order (Cloudflare Function)
 - `functions/api/verify-payment.js` — Verifies payment signature & activates access (Cloudflare Function)
 - `functions/api/claim-payment.js` — Recovers captured ₹199 payment by email match (Cloudflare Function)
