@@ -1922,12 +1922,17 @@ body.onb-open { overflow: hidden; }
 .locked-backdrop {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--ll-paper) 45%, transparent);
-  border-radius: var(--r);
-  border: 1.4px solid var(--ll-pencil-mark);
+  /* Frosted "matt glass" over the whole locked tab: enough blur to erase the
+     underlying study content, with a faint paper tint so it still belongs to
+     the looseleaf theme in both light and dark mode. */
+  background: rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(40px) saturate(1.2);
+  backdrop-filter: blur(40px) saturate(1.2);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   z-index: 1;
   pointer-events: none;
-  box-shadow: 0 6px 14px -10px rgb(58 44 30 / 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .locked-glass {
   position: relative;
@@ -1937,11 +1942,19 @@ body.onb-open { overflow: hidden; }
   color: var(--ll-ink);
   max-width: 420px;
   width: 90%;
-  padding: var(--sp-14) var(--sp-12) var(--sp-12);
-  border-radius: var(--r);
-  background: var(--ll-card);
+  padding: var(--sp-12) var(--sp-10) var(--sp-10);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--ll-card) 78%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
   border: 1.4px solid var(--ll-pencil-mark);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 18px 40px -24px rgb(58 44 30 / 0.55);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Without glass support the tint must be opaque enough to hide content. */
+  .locked-backdrop { background: color-mix(in srgb, var(--ll-paper) 92%, transparent); }
+  [data-theme="dark"] .locked-backdrop { background: color-mix(in srgb, var(--ll-paper) 94%, transparent); }
+  .locked-glass { background: var(--ll-card); }
 }
 .lock-icon {
   width: 72px;
@@ -1984,11 +1997,12 @@ body.onb-open { overflow: hidden; }
 .locked-hint { margin: var(--sp-7) 0 0; color: var(--ll-ink-muted); font-size: var(--fs-xs); }
 
 [data-theme="dark"] .locked-backdrop {
-  background: color-mix(in srgb, var(--ll-paper) 45%, transparent);
-  border-color: var(--ll-pencil-mark);
+  background: rgba(18, 20, 18, 0.38);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 [data-theme="dark"] .locked-glass {
-  background: var(--ll-card);
+  background: color-mix(in srgb, var(--ll-card) 78%, transparent);
   border-color: var(--ll-pencil-mark);
   color: var(--ll-ink);
 }
@@ -2837,6 +2851,12 @@ h3 { font-size: var(--fs); }
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+/* Some engines ignore backface-visibility inside a 3D card, which used to
+   show a mirrored question through the answer "See answer". Hiding the
+   inactive face explicitly makes the flip correct everywhere. */
+.card-back { visibility: hidden; }
+.study-card.flipped .card-front { visibility: hidden; }
+.study-card.flipped .card-back { visibility: visible; }
 .card-back::after {
   content: "💡";
   position: absolute;
@@ -2853,13 +2873,15 @@ h3 { font-size: var(--fs); }
 
 .card-meta { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
 .card-prompt, .card-answer {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   font-size: var(--fs-lg);
   line-height: 1.7;
   color: inherit;
   white-space: pre-wrap;
   overflow-y: auto;
-  max-height: 100%;
+  overflow-wrap: anywhere;
+  overscroll-behavior: contain;
 }
 .card-prompt { display: flex; align-items: center; justify-content: center; text-align: center; }
 .card-answer {
