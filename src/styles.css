@@ -2883,10 +2883,10 @@ h3 { font-size: var(--fs); }
   overflow-wrap: anywhere;
   overscroll-behavior: contain;
 }
-.card-prompt { display: flex; align-items: center; justify-content: center; text-align: center; }
+.card-prompt { display: flex; align-items: safe center; justify-content: center; text-align: center; }
 .card-answer {
   display: flex;
-  align-items: center;
+  align-items: safe center;
   justify-content: center;
   text-align: center;
   padding-top: var(--sp-2);
