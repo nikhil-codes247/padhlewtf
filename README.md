@@ -3,9 +3,12 @@
 This folder contains the complete, deployable SaaS: the static website plus the Razorpay payment backend (Cloudflare Pages Functions).
 
 ## What's inside
-- `config.js`, `index.html`, `src/`, `fonts/`, `404.html` — the built website
+- `config.js`, `index.html`, `src/`, `fonts/`, `404.html` — the built website (synced from `updatedapp/dist/`)
 - `functions/api/create-order.js` — Creates the ₹199 Razorpay order (Cloudflare Function)
 - `functions/api/verify-payment.js` — Verifies payment signature & activates access (Cloudflare Function)
+- `functions/api/claim-payment.js` — Recovers captured ₹199 payment by email match (Cloudflare Function)
+- `functions/api/health.js` — Public health check (env status, Supabase, Razorpay)
+- `functions/_lib/grant.js` — Shared profile grant helper (update/insert/create row)
 - `wrangler.toml` — Cloudflare Pages configuration
 - `package.json` — Project metadata
 - `.env.example` — Template of variables to add in Cloudflare dashboard
@@ -116,20 +119,35 @@ These are Razorpay **test** keys, so no real money moves. Use a test card (e.g. 
 
 ---
 
+## UX Features
+
+### Lazy loading (Syllabus Map & PYQ Insights)
+- **Syllabus Map** (`#/curriculum`): First paint loads only the subject list. Chapters and topics download per-subject when the user taps a subject card. Saves egress for students who only check a few subjects.
+- **PYQ Insights** (`#/pyq`): First paint loads only library metadata (paper counts, years, subject list). Per-subject papers and topic stats download when the user taps a subject card.
+
+### Glassmorphism lock overlay
+Free (non-paid) users see the full nav bar and interface. Paid tabs show a **light frosted-glass overlay** covering only the tab content area (not the navbar, header, or footer):
+- `backdrop-filter: blur(44px)` on the full-screen backdrop
+- Translucent glass card (`rgba(255,255,255,0.72)`) with pencil-border and hand-drawn SVG lock icon
+- "Upgrade to access" title, ₹199 note, buy button, and hint
+
+### Pay after onboarding
+New accounts complete the full onboarding tour (Welcome → Profile → Subjects → Finish) before any payment prompt appears. The buy panel and locked previews are hidden until `onboarded` is true. Paid users who log in see the welcome page without any buy option — just a "Full access active until 10 March 2027" badge and unlocked feature cards.
+
 ## What free users see vs paid users
 
 | User state | Landing page | Dashboard access | Pricing on welcome |
 |---|---|---|---|
 | Signed out | Marketing welcome | Blocked → welcome | Not shown |
-| Signed in, **free** | Welcome + locked feature previews | Blurred + 🔒 lock overlay on paid tabs | ✅ "Buy full access — ₹199" |
-| Signed in, **paid** | Auto-redirects to dashboard | Full access | ❌ Hidden |
+| Signed in, **free** | Welcome + locked feature previews | Full navbar, paid tabs glassmorphism-locked | ✅ "Buy full access — ₹199" (after onboarding) |
+| Signed in, **paid** | Welcome (no buy panel, active-plan badge) | Full access everywhere | ❌ Hidden |
 
 ### Free user experience
 Free users see the whole nav bar and interface. When they click a paid tab (dashboard, planner, revision, flashcards, practice questions, etc.):
-- The tab content is **blurred**
-- A **big 🔒 lock icon** appears in the center
-- **Skeleton placeholders** show (no real data fetched)
+- The tab content is covered by a **glassmorphism lock overlay** (blur + frosted glass card)
+- A **hand-drawn SVG lock icon** appears in the center
 - An **"Upgrade to access"** button opens Razorpay checkout
+- The lock covers only the tab content — navbar, header, and footer stay visible
 
 ---
 

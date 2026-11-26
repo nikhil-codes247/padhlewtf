@@ -22,7 +22,7 @@ export const NAV = [
   { hash: "#/notes", label: "Doubts & Notes", ico: "✎", routes: ["notes"], badge: (d) => d.openDoubts, group: "Do" },
   { hash: "#/analytics", label: "Analytics", ico: "◨", routes: ["analytics"], group: "Review" },
   { hash: "#/curriculum", label: "Syllabus Map", ico: "❖", routes: ["curriculum"], group: "Plan" },
-  { hash: "#/calendar", label: "60-Day Calendar", ico: "▩", routes: ["calendar"], group: "Plan" },
+  { hash: "#/calendar", label: "Calendar", ico: "▩", routes: ["calendar"], group: "Plan" },
   { hash: "#/board-exams", label: "Board Exams", ico: "📅", routes: ["board-exams"], group: "Plan" },
   { hash: "#/pyq", label: "PYQ Insights", ico: "▥", routes: ["pyq"], group: "Review" },
 ];

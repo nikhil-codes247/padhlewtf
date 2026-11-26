@@ -2800,6 +2800,7 @@ h3 { font-size: var(--fs); }
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow var(--speed);
   cursor: pointer;
   touch-action: manipulation;
+  overflow: hidden;
 }
 .study-card.flipped { transform: rotateY(180deg); }
 .study-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
@@ -2851,6 +2852,8 @@ h3 { font-size: var(--fs); }
   line-height: 1.7;
   color: inherit;
   white-space: pre-wrap;
+  overflow-y: auto;
+  max-height: 100%;
 }
 .card-prompt { display: flex; align-items: center; justify-content: center; text-align: center; }
 .card-answer {

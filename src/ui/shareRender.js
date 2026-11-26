@@ -225,7 +225,7 @@ export function drawCard(
   ctx.clearRect(0, 0, W, H);
 
   /* Background + soft decorative shapes. */
-  ctx.fillStyle = p.background;
+  ctx.fillStyle = p.background || '#ffffff';
   ctx.fillRect(0, 0, W, H);
   if (p.hand) drawDeskTexture(ctx, W, H, p.ink);
   ctx.save();
