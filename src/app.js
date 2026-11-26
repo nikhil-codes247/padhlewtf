@@ -50,7 +50,7 @@ import usernameView from "./ui/views/username.js";
 import chooseSubjectsView from "./ui/views/chooseSubjects.js";
 import privacyView from "./ui/views/privacy.js";
 import termsView from "./ui/views/terms.js";
-import cookieConsentView from "./ui/views/cookie-consent.js";
+import cookieConsentView from "./ui/views/consent-banner.js";
 import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js";
 import { renderOnboarding } from "./ui/onboarding.js";
 import notesView from "./ui/views/notes.js";
