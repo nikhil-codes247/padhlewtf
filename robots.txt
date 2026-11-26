@@ -1,0 +1,10 @@
+# PADHLE.WTF robots.txt
+User-agent: *
+Allow: /
+
+# Disallow private areas
+Disallow: /api/
+Disallow: /functions/
+
+# Sitemap
+Sitemap: https://padhlewtf.pages.dev/sitemap.xml

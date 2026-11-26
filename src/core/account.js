@@ -174,36 +174,42 @@ async function loadProfileAndSelection() {
       planExpiresAt: row.plan_expires_at,
     };
   } else {
-    // No profile row yet. Google sign-in provides name and avatar in the JWT
-    // user_metadata, so create the profile automatically without a sign-up form.
-    // Email/password users still go through the profile step (set-username).
+    // No profile row yet. Google OAuth users have provider_data with
+    // provider 'google' and user_metadata with full_name/avatar_url, so we
+    // can create the profile automatically without a sign-up form.
+    // Email/password users are sent to set-username by gateTarget instead.
     const user = session.user || {};
-    const meta = user.user_metadata || {};
-    const suggestedUsername = String(user.email || "").split("@")[0] || `user_${uid.slice(0, 8)}`;
-    const displayName = meta.full_name || meta.name || suggestedUsername;
-    const avatar = meta.avatar_url || meta.picture || "🦉";
-    try {
-      const created = await insertRows("profiles", [{
-        id: uid,
-        username: suggestedUsername,
-        display_name: String(displayName).slice(0, 40),
-        avatar: String(avatar).slice(0, 4),
-      }]);
-      const createdRow = Array.isArray(created) ? created[0] : null;
-      if (createdRow) {
-        account.profile = {
-          id: createdRow.id,
-          username: createdRow.username,
-          displayName: createdRow.display_name,
-          avatar: createdRow.avatar,
-          createdAt: createdRow.created_at,
-        };
+    const isGoogleOAuth = Array.isArray(user.provider_data)
+      && user.provider_data.some((p) => p.provider === "google");
+    if (isGoogleOAuth) {
+      const meta = user.user_metadata || {};
+      const suggestedUsername = String(user.email || "").split("@")[0] || `user_${uid.slice(0, 8)}`;
+      const displayName = meta.full_name || meta.name || suggestedUsername;
+      const avatar = meta.avatar_url || meta.picture || "🦉";
+      try {
+        const created = await insertRows("profiles", [{
+          id: uid,
+          username: suggestedUsername,
+          display_name: String(displayName).slice(0, 40),
+          avatar: String(avatar).slice(0, 4),
+        }]);
+        const createdRow = Array.isArray(created) ? created[0] : null;
+        if (createdRow) {
+          account.profile = {
+            id: createdRow.id,
+            username: createdRow.username,
+            displayName: createdRow.display_name,
+            avatar: createdRow.avatar,
+            createdAt: createdRow.created_at,
+          };
+        }
+      } catch (err) {
+        // Username may be taken (unique index on lower(username)) or another
+        // transient error. Leave profile null; the profile step will handle it.
+        console.warn("[account] Could not auto-create profile:", err?.message || err);
       }
-    } catch (err) {
-      // Username may be taken (unique index on lower(username)) or another
-      // transient error. Leave profile null; the profile step will handle it.
-      console.warn("[account] Could not auto-create profile:", err?.message || err);
     }
+    // Not Google OAuth and no profile: gateTarget will redirect to set-username.
   }
 
   const list = Array.isArray(rows) ? rows : [];

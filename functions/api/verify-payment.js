@@ -39,7 +39,7 @@ export async function onRequestPost(context) {
   if (!keyId || !keySecret) {
     return Response.json(
       { error: "Payments are not configured on this deployment." },
-      { status: 500, headers: { "Content-Type": "application/json" } },
+      { status: 500, headers: { "Content-Type": "application/json", "X-Content-Type-Options": "nosniff", "X-Frame-Options": "DENY" } },
     );
   }
 
@@ -91,7 +91,15 @@ export async function onRequestPost(context) {
       ...(grant.authRequired ? { authRequired: true } : {}),
       ...(grant.error ? { error: grant.error } : {}),
     },
-    { status: 200, headers: { "Content-Type": "application/json" } },
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+      },
+    },
   );
 }
 

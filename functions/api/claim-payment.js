@@ -24,7 +24,15 @@ const AMOUNT_PAISE = 19900;
 const CURRENCY = "INR";
 
 const json = (body, status = 200) =>
-  Response.json(body, { status, headers: { "Content-Type": "application/json" } });
+  Response.json(body, {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
+  });
 
 function jwtSubject(token) {
   try {

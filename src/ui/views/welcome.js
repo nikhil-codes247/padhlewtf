@@ -318,6 +318,11 @@ export default {
           <a class="small" href="mailto:support@padhle.wtf">support@padhle.wtf</a><span class="faint">·</span>
           <a class="small" href="mailto:feedback@padhle.wtf">feedback@padhle.wtf</a>
         </div>
+        <div class="row gap-2 mt-3">
+          <span class="small muted">Policies:</span>
+          <a class="small" href="#/privacy">Privacy Policy</a><span class="faint">·</span>
+          <a class="small" href="#/terms">Terms of Service</a>
+        </div>
       </footer>
     </div>`;
   },

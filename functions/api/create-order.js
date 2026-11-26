@@ -66,9 +66,16 @@ export async function onRequestPost(context) {
 
   const order = await razorpayRes.json();
 
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+  };
+
   return Response.json({
     order_id: order.id,
     amount: order.amount,
     currency: order.currency,
-  }, { status: 200, headers: { "Content-Type": "application/json" } });
+  }, { status: 200, headers });
 }

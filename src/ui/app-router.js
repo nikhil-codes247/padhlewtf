@@ -11,14 +11,15 @@
  * upgrade.
  */
 import { account } from "../core/account.js";
-import { isSignedIn, hasPaidAccess } from "../core/account.js";
+import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js";
+import { store } from "../core/store.js";
 
-const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
+const PUBLIC_ROUTES = new Set(["welcome", "login", "signup", "privacy", "terms"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
 // Dashboard is the home base after onboarding; every feature tab stays locked.
 // set-username / choose-subjects remain reachable (not forced) so a student can
 // complete them from Settings whenever they want.
-const FREE_ROUTES = new Set(["welcome", "dashboard", "settings", "account", "profile", "set-username", "choose-subjects"]);
+const FREE_ROUTES = new Set(["welcome", "dashboard", "settings", "account", "profile", "set-username", "choose-subjects", "privacy", "terms"]);
 
 export function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");
@@ -55,6 +56,22 @@ export function gateTarget(name) {
   if (name === "login" || name === "signup") {
     return hasPaidAccess() ? "welcome" : "dashboard";
   }
+
+  // No profile → complete the profile step first (unless already there).
+  // Skip this during onboarding — the tour drives its own flow.
+  if (!hasProfile() && name !== "set-username" && store.state.settings.onboarded)
+    return "set-username";
+
+  // Has a profile but no subject selection → choose subjects first.
+  // Skip this during onboarding — the tour drives its own flow.
+  if (
+    hasProfile() &&
+    !hasSelection() &&
+    name !== "choose-subjects" &&
+    store.state.settings.onboarded
+  )
+    return "choose-subjects";
+
   // Every signed-in user can access any route. Paid-content gating is handled
   // by the lock overlay in renderRoute — not by blocking the route here.
   return name;

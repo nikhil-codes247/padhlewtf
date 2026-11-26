@@ -48,6 +48,9 @@ import welcomeView from "./ui/views/welcome.js";
 import authView from "./ui/views/auth.js";
 import usernameView from "./ui/views/username.js";
 import chooseSubjectsView from "./ui/views/chooseSubjects.js";
+import privacyView from "./ui/views/privacy.js";
+import termsView from "./ui/views/terms.js";
+import cookieConsentView from "./ui/views/cookie-consent.js";
 import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js";
 import { renderOnboarding } from "./ui/onboarding.js";
 import notesView from "./ui/views/notes.js";
@@ -100,6 +103,8 @@ const ROUTES = {
   account: { view: accountView, title: "Account", crumb: "System" },
   settings: { view: settingsView, title: "Settings", crumb: "System" },
   search: { view: searchView, title: "Search", crumb: "Everything" },
+  privacy: { view: privacyView, title: "Privacy Policy", crumb: "" },
+  terms: { view: termsView, title: "Terms and Conditions", crumb: "" },
 };
 
 async function main() {
@@ -193,6 +198,15 @@ async function main() {
       console.error("[padhle] account restore failed", err);
       renderRoute("account");
     });
+
+  // Cookie consent banner — shown once per device, then remembered.
+  import("./ui/views/cookie-consent.js").then(({ default: cookieView }) => {
+    const alreadyConsented = localStorage.getItem("padhle.cookie-consent");
+    if (!alreadyConsented) {
+      shell.viewEl.insertAdjacentHTML("beforeend", cookieView.render());
+      cookieView.mount?.();
+    }
+  });
 }
 
 /** Copy the Supabase profile into the local profile so every view agrees. */

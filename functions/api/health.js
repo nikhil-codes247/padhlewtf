@@ -88,5 +88,12 @@ async function check(env, request) {
   return out;
 }
 
-export const onRequestGet = async ({ request, env }) => Response.json(await check(env, request));
-export const onRequestPost = async ({ request, env }) => Response.json(await check(env, request));
+const headers = {
+  "Content-Type": "application/json",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+};
+
+export const onRequestGet = async ({ request, env }) => Response.json(await check(env, request), { headers });
+export const onRequestPost = async ({ request, env }) => Response.json(await check(env, request), { headers });
