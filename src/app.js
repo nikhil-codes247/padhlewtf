@@ -200,7 +200,7 @@ async function main() {
     });
 
   // Cookie consent banner — shown once per device, then remembered.
-  import("./ui/views/cookie-consent.js").then(({ default: cookieView }) => {
+  import("./ui/views/consent-banner.js").then(({ default: cookieView }) => {
     const alreadyConsented = localStorage.getItem("padhle.cookie-consent");
     if (!alreadyConsented) {
       document.body.insertAdjacentHTML("beforeend", cookieView.render());
