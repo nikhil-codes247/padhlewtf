@@ -203,8 +203,25 @@ async function main() {
   import("./ui/views/cookie-consent.js").then(({ default: cookieView }) => {
     const alreadyConsented = localStorage.getItem("padhle.cookie-consent");
     if (!alreadyConsented) {
-      shell.viewEl.insertAdjacentHTML("beforeend", cookieView.render());
-      cookieView.mount?.();
+      document.body.insertAdjacentHTML("beforeend", cookieView.render());
+      if (typeof cookieView.mount === "function") {
+        cookieView.mount();
+      } else {
+        const acceptBtn = document.querySelector('[data-act="cookie-accept"]');
+        const essentialBtn = document.querySelector('[data-act="cookie-essential"]');
+        if (acceptBtn) {
+          acceptBtn.addEventListener("click", () => {
+            localStorage.setItem("padhle.cookie-consent", "all");
+            document.querySelector(".cookie-consent")?.remove();
+          });
+        }
+        if (essentialBtn) {
+          essentialBtn.addEventListener("click", () => {
+            localStorage.setItem("padhle.cookie-consent", "essential");
+            document.querySelector(".cookie-consent")?.remove();
+          });
+        }
+      }
     }
   });
 }
