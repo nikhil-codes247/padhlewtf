@@ -18,7 +18,7 @@ import { renderCardPng, renderCardGif } from "./shareRender.js";
 import { onboardingSteps, readProfileStep } from "./onboarding.js";
 import { startCheckout } from "./checkout.js";
 import {
-  signUpAccount, signInAccount, signOutAccount, createProfile,
+  signUpAccount, signInAccount, signInWithGoogleOAuth, signOutAccount, createProfile,
   hasProfile, initAccount, setPendingEmail, clearPendingEmail,
   validateUsername, checkUsernameAvailability, resetAccountData, deleteAccount,
   isSignedIn, account, resetPassword,
@@ -1202,6 +1202,17 @@ export async function handleFormSubmit(form, ctx) {
       }
       formError(form, err?.message || "Could not log in.");
     }
+    return;
+  }
+  if (kind === "padhle-google-signin") {
+    const btn = form?.querySelector?.('[data-act="auth-google"]') || el;
+    await withBusy(btn, "Signing in with Google…", async () => {
+      try {
+        await signInWithGoogleOAuth();
+      } catch (err) {
+        ctx.toast(err?.message || "Could not sign in with Google.", "err");
+      }
+    });
     return;
   }
   if (kind === "padhle-forgot") {

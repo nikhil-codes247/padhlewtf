@@ -113,6 +113,10 @@ export default {
             <input class="input" id="auth-confirm" name="confirm" type="password" autocomplete="new-password" placeholder="Type it again" minlength="8" required>
           </div>` : ""}` : ""}
           <p class="field-error" data-form-error role="alert"></p>
+          ${!isForgot ? `<div class="row gap-2 mt-3">
+            <span class="small faint">Or continue with</span>
+            <button class="btn wide" type="button" data-act="auth-google">Continue with Google</button>
+          </div>` : ""}
           <button class="btn primary wide" type="submit">${submit}</button>
         </form>
 

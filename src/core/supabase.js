@@ -288,6 +288,23 @@ export async function signInWithPassword(email, password) {
   return session;
 }
 
+/**
+ * Start Google OAuth sign-in. Redirects the browser to Supabase's authorize
+ * endpoint; Supabase sends the user to Google, then back to redirectTo with
+ * a session fragment that consumeAuthCallback() picks up on page load.
+ * This function does not return on success (the browser navigates away).
+ */
+export async function signInWithGoogle() {
+  requireBackend();
+  const redirectTo = `${config.siteUrl}/#/login`;
+  const url = new URL(base("/auth/v1/authorize"));
+  url.searchParams.set("provider", "google");
+  url.searchParams.set("redirect_to", redirectTo);
+  window.location.href = url.toString();
+  // If the redirect is blocked (popup blocker etc.), surface an error.
+  throw new SupabaseError("Google sign-in was blocked or cancelled.", { code: "oauth_blocked" });
+}
+
 export async function refreshUser() {
   const session = await getSession();
   if (!session) return null;

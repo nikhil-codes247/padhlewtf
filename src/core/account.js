@@ -9,7 +9,7 @@
  * deployment is a misconfiguration, not a supported operating mode.
  */
 import {
-  getSession, signUpWithPassword, signInWithPassword, signOut as supabaseSignOut,
+  getSession, signUpWithPassword, signInWithPassword, signInWithGoogle, signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
 } from "./supabase.js";
@@ -163,17 +163,48 @@ async function loadProfileAndSelection() {
   ]);
 
   const row = Array.isArray(profiles) ? profiles[0] : null;
-  account.profile = row
-    ? {
-        id: row.id,
-        username: row.username,
-        displayName: row.display_name,
-        avatar: row.avatar,
-        createdAt: row.created_at,
-        plan: row.plan,
-        planExpiresAt: row.plan_expires_at,
+  if (row) {
+    account.profile = {
+      id: row.id,
+      username: row.username,
+      displayName: row.display_name,
+      avatar: row.avatar,
+      createdAt: row.created_at,
+      plan: row.plan,
+      planExpiresAt: row.plan_expires_at,
+    };
+  } else {
+    // No profile row yet. Google sign-in provides name and avatar in the JWT
+    // user_metadata, so create the profile automatically without a sign-up form.
+    // Email/password users still go through the profile step (set-username).
+    const user = session.user || {};
+    const meta = user.user_metadata || {};
+    const suggestedUsername = String(user.email || "").split("@")[0] || `user_${uid.slice(0, 8)}`;
+    const displayName = meta.full_name || meta.name || suggestedUsername;
+    const avatar = meta.avatar_url || meta.picture || "🦉";
+    try {
+      const created = await insertRows("profiles", [{
+        id: uid,
+        username: suggestedUsername,
+        display_name: String(displayName).slice(0, 40),
+        avatar: String(avatar).slice(0, 4),
+      }]);
+      const createdRow = Array.isArray(created) ? created[0] : null;
+      if (createdRow) {
+        account.profile = {
+          id: createdRow.id,
+          username: createdRow.username,
+          displayName: createdRow.display_name,
+          avatar: createdRow.avatar,
+          createdAt: createdRow.created_at,
+        };
       }
-    : null;
+    } catch (err) {
+      // Username may be taken (unique index on lower(username)) or another
+      // transient error. Leave profile null; the profile step will handle it.
+      console.warn("[account] Could not auto-create profile:", err?.message || err);
+    }
+  }
 
   const list = Array.isArray(rows) ? rows : [];
   const core = list.filter((r) => r.kind === "core").map((r) => r.subject_id);
@@ -258,10 +289,14 @@ export async function signInAccount(email, password) {
 }
 
 /**
- * Send a password-reset link to the given email. The user will receive an email
- * with a link to set a new password. Returns nothing on success; Supabase does
- * not reveal whether the email exists (to prevent user enumeration).
+ * Start Google OAuth sign-in. Redirects the browser to Supabase's authorize
+ * endpoint; Supabase sends the user to Google, then back to the app. On return
+ * the session is restored and initAccount() loads (or creates) the profile.
  */
+export async function signInWithGoogleOAuth() {
+  await signInWithGoogle();
+}
+
 export async function resetPassword(email) {
   const address = String(email ?? "").trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) {
