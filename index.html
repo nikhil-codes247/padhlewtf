@@ -50,6 +50,18 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- Static description for crawlers and for visitors with JavaScript off.
+       Google's OAuth verification and search crawlers need the app's purpose
+       and the legal URLs in plain HTML, not only in the JS-rendered shell. -->
+  <noscript>
+    <main style="max-width:760px;margin:0 auto;padding:32px 20px;font-family:system-ui,sans-serif;line-height:1.65">
+      <h1>PADHLE.WTF — Work Towards Finals</h1>
+      <p>PADHLE.WTF is a study workspace for CBSE Class 10 students. It tracks the 2026–27 syllabus, plans revision across the run-up to the boards, runs timed focus sessions, and shows what past papers actually asked. Accounts sync subjects, planner tasks, notes and progress across devices. Full access is a one-time payment of ₹199 and stays active until 10 March 2027.</p>
+      <p><a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a> · <a href="mailto:support@padhle.wtf">Contact support</a></p>
+      <p>Please enable JavaScript to open the study workspace.</p>
+    </main>
+  </noscript>
+
   <!-- Hand-drawn study doodles. Kept outside #app so the static boot screen
        and the account gate can both reference the same symbols. -->
   <svg class="boot-doodle-sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;overflow:hidden">
