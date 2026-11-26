@@ -325,8 +325,8 @@ export default {
         </div>
         <div class="row gap-2 mt-3">
           <span class="small muted">Policies:</span>
-          <a class="small" href="#/privacy">Privacy Policy</a><span class="faint">·</span>
-          <a class="small" href="#/terms">Terms of Service</a>
+          <a class="small" href="/privacy.html">Privacy Policy</a><span class="faint">·</span>
+          <a class="small" href="/terms.html">Terms of Service</a>
         </div>
       </footer>
     </div>`;
