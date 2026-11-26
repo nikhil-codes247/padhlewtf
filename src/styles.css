@@ -2819,6 +2819,7 @@ h3 { font-size: var(--fs); }
   flex-direction: column;
   padding: var(--sp-6);
   box-sizing: border-box;
+  overflow: hidden;
 }
 .card-front {
   z-index: 2;
