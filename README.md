@@ -127,8 +127,8 @@ These are Razorpay **test** keys, so no real money moves. Use a test card (e.g. 
 
 ### Glassmorphism lock overlay
 Free (non-paid) users see the full nav bar and interface. Paid tabs show a **light frosted-glass overlay** covering only the tab content area (not the navbar, header, or footer):
-- `backdrop-filter: blur(44px)` on the full-screen backdrop
-- Translucent glass card (`rgba(255,255,255,0.72)`) with pencil-border and hand-drawn SVG lock icon
+- `backdrop-filter: blur(40px) saturate(1.2)` on the full content backdrop
+- Translucent glass card with pencil-border and hand-drawn SVG lock icon; a solid fallback when `backdrop-filter` is unsupported
 - "Upgrade to access" title, ₹199 note, buy button, and hint
 
 ### Pay after onboarding
@@ -153,12 +153,50 @@ Free users see the whole nav bar and interface. When they click a paid tab (dash
 
 ## To go live with real money
 
-Replace `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` with your **live** Razorpay keys in Cloudflare environment variables, then redeploy.
+Do these in order. The first two are required before the entitlement write can
+be locked down; until they are done, a signed-in student could still try to
+PATCH their own `plan` column directly.
+
+1. **Add the Supabase service-role key** to Cloudflare Pages environment
+   variables as `PADHLE_SUPABASE_SERVICE_KEY` (Project Settings → API →
+   `service_role`). This is server-side only — never put it in `config.js`.
+2. **Apply `build-src/supabase/migrations/0011_lock_entitlement.sql`** in the
+   Supabase SQL editor. It revokes write access to `plan` / `plan_expires_at`
+   from the `authenticated` role and adds a trigger that only the service role
+   (or a database admin) can bypass.
+3. Redeploy, then confirm `https://padhle.wtf/api/health` reports
+   `"supabaseServiceKey": true`.
+4. Run one test purchase end-to-end; the profile should flip to
+   `plan = full_access` and a second browser should see the unlocked UI.
+5. Replace `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` with your **live**
+   Razorpay keys in Cloudflare environment variables, then redeploy.
+6. Replace the test `razorpayKeyId` in the build config with the live public
+   key id (the secret stays server-side).
+
+### Google OAuth verification
+
+Submit the clean, crawlable URLs (not hash routes):
+
+| Field | URL |
+|---|---|
+| App home page | `https://padhle.wtf/` |
+| Privacy policy | `https://padhle.wtf/privacy` |
+| Terms of service | `https://padhle.wtf/terms` |
+| Authorized domain | `padhle.wtf` |
+
+`/#/dashboard` and `/#/privacy` are client-side hash routes, which Google's
+reviewer cannot fetch as separate pages. The static `/privacy` and `/terms`
+pages contain the same policy in plain HTML, plus the Google Sign-In / Limited
+Use disclosure. Verify ownership of `padhle.wtf` in Google Search Console
+(DNS TXT or an HTML verification file at the site root) before resubmitting.
 
 ---
 
 ## Important security notes
 
 - `RAZORPAY_KEY_SECRET` never reaches the browser. It lives only in Cloudflare environment variables and is used inside the Pages Functions.
+- `PADHLE_SUPABASE_SERVICE_KEY` is server-side only and is used solely by the payment functions to write the entitlement.
 - The built `config.js` contains only the public `RAZORPAY_KEY_ID`.
+- The student's own JWT is never trusted to grant paid access once migration
+  `0011_lock_entitlement.sql` is applied.
 - `.env` is a template only — never commit real secrets.
