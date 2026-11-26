@@ -12,7 +12,6 @@
  */
 import { account } from "../core/account.js";
 import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js";
-import { store } from "../core/store.js";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup", "privacy", "terms"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
@@ -57,19 +56,13 @@ export function gateTarget(name) {
     return hasPaidAccess() ? "welcome" : "dashboard";
   }
 
-  // No profile → complete the profile step first (unless already there).
-  // Skip this during onboarding — the tour drives its own flow.
-  if (!hasProfile() && name !== "set-username" && store.state.settings.onboarded)
-    return "set-username";
+  // No profile → complete the profile step first. A signed-in account must
+  // have a profile row, otherwise its username and paid entitlement have
+  // nowhere to live.
+  if (!hasProfile() && name !== "set-username") return "set-username";
 
   // Has a profile but no subject selection → choose subjects first.
-  // Skip this during onboarding — the tour drives its own flow.
-  if (
-    hasProfile() &&
-    !hasSelection() &&
-    name !== "choose-subjects" &&
-    store.state.settings.onboarded
-  )
+  if (hasProfile() && !hasSelection() && name !== "choose-subjects")
     return "choose-subjects";
 
   // Every signed-in user can access any route. Paid-content gating is handled

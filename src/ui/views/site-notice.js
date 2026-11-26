@@ -1,5 +1,5 @@
 /**
- * cookie-consent.js — Cookie consent banner.
+ * site-notice.js — Cookie consent banner.
  *
  * Shows a lightweight cookie consent banner on first visit. Stores the
  * student's choice in localStorage so it only shows once. Does not load any
@@ -8,7 +8,7 @@
 import { esc } from "../dom.js";
 
 export default {
-  id: "cookie-consent",
+  id: "site-notice",
   render(ctx) {
     const alreadyConsented = localStorage.getItem("padhle.cookie-consent");
     if (alreadyConsented) return "";

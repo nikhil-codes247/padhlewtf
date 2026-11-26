@@ -94,7 +94,7 @@ export default {
       <section class="card">
         <h2>10. Contact us</h2>
         <p class="small muted">If you have questions about these Terms, contact us at:</p>
-        <p class="small muted"><b>hello@padhle.wtf</b></p>
+        <p class="small muted"><b>support@padhle.wtf</b></p>
         <p class="small muted">PADHLE.WTF — Full access until 10 March 2027</p>
       </section>
     </div>

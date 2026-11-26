@@ -2,9 +2,9 @@
 User-agent: *
 Allow: /
 
-# Disallow private areas
+# Private API and server functions
 Disallow: /api/
 Disallow: /functions/
 
 # Sitemap
-Sitemap: https://padhlewtf.pages.dev/sitemap.xml
+Sitemap: https://padhle.wtf/sitemap.xml

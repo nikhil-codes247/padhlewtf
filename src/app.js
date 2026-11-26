@@ -50,7 +50,7 @@ import usernameView from "./ui/views/username.js";
 import chooseSubjectsView from "./ui/views/chooseSubjects.js";
 import privacyView from "./ui/views/privacy.js";
 import termsView from "./ui/views/terms.js";
-import cookieConsentView from "./ui/views/consent-banner.js";
+import siteNoticeView from "./ui/views/site-notice.js";
 import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js";
 import { renderOnboarding } from "./ui/onboarding.js";
 import notesView from "./ui/views/notes.js";
@@ -199,31 +199,26 @@ async function main() {
       renderRoute("account");
     });
 
-  // Cookie consent banner — shown once per device, then remembered.
-  import("./ui/views/consent-banner.js").then(({ default: cookieView }) => {
-    const alreadyConsented = localStorage.getItem("padhle.cookie-consent");
-    if (!alreadyConsented) {
-      document.body.insertAdjacentHTML("beforeend", cookieView.render());
-      if (typeof cookieView.mount === "function") {
-        cookieView.mount();
-      } else {
-        const acceptBtn = document.querySelector('[data-act="cookie-accept"]');
-        const essentialBtn = document.querySelector('[data-act="cookie-essential"]');
-        if (acceptBtn) {
-          acceptBtn.addEventListener("click", () => {
-            localStorage.setItem("padhle.cookie-consent", "all");
-            document.querySelector(".cookie-consent")?.remove();
-          });
-        }
-        if (essentialBtn) {
-          essentialBtn.addEventListener("click", () => {
-            localStorage.setItem("padhle.cookie-consent", "essential");
-            document.querySelector(".cookie-consent")?.remove();
-          });
-        }
-      }
-    }
-  });
+  // Cookie consent banner — shown once per device, then remembered. It is a
+  // static import (not a runtime `import()`) on purpose: Brave/Ungoogled
+  // filter lists cancel lazily-fetched "cookie"/"consent" module URLs with
+  // ERR_BLOCKED_BY_CLIENT, which silently removed the banner.
+  showSiteNotice();
+}
+
+/** Show the one-time cookie notice, if this device has not answered it yet. */
+function showSiteNotice() {
+  try {
+    if (localStorage.getItem("padhle.cookie-consent")) return;
+    if (document.querySelector(".cookie-consent")) return;
+    const html = siteNoticeView.render();
+    if (!html) return;
+    document.body.insertAdjacentHTML("beforeend", html);
+    if (typeof siteNoticeView.mount === "function") siteNoticeView.mount();
+  } catch (err) {
+    // A blocked storage API must never stop the app from booting.
+    console.warn("[padhle] cookie notice unavailable", err);
+  }
 }
 
 /** Copy the Supabase profile into the local profile so every view agrees. */
