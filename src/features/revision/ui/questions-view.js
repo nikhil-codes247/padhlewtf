@@ -17,23 +17,23 @@
  * All interactions wired through `data-act` (delegated by app.js).
  */
 
-import { esc } from "../../../ui/dom.js?v=mwz7xp2l";
-import { sectionCard, emptyState, bar, chip, metricCard } from "../../../ui/components.js?v=mwz7xp2l";
-import { renderMath } from "../math/katex.js?v=mwz7xp2l";
+import { esc } from "../../../ui/dom.js?v=mwz855jx";
+import { sectionCard, emptyState, bar, chip, metricCard } from "../../../ui/components.js?v=mwz855jx";
+import { renderMath } from "../math/katex.js?v=mwz855jx";
 import {
   createQuestionState, getCurrentQuestion, getCurrentAnswer, getProgressPct,
   isComplete, recordMastery, revealAnswer, nextQuestion,
   prevQuestion, skipQuestion, getResults, saveSessionSummary, recordTimeSpent,
-} from "../logic/question-flow.js?v=mwz7xp2l";
-import { ensureRevisionContent } from "../data/repository.js?v=mwz7xp2l";
+} from "../logic/question-flow.js?v=mwz855jx";
+import { ensureRevisionContent } from "../data/repository.js?v=mwz855jx";
 import {
   loadCatalogueIndex,
   loadChapterQuestions,
   getSubjects,
   getChaptersForSubject,
   getChapterCounts,
-} from "../data/catalogue.js?v=mwz7xp2l";
-import { currentUser } from "../../../core/supabase.js?v=mwz7xp2l";
+} from "../data/catalogue.js?v=mwz855jx";
+import { currentUser } from "../../../core/supabase.js?v=mwz855jx";
 
 const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard"];
 

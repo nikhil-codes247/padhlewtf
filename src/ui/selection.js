@@ -7,14 +7,14 @@
  * cannot drift between the dashboard, syllabus, planner, analytics and the rest
  * of the app.
  */
-import { account, isSignedIn, saveSubjectSelection } from "../core/account.js?v=mwz7xp2l";
-import { todayISO } from "../core/dates.js?v=mwz7xp2l";
+import { account, isSignedIn, saveSubjectSelection } from "../core/account.js?v=mwz855jx";
+import { todayISO } from "../core/dates.js?v=mwz855jx";
 import {
   ALL_SUBJECT_IDS as ALL_SUBJECTS,
   CORE_SUBJECT_IDS,
   isCoreSubject, isOptionalSubject,
   validateSubjectChoice, visibleSubjectIds,
-} from "../core/subjects.js?v=mwz7xp2l";
+} from "../core/subjects.js?v=mwz855jx";
 
 /** The active selection, or null when nothing has been chosen (show all). */
 export function currentSelection(store) {

@@ -12,8 +12,8 @@
  * Pure and DOM-free. `daysBetween` is passed in so the module shares the app's
  * date maths (and can be tested without a clock).
  */
-import { STREAK_MIN_ITEMS, STREAK_MIN_MINUTES, STREAK_MILESTONES } from "./constants.js?v=mwz7xp2l";
-import { diffDays } from "./dates.js?v=mwz7xp2l";
+import { STREAK_MIN_ITEMS, STREAK_MIN_MINUTES, STREAK_MILESTONES } from "./constants.js?v=mwz855jx";
+import { diffDays } from "./dates.js?v=mwz855jx";
 
 export function qualifiesForStreak(day) {
   return (day.studyMinutes || 0) >= STREAK_MIN_MINUTES || (day.itemsCompleted || 0) >= STREAK_MIN_ITEMS;

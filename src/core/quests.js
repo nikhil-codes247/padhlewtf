@@ -9,8 +9,8 @@
  *
  * Pure and DOM-free, so it is unit-testable in plain Node.
  */
-import { QUEST_XP, WEEK_QUEST_TARGETS, STREAK_MIN_MINUTES } from "./constants.js?v=mwz7xp2l";
-import { qualifiesForStreak } from "./streak.js?v=mwz7xp2l";
+import { QUEST_XP, WEEK_QUEST_TARGETS, STREAK_MIN_MINUTES } from "./constants.js?v=mwz855jx";
+import { qualifiesForStreak } from "./streak.js?v=mwz855jx";
 
 const addDays = (iso, n) => {
   if (!iso) return null;

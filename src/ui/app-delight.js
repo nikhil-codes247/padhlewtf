@@ -9,8 +9,8 @@
  * Motion is opt-in: with reduced motion enabled the same moment is announced
  * by a toast instead of confetti.
  */
-import { store } from "../core/store.js?v=mwz7xp2l";
-import { toast } from "./app-toasts.js?v=mwz7xp2l";
+import { store } from "../core/store.js?v=mwz855jx";
+import { toast } from "./app-toasts.js?v=mwz855jx";
 
 const CONFETTI_COLOURS = [
   "var(--ll-sticky-yellow)",

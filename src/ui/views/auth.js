@@ -9,10 +9,10 @@
  * Rather than dumping the visitor back on the landing page, the view switches
  * to a "check your inbox" state and remembers the address for this tab.
  */
-import { debounce, esc } from "../dom.js?v=mwz7xp2l";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz7xp2l";
-import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz7xp2l";
-import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz7xp2l";
+import { debounce, esc } from "../dom.js?v=mwz855jx";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz855jx";
+import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz855jx";
+import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz855jx";
 
 const BENEFITS = [
   "Your subjects, saved to your account",
@@ -234,14 +234,16 @@ function initGoogleOneTap(ctx) {
       google.accounts.id.initialize({
         client_id: googleClientId(),
         callback: onSuccess,
-        login_uri: "https://padhle.wtf/",
-        native_callback: true,
         context: "signin",
         prompt_parent_id: "padhle-g-id-onload",
+        itp_support: true,
       });
-      google.accounts.id.prompt((notification) => {
-        if (mounted) onError(notification);
-      });
+      // Small delay so the prompt container is definitely mounted in the DOM.
+      setTimeout(() => {
+        if (mounted) google.accounts.id.prompt((notification) => {
+          if (mounted) onError(notification);
+        });
+      }, 100);
     } catch (err) {
       console.error("[padhle] Google One Tap setup failed", err);
     }

@@ -1,5 +1,5 @@
 /** validate.js — small, explicit input validation. Every mutator calls one of these. */
-import { isValidISO } from "./dates.js?v=mwz7xp2l";
+import { isValidISO } from "./dates.js?v=mwz855jx";
 
 export const STATUSES = ["To Do", "In Progress", "Done", "Revise", "Second Revision", "Doubt"];
 export const PRIORITIES = ["P1", "P2", "P3"];

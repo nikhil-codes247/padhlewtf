@@ -10,8 +10,8 @@
  * this module only reads.
  */
 
-import { callRpc } from "../../../core/supabase.js?v=mwz7xp2l";
-import { listFlashcards, listQuestions } from "./repository.js?v=mwz7xp2l";
+import { callRpc } from "../../../core/supabase.js?v=mwz855jx";
+import { listFlashcards, listQuestions } from "./repository.js?v=mwz855jx";
 
 let indexCache = null;
 let indexLoadedAt = 0;

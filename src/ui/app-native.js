@@ -5,10 +5,10 @@
  * callback for native WebView hosts. Uses shared state from app-state.js
  * (store) and functions from core/reminders.js and core/native.js.
  */
-import { store } from "../core/store.js?v=mwz7xp2l";
-import { isNative } from "../core/native.js?v=mwz7xp2l";
-import { syncDailyReminder } from "../core/reminders.js?v=mwz7xp2l";
-import { renderRoute } from "../app.js?v=mwz7xp2l";
+import { store } from "../core/store.js?v=mwz855jx";
+import { isNative } from "../core/native.js?v=mwz855jx";
+import { syncDailyReminder } from "../core/reminders.js?v=mwz855jx";
+import { renderRoute } from "../app.js?v=mwz855jx";
 
 export function connectNativeShell() {
   // Re-arm the reminder on every open. In a browser this schedules the in-page
