@@ -12,8 +12,8 @@ import {
   getSession, signUpWithPassword, signInWithPassword, signInWithGoogle, signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js?v=mwz1qwqk";
-import { validateSubjectSelection } from "./subjects.js?v=mwz1qwqk";
+} from "./supabase.js?v=mwz23oco";
+import { validateSubjectSelection } from "./subjects.js?v=mwz23oco";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";
@@ -156,6 +156,11 @@ async function loadProfileAndSelection() {
 
   const uid = session.user?.id;
   if (!uid) throw new Error("The account service returned a session without a user id.");
+
+  // Never carry the previous session's identity into this one: a forced
+  // re-init (Google return, account switch) with no profile row must leave
+  // profile null so the gate can ask for a username.
+  account.profile = null;
 
   const [profiles, rows] = await Promise.all([
     selectRows("profiles", `select=${PROFILE_FIELDS}&id=eq.${encodeURIComponent(uid)}&limit=1`),

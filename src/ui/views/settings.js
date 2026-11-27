@@ -11,13 +11,13 @@
  * Backup/export was removed from this surface by request; only the destructive
  * "clear study data" control remains, and it always asks for confirmation.
  */
-import { esc } from "../dom.js?v=mwz1qwqk";
-import { chip, sectionCard } from "../components.js?v=mwz1qwqk";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz1qwqk";
-import { account, accountEmail, accountUsername, isSignedIn } from "../../core/account.js?v=mwz1qwqk";
-import { isNative } from "../../core/native.js?v=mwz1qwqk";
-import { notificationsSupported, reminderPermission } from "../../core/reminders.js?v=mwz1qwqk";
-import accountView from "./account.js?v=mwz1qwqk";
+import { esc } from "../dom.js?v=mwz23oco";
+import { chip, sectionCard } from "../components.js?v=mwz23oco";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz23oco";
+import { account, accountEmail, accountUsername, isSignedIn } from "../../core/account.js?v=mwz23oco";
+import { isNative } from "../../core/native.js?v=mwz23oco";
+import { notificationsSupported, reminderPermission } from "../../core/reminders.js?v=mwz23oco";
+import accountView from "./account.js?v=mwz23oco";
 
 const DAY_NAMES = [
   ["1", "Mon"],

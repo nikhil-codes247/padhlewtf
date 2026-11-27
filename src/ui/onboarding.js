@@ -6,14 +6,14 @@
  * returning student. Every answer the student gives here is written straight into
  * the same local database the rest of the app uses — there is no throwaway state.
  */
-import { esc } from "./dom.js?v=mwz1qwqk";
-import { subjectMark } from "./components.js?v=mwz1qwqk";
-import { todayISO } from "../core/dates.js?v=mwz1qwqk";
-import { brand, TAGLINE } from "../core/branding.js?v=mwz1qwqk";
-import { account, isSignedIn, accountEmail, hasPaidAccess } from "../core/account.js?v=mwz1qwqk";
-import { config } from "../core/config.js?v=mwz1qwqk";
-import { ALL_SUBJECT_IDS, CORE_SUBJECT_IDS, SUBJECT_MIN } from "../core/subjects.js?v=mwz1qwqk";
-import { currentSelection } from "./selection.js?v=mwz1qwqk";
+import { esc } from "./dom.js?v=mwz23oco";
+import { subjectMark } from "./components.js?v=mwz23oco";
+import { todayISO } from "../core/dates.js?v=mwz23oco";
+import { brand, TAGLINE } from "../core/branding.js?v=mwz23oco";
+import { account, isSignedIn, accountEmail, hasPaidAccess } from "../core/account.js?v=mwz23oco";
+import { config } from "../core/config.js?v=mwz23oco";
+import { ALL_SUBJECT_IDS, CORE_SUBJECT_IDS, SUBJECT_MIN } from "../core/subjects.js?v=mwz23oco";
+import { currentSelection } from "./selection.js?v=mwz23oco";
 
 /** The four base stages, plus a final unlock stage for signed-in free students. */
 export const ONBOARDING_STEPS = 4;

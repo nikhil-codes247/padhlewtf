@@ -9,14 +9,14 @@
  * router, tests and keyboard shortcuts (#nav, #main, #global-search, …) never
  * move.
  */
-import { esc, debounce } from "./dom.js?v=mwz1qwqk";
-import { brand, TAGLINE } from "../core/branding.js?v=mwz1qwqk";
-import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js?v=mwz1qwqk";
-import { store } from "../core/store.js?v=mwz1qwqk";
-import { renderNav } from "./app-nav.js?v=mwz1qwqk";
-import { shell, ui } from "./app-state.js?v=mwz1qwqk";
-import { inkUnderline } from "./ink.js?v=mwz1qwqk";
-import { bootDoodles } from "./boot-doodles.js?v=mwz1qwqk";
+import { esc, debounce } from "./dom.js?v=mwz23oco";
+import { brand, TAGLINE } from "../core/branding.js?v=mwz23oco";
+import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js?v=mwz23oco";
+import { store } from "../core/store.js?v=mwz23oco";
+import { renderNav } from "./app-nav.js?v=mwz23oco";
+import { shell, ui } from "./app-state.js?v=mwz23oco";
+import { inkUnderline } from "./ink.js?v=mwz23oco";
+import { bootDoodles } from "./boot-doodles.js?v=mwz23oco";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 const SETUP_ROUTES = new Set(["set-username", "choose-subjects"]);

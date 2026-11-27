@@ -3,8 +3,8 @@
  * planner records, shifted so Day 1 lands on a date the user chooses.
  * Pure functions: no DB, no DOM.
  */
-import { addDays } from "./dates.js?v=mwz1qwqk";
-import { newId } from "./ids.js?v=mwz1qwqk";
+import { addDays } from "./dates.js?v=mwz23oco";
+import { newId } from "./ids.js?v=mwz23oco";
 
 const norm = (s) => String(s ?? "").toLowerCase().normalize("NFKC").replace(/[^\p{L}\p{N}]+/gu, "");
 

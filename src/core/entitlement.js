@@ -12,8 +12,8 @@
  * treat a payment as done unless the server says `paid: true` and the refreshed
  * profile actually reports access.
  */
-import { account, accessToken, initAccount, hasPaidAccess, isSignedIn } from "./account.js?v=mwz1qwqk";
-import { cacheInvalidate } from "./requestCache.js?v=mwz1qwqk";
+import { account, accessToken, initAccount, hasPaidAccess, isSignedIn } from "./account.js?v=mwz23oco";
+import { cacheInvalidate } from "./requestCache.js?v=mwz23oco";
 
 const PENDING_KEY = "padhle.pending.payment.v1";
 const AUTO_CLAIM_KEY = "padhle.claim.auto.v1";

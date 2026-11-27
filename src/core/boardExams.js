@@ -16,7 +16,7 @@
  *   artificial_intelligence → sub-ai
  */
 
-import { diffDays, todayISO } from "./dates.js?v=mwz1qwqk";
+import { diffDays, todayISO } from "./dates.js?v=mwz23oco";
 
 export const EXAM_SCHEDULE_DATA = {
   "schema_version": "1.0",

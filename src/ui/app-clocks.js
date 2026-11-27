@@ -5,10 +5,10 @@
  * startClocks() starts the 1-second tick and the midnight date check.
  * Uses shared state from app-state.js (store, ctx).
  */
-import { store } from "../core/store.js?v=mwz1qwqk";
-import { todayISO } from "../core/dates.js?v=mwz1qwqk";
-import { shell } from "./app-state.js?v=mwz1qwqk";
-import { renderRoute } from "../app.js?v=mwz1qwqk";
+import { store } from "../core/store.js?v=mwz23oco";
+import { todayISO } from "../core/dates.js?v=mwz23oco";
+import { shell } from "./app-state.js?v=mwz23oco";
+import { renderRoute } from "../app.js?v=mwz23oco";
 
 export function clock(ms) {
   const total = Math.max(0, Math.floor(ms / 1000));

@@ -10,11 +10,11 @@
  * Frequency describes papers already read — it is never presented as a prediction,
  * and where there is no per-question data the page says so.
  */
-import { esc, fmtNum } from "../dom.js?v=mwz1qwqk";
-import { chip, emptyState, sectionCard } from "../components.js?v=mwz1qwqk";
-import { FREQUENCY_LABEL } from "../../core/constants.js?v=mwz1qwqk";
-import { selectRows } from "../../core/supabase.js?v=mwz1qwqk";
-import { selectionKey } from "../selection.js?v=mwz1qwqk";
+import { esc, fmtNum } from "../dom.js?v=mwz23oco";
+import { chip, emptyState, sectionCard } from "../components.js?v=mwz23oco";
+import { FREQUENCY_LABEL } from "../../core/constants.js?v=mwz23oco";
+import { selectRows } from "../../core/supabase.js?v=mwz23oco";
+import { selectionKey } from "../selection.js?v=mwz23oco";
 
 const cache = new Map();
 

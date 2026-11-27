@@ -9,7 +9,7 @@
  * The visible glyph mirrors the old bare-text toast, but the kind label and
  * progress bar make the state legible without relying on colour alone.
  */
-import { h, esc } from "./dom.js?v=mwz1qwqk";
+import { h, esc } from "./dom.js?v=mwz23oco";
 
 const LIFE = { ok: 5000, info: 5000, warn: 7000, err: 9000 };
 const META = {
