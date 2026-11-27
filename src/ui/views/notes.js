@@ -1,8 +1,8 @@
-import { esc, fmtNum, attrs } from "../dom.js?v=mwz7i9p1";
-import { chip, emptyState, metricCard, sectionCard, table } from "../components.js?v=mwz7i9p1";
-import { noteCard } from "./_shared.js?v=mwz7i9p1";
-import { fmtShort, diffDays } from "../../core/dates.js?v=mwz7i9p1";
-import { filterBySubject, visibleSubjects } from "../selection.js?v=mwz7i9p1";
+import { esc, fmtNum, attrs } from "../dom.js?v=mwz7xp2l";
+import { chip, emptyState, metricCard, sectionCard, table } from "../components.js?v=mwz7xp2l";
+import { noteCard } from "./_shared.js?v=mwz7xp2l";
+import { fmtShort, diffDays } from "../../core/dates.js?v=mwz7xp2l";
+import { filterBySubject, visibleSubjects } from "../selection.js?v=mwz7xp2l";
 
 const KINDS = [
   { value: "all", label: "Everything" },

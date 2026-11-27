@@ -18,8 +18,8 @@
  *   fits the free time today    +10   doesn't fit  -10
  *   studied in the last 2 days  -15   not touched for 14+ days & done  +10 (revision)
  */
-import { diffDays } from "./dates.js?v=mwz7i9p1";
-import { buildNodeIndex, leavesOfChapter } from "./progress.js?v=mwz7i9p1";
+import { diffDays } from "./dates.js?v=mwz7xp2l";
+import { buildNodeIndex, leavesOfChapter } from "./progress.js?v=mwz7xp2l";
 
 export const WEIGHTS = {
   plannedOverdueBase: 100, plannedOverduePerDay: 5, plannedOverdueCap: 40,

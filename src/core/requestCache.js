@@ -14,7 +14,7 @@
  * read doesn't return stale data. `supabase.js` does this automatically.
  *
  * Usage:
- *   import { cacheGet, cacheInvalidate } from "./requestCache.js?v=mwz7i9p1";
+ *   import { cacheGet, cacheInvalidate } from "./requestCache.js?v=mwz7xp2l";
  *   const rows = await cacheGet(`GET /rest/v1/chapters`, () => selectRows("chapters"), 15000);
  */
 

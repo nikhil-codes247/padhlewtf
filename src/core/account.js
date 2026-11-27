@@ -13,8 +13,9 @@ import {
   signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js?v=mwz7i9p1";
-import { validateSubjectSelection } from "./subjects.js?v=mwz7i9p1";
+} from "./supabase.js?v=mwz7xp2l";
+import { validateSubjectSelection } from "./subjects.js?v=mwz7xp2l";
+import { store } from "./store.js?v=mwz7xp2l";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";
@@ -239,6 +240,13 @@ async function loadProfileAndSelection() {
     // empty optional list is a valid, saved choice.
     saved: list.length > 0,
   };
+
+  // A returning student who already has a profile and subject selection has
+  // effectively completed onboarding. Flip the flag so the welcome tour does
+  // not reappear on later logins (email/password or Google).
+  if (account.profile && account.selection.saved) {
+    void store.setProfile({ onboarded: true });
+  }
 }
 
 /**

@@ -12,11 +12,11 @@
  *   #/practice-questions      → Practice Questions interface
  */
 
-import { esc, fmtNum } from "../dom.js?v=mwz7i9p1";
-import { bar, chip, emptyState, metricCard, sectionCard, subjectMark, deadlineChip } from "../components.js?v=mwz7i9p1";
-import { addDays, fmtDuration, fmtShort, diffDays, relative, todayISO } from "../../core/dates.js?v=mwz7i9p1";
-import { visibleChapters, filterBySubject, revisionSubjectId } from "../selection.js?v=mwz7i9p1";
-import { REVISION_LADDER_DAYS } from "../../core/constants.js?v=mwz7i9p1";
+import { esc, fmtNum } from "../dom.js?v=mwz7xp2l";
+import { bar, chip, emptyState, metricCard, sectionCard, subjectMark, deadlineChip } from "../components.js?v=mwz7xp2l";
+import { addDays, fmtDuration, fmtShort, diffDays, relative, todayISO } from "../../core/dates.js?v=mwz7xp2l";
+import { visibleChapters, filterBySubject, revisionSubjectId } from "../selection.js?v=mwz7xp2l";
+import { REVISION_LADDER_DAYS } from "../../core/constants.js?v=mwz7xp2l";
 
 /** The researched ladder: gaps between consecutive revision rounds. */
 const NEXT_GAP_DAYS = REVISION_LADDER_DAYS;

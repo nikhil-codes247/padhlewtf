@@ -1,7 +1,7 @@
 /** _shared.js — pieces used by the syllabus, subject and chapter views. */
-import { esc, fmtPct, sum } from "../dom.js?v=mwz7i9p1";
-import { bar, chip, deadlineChip, priorityChip, scopeChip, statusChip, tagChips, tierChip, iconBtn } from "../components.js?v=mwz7i9p1";
-import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz7i9p1";
+import { esc, fmtPct, sum } from "../dom.js?v=mwz7xp2l";
+import { bar, chip, deadlineChip, priorityChip, scopeChip, statusChip, tagChips, tierChip, iconBtn } from "../components.js?v=mwz7xp2l";
+import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz7xp2l";
 
 export const SORTS = [
   { value: "order", label: "Syllabus order" },

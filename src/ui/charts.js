@@ -4,7 +4,7 @@
  * carries an aria-label with the underlying numbers so it is readable by
  * screen readers (and never decorative-only).
  */
-import { esc, fmtNum, fmtPct } from "./dom.js?v=mwz7i9p1";
+import { esc, fmtNum, fmtPct } from "./dom.js?v=mwz7xp2l";
 
 /* ------------------------------------------------------------------ donut -- */
 export function donut({ segments, size = 190, thickness = 26, center, sub, aria }) {
