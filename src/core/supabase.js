@@ -112,6 +112,13 @@ export function currentUser() {
  * the one-time token. Returns the stored session, or null when the URL is not
  * an auth callback.
  */
+let oauthError = null;
+
+/** The error Supabase/Google sent back on the last OAuth callback, if any. */
+export function getOAuthError() {
+  return oauthError;
+}
+
 export function consumeAuthCallback() {
   if (typeof location === "undefined" || !location.hash) return null;
   const fragment = String(location.hash).replace(/^#/, "");
@@ -119,13 +126,20 @@ export function consumeAuthCallback() {
 
   const params = new URLSearchParams(fragment);
   const accessToken = params.get("access_token");
+  oauthError = null;
 
   // Remove the tokens from the address bar and from history, whatever the result.
   if (typeof history !== "undefined" && typeof history?.replaceState === "function") {
     try { history.replaceState(null, "", `${location.pathname || "/"}${location.search || ""}`); } catch { /* file:// */ }
   }
 
-  if (!accessToken) return null;
+  if (!accessToken) {
+    oauthError =
+      params.get("error_description") ||
+      params.get("error") ||
+      "Google sign-in did not finish. Please try again.";
+    return null;
+  }
   const session = normalizeSession({
     access_token: accessToken,
     refresh_token: params.get("refresh_token"),
@@ -293,16 +307,20 @@ export async function signInWithPassword(email, password) {
  * endpoint; Supabase sends the user to Google, then back to redirectTo with
  * a session fragment that consumeAuthCallback() picks up on page load.
  * This function does not return on success (the browser navigates away).
+ *
+ * redirectTo deliberately has no hash route: Supabase appends its own
+ * `#access_token=…` fragment, and a hash such as `/#/login` produced
+ * `/#/login#access_token=…`, which the parser read as one meaningless key.
+ * Returning to the site root lets the normal gate send the student onward.
  */
 export async function signInWithGoogle() {
   requireBackend();
-  const redirectTo = `${config.siteUrl}/#/login`;
+  const root = String(config.siteUrl || (typeof location !== "undefined" ? location.origin : "")).replace(/\/+$/, "");
+  const redirectTo = `${root}/`;
   const url = new URL(base("/auth/v1/authorize"));
   url.searchParams.set("provider", "google");
   url.searchParams.set("redirect_to", redirectTo);
-  window.location.href = url.toString();
-  // If the redirect is blocked (popup blocker etc.), surface an error.
-  throw new SupabaseError("Google sign-in was blocked or cancelled.", { code: "oauth_blocked" });
+  window.location.assign(url.toString());
 }
 
 export async function refreshUser() {

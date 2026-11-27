@@ -373,6 +373,18 @@ export const ACTIONS = {
     ctx.toast("Signed out.", "info");
     ctx.navigate("#/welcome");
   },
+  // Starts the Supabase → Google redirect. This must be a real ACTIONS entry:
+  // it is a <button data-act>, not a form submit, so handleFormSubmit never
+  // sees it. Without this key the button silently logged "unknown action".
+  "padhle-google-signin": async (el, ctx) => {
+    await withBusy(el, "Signing in with Google…", async () => {
+      try {
+        await signInWithGoogleOAuth();
+      } catch (err) {
+        ctx.toast(err?.message || "Could not sign in with Google.", "err");
+      }
+    });
+  },
   "account-retry": async (el, ctx) => {
     await initAccount({ force: true });
     ctx.rerender();
@@ -1202,17 +1214,6 @@ export async function handleFormSubmit(form, ctx) {
       }
       formError(form, err?.message || "Could not log in.");
     }
-    return;
-  }
-  if (kind === "padhle-google-signin") {
-    const btn = form?.querySelector?.('[data-act="auth-google"]') || el;
-    await withBusy(btn, "Signing in with Google…", async () => {
-      try {
-        await signInWithGoogleOAuth();
-      } catch (err) {
-        ctx.toast(err?.message || "Could not sign in with Google.", "err");
-      }
-    });
     return;
   }
   if (kind === "padhle-forgot") {

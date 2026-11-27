@@ -22,6 +22,7 @@ import {
 } from "./core/account.js";
 import { isPaidRoute } from "./ui/app-router.js";
 import { recoverPurchase } from "./core/entitlement.js";
+import { getOAuthError } from "./core/supabase.js";
 import { startCheckout } from "./ui/checkout.js";
 /* ------------------------------------------------------------- views --- */
 import dashboardView from "./ui/views/dashboard.js";
@@ -190,6 +191,10 @@ async function main() {
   // The gate renders a small loading state while this is in flight.
   initAccount()
     .then(async () => {
+      // A rejected Google consent screen comes back as #error=…; surface it
+      // instead of silently dropping the student on the welcome page.
+      const oauthError = getOAuthError();
+      if (oauthError) toast(oauthError, "err");
       await hydrateRemoteSettings();
       syncAccountProfile();
       renderRoute("account");

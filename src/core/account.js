@@ -174,24 +174,33 @@ async function loadProfileAndSelection() {
       planExpiresAt: row.plan_expires_at,
     };
   } else {
-    // No profile row yet. Google OAuth users have provider_data with
-    // provider 'google' and user_metadata with full_name/avatar_url, so we
-    // can create the profile automatically without a sign-up form.
-    // Email/password users are sent to set-username by gateTarget instead.
+    // No profile row yet. Google OAuth users carry `app_metadata.provider`
+    // (and identities/provider_data on some versions) plus user_metadata
+    // with full_name/avatar_url, so we can create the profile automatically
+    // without a sign-up form. Email/password users are sent to set-username
+    // by gateTarget instead.
     const user = session.user || {};
-    const isGoogleOAuth = Array.isArray(user.provider_data)
-      && user.provider_data.some((p) => p.provider === "google");
+    const providers = [
+      user.app_metadata?.provider,
+      user.identities?.[0]?.provider,
+      ...(Array.isArray(user.provider_data) ? user.provider_data.map((p) => p?.provider) : []),
+    ].filter(Boolean);
+    const isGoogleOAuth = providers.includes("google");
     if (isGoogleOAuth) {
       const meta = user.user_metadata || {};
-      const suggestedUsername = String(user.email || "").split("@")[0] || `user_${uid.slice(0, 8)}`;
+      // The database only accepts [A-Za-z0-9_]{3,20}; an email local part
+      // such as "first.last" must be cleaned before it becomes a username.
+      const emailBase = String(user.email || "").split("@")[0].replace(/[^A-Za-z0-9_]/g, "");
+      const suggestedUsername = emailBase.length >= 3 ? emailBase.slice(0, 20) : `user_${uid.slice(0, 8)}`;
       const displayName = meta.full_name || meta.name || suggestedUsername;
-      const avatar = meta.avatar_url || meta.picture || "🦉";
+      // profiles.avatar is an emoji, not a URL. Google's picture URL would be
+      // truncated to "http" and render as a broken avatar.
       try {
         const created = await insertRows("profiles", [{
           id: uid,
           username: suggestedUsername,
           display_name: String(displayName).slice(0, 40),
-          avatar: String(avatar).slice(0, 4),
+          avatar: "🦉",
         }]);
         const createdRow = Array.isArray(created) ? created[0] : null;
         if (createdRow) {

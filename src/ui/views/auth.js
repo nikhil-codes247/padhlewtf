@@ -115,7 +115,7 @@ export default {
           <p class="field-error" data-form-error role="alert"></p>
           ${!isForgot ? `<div class="row gap-2 mt-3">
             <span class="small faint">Or continue with</span>
-            <button class="btn wide" type="button" data-act="auth-google">Continue with Google</button>
+            <button class="btn wide" type="button" data-act="padhle-google-signin">Continue with Google</button>
           </div>` : ""}
           <button class="btn primary wide" type="submit">${submit}</button>
         </form>
