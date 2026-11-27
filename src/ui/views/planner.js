@@ -1,9 +1,9 @@
-import { esc, fmtNum, sum } from "../dom.js";
-import { bar, emptyState, metricCard, sectionCard, subjectMark, priorityChip, iconBtn } from "../components.js";
-import { addDays, fmtDuration, fmtShort, weekdayName, diffDays, weekDates, relative } from "../../core/dates.js";
+import { esc, fmtNum, sum } from "../dom.js?v=mwz1jos9";
+import { bar, emptyState, metricCard, sectionCard, subjectMark, priorityChip, iconBtn } from "../components.js?v=mwz1jos9";
+import { addDays, fmtDuration, fmtShort, weekdayName, diffDays, weekDates, relative } from "../../core/dates.js?v=mwz1jos9";
 import {
   currentSelection, scopedTime, filterBySubject, taskSubjectId,
-} from "../selection.js";
+} from "../selection.js?v=mwz1jos9";
 
 export default {
   id: "planner",

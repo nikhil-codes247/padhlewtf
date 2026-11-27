@@ -9,10 +9,10 @@
  * Every failure is surfaced. A Razorpay success screen is not a grant: the
  * handler waits for `activatePaidAccess` to confirm the plan really changed.
  */
-import { config } from "../core/config.js";
-import { account, accountEmail, signOutAccount } from "../core/account.js";
-import { activatePaidAccess, PaymentAuthError } from "../core/entitlement.js";
-import { toast } from "./app-toasts.js";
+import { config } from "../core/config.js?v=mwz1jos9";
+import { account, accountEmail, signOutAccount } from "../core/account.js?v=mwz1jos9";
+import { activatePaidAccess, PaymentAuthError } from "../core/entitlement.js?v=mwz1jos9";
+import { toast } from "./app-toasts.js?v=mwz1jos9";
 
 let loading = null;
 

@@ -73,7 +73,7 @@ export function bundleToStoreMap(bundle) {
 }
 
 /* ----------------------------------------------------- browser / native io -- */
-import { saveTextFile } from "./native.js";
+import { saveTextFile } from "./native.js?v=mwz1jos9";
 
 /**
  * Saves the bundle as a file.

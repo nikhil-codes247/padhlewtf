@@ -7,8 +7,8 @@
  * deployment is seeded, the catalogue is available; if not, surfaces fall back
  * to the stable subject ids until the catalogue arrives.
  */
-import { account } from "./account.js";
-import { selectRows, callRpc } from "./supabase.js";
+import { account } from "./account.js?v=mwz1jos9";
+import { selectRows, callRpc } from "./supabase.js?v=mwz1jos9";
 
 const CACHE_TTL_MS = 5 * 60 * 1000;
 

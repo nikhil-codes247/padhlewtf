@@ -5,7 +5,7 @@
  * student's choice in localStorage so it only shows once. Does not load any
  * tracking scripts until consent is given.
  */
-import { esc } from "../dom.js";
+import { esc } from "../dom.js?v=mwz1jos9";
 
 export default {
   id: "site-notice",

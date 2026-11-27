@@ -9,14 +9,14 @@
  * router, tests and keyboard shortcuts (#nav, #main, #global-search, …) never
  * move.
  */
-import { esc, debounce } from "./dom.js";
-import { brand, TAGLINE } from "../core/branding.js";
-import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js";
-import { store } from "../core/store.js";
-import { renderNav } from "./app-nav.js";
-import { shell, ui } from "./app-state.js";
-import { inkUnderline } from "./ink.js";
-import { bootDoodles } from "./boot-doodles.js";
+import { esc, debounce } from "./dom.js?v=mwz1jos9";
+import { brand, TAGLINE } from "../core/branding.js?v=mwz1jos9";
+import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js?v=mwz1jos9";
+import { store } from "../core/store.js?v=mwz1jos9";
+import { renderNav } from "./app-nav.js?v=mwz1jos9";
+import { shell, ui } from "./app-state.js?v=mwz1jos9";
+import { inkUnderline } from "./ink.js?v=mwz1jos9";
+import { bootDoodles } from "./boot-doodles.js?v=mwz1jos9";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 const SETUP_ROUTES = new Set(["set-username", "choose-subjects"]);

@@ -12,8 +12,8 @@ import {
   getSession, signUpWithPassword, signInWithPassword, signInWithGoogle, signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js";
-import { validateSubjectSelection } from "./subjects.js";
+} from "./supabase.js?v=mwz1jos9";
+import { validateSubjectSelection } from "./subjects.js?v=mwz1jos9";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";

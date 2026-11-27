@@ -17,9 +17,9 @@
  * Every failure is surfaced as a `SupabaseError` with a human message, a status
  * and the provider's code where there is one.
  */
-import { config, accountsAvailable } from "./config.js";
-import { enqueue } from "./requestQueue.js";
-import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js";
+import { config, accountsAvailable } from "./config.js?v=mwz1jos9";
+import { enqueue } from "./requestQueue.js?v=mwz1jos9";
+import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js?v=mwz1jos9";
 
 const SESSION_KEY = "padhle.auth.v1";
 const REFRESH_WINDOW_MS = 60 * 1000;
