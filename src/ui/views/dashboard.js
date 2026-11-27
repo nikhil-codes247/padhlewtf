@@ -1,14 +1,14 @@
-import { esc, fmtNum, fmtPct, sum, pluralise } from "../dom.js?v=mwz23oco";
-import { bar, chip, emptyState, metricCard, meter, questBoard, sectionCard, subjectMark, deadlineChip, priorityChip } from "../components.js?v=mwz23oco";
-import { donut, legend, barChart, hBars } from "../charts.js?v=mwz23oco";
-import { fmtDuration, fmtShort, addDays, diffDays, relative } from "../../core/dates.js?v=mwz23oco";
+import { esc, fmtNum, fmtPct, sum, pluralise } from "../dom.js?v=mwz6nuk5";
+import { bar, chip, emptyState, metricCard, meter, questBoard, sectionCard, subjectMark, deadlineChip, priorityChip } from "../components.js?v=mwz6nuk5";
+import { donut, legend, barChart, hBars } from "../charts.js?v=mwz6nuk5";
+import { fmtDuration, fmtShort, addDays, diffDays, relative } from "../../core/dates.js?v=mwz6nuk5";
 import {
   currentSelection, scopedScopes, scopedTime, visibleChapters,
   filterBySubject, taskSubjectId, revisionSubjectId, isVisibleSubject,
-} from "../selection.js?v=mwz23oco";
-import { getExams } from "../../core/boardExams.js?v=mwz23oco";
-import { inkUnderline } from "../ink.js?v=mwz23oco";
-import { mascotBubble } from "../mascot.js?v=mwz23oco";
+} from "../selection.js?v=mwz6nuk5";
+import { getExams } from "../../core/boardExams.js?v=mwz6nuk5";
+import { inkUnderline } from "../ink.js?v=mwz6nuk5";
+import { mascotBubble } from "../mascot.js?v=mwz6nuk5";
 
 const ACTIVITY_COLOR = { learn: "var(--accent)", practice: "var(--accent-2)", revision: "var(--warn)", doubt: "var(--bad)" };
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

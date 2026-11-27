@@ -17,6 +17,7 @@ const DEFAULT_CONFIG = Object.freeze({
   siteUrl: "",
   environment: "development",
   razorpayKeyId: "",
+  googleClientId: "",
 });
 
 function trimUrl(value) {
@@ -63,6 +64,7 @@ export function readConfig(raw = {}) {
     siteUrl,
     environment: String(raw.environment || DEFAULT_CONFIG.environment),
     razorpayKeyId: String(raw.razorpayKeyId ?? "").trim(),
+    googleClientId: String(raw.googleClientId ?? "").trim(),
     errors,
   };
 }

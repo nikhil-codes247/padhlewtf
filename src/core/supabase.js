@@ -17,9 +17,9 @@
  * Every failure is surfaced as a `SupabaseError` with a human message, a status
  * and the provider's code where there is one.
  */
-import { config, accountsAvailable } from "./config.js?v=mwz23oco";
-import { enqueue } from "./requestQueue.js?v=mwz23oco";
-import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js?v=mwz23oco";
+import { config, accountsAvailable } from "./config.js?v=mwz6nuk5";
+import { enqueue } from "./requestQueue.js?v=mwz6nuk5";
+import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js?v=mwz6nuk5";
 
 const SESSION_KEY = "padhle.auth.v1";
 const REFRESH_WINDOW_MS = 60 * 1000;
@@ -511,6 +511,59 @@ export async function callRpc(name, args = {}) {
 /** DELETE rows. `query` selects them, e.g. `id=eq.<uuid>` or `id=in.(...)`. */
 export function deleteRows(table, query = "") {
   return restRequest(`${table}${query ? `?${query}` : ""}`, { method: "DELETE" });
+}
+
+/* ------------------------------------------------------------ google one-tap -- */
+
+/** The Google OAuth client ID from config (public, safe in the browser). */
+export function googleClientId() {
+  return String(config.googleClientId || "");
+}
+
+/**
+ * Load Google's Identity Services (GIS) client library on demand.
+ * One Tap sign-in needs this script; it is not bundled so pages that never
+ * use Google sign-in never pay for it.
+ */
+let gsiPromise = null;
+export function loadGsiScript() {
+  if (gsiPromise) return gsiPromise;
+  if (typeof document === "undefined") {
+    gsiPromise = Promise.reject(new Error("GSI script is only available in a browser."));
+    return gsiPromise;
+  }
+  gsiPromise = new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
+    if (existing) { resolve(existing); return; }
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error("Failed to load Google Identity Services."));
+    document.head.appendChild(script);
+  });
+  return gsiPromise;
+}
+
+/**
+ * Exchange a Google ID token (from One Tap or the Google "G" button) for a
+ * Supabase session. This is the serverless equivalent of
+ * `signInWithIdToken` — the ID token is verified by Supabase against Google,
+ * and a Supabase session is issued in return.
+ */
+export async function signInWithGoogleIdToken(idToken) {
+  requireBackend();
+  const clientId = googleClientId();
+  if (!clientId) throw new SupabaseError("Google sign-in is not configured on this deployment.", { code: "not_configured" });
+  const data = await fetchJson(base("/auth/v1/token?grant_type=id_token"), {
+    method: "POST",
+    headers: publicHeaders({ "Content-Type": "application/json" }),
+    body: JSON.stringify({ provider: "google", id_token: idToken }),
+  });
+  const session = saveAuthResponse(data);
+  if (!session) throw new SupabaseError("Google sign-in did not return a session.", { code: "no_session" });
+  return session;
 }
 
 export { accountsAvailable };

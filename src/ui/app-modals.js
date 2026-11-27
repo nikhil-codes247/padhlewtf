@@ -4,8 +4,8 @@
  * openModal, closeModal, confirm and submitModal. Uses shared state from
  * app-state.js (ctx) for submitModal callbacks.
  */
-import { esc } from "./dom.js?v=mwz23oco";
-import { shell } from "./app-state.js?v=mwz23oco";
+import { esc } from "./dom.js?v=mwz6nuk5";
+import { shell } from "./app-state.js?v=mwz6nuk5";
 
 let modalSpec = null;
 let modalReturnFocus = null;

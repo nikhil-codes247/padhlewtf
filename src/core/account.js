@@ -9,11 +9,12 @@
  * deployment is a misconfiguration, not a supported operating mode.
  */
 import {
-  getSession, signUpWithPassword, signInWithPassword, signInWithGoogle, signOut as supabaseSignOut,
+  getSession, signUpWithPassword, signInWithPassword, signInWithGoogle, signInWithGoogleIdToken as supabaseSignInWithGoogleIdToken,
+  signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js?v=mwz23oco";
-import { validateSubjectSelection } from "./subjects.js?v=mwz23oco";
+} from "./supabase.js?v=mwz6nuk5";
+import { validateSubjectSelection } from "./subjects.js?v=mwz6nuk5";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";
@@ -315,6 +316,16 @@ export async function signInAccount(email, password) {
  */
 export async function signInWithGoogleOAuth() {
   await signInWithGoogle();
+}
+
+/**
+ * Sign in with a Google ID token (from One Tap or the Google button). Exchanges
+ * the token with Supabase and restores the session, then loads the profile.
+ */
+export async function signInWithGoogleIdToken(idToken) {
+  await supabaseSignInWithGoogleIdToken(idToken);
+  await initAccount({ force: true });
+  return account;
 }
 
 export async function resetPassword(email) {

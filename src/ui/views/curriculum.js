@@ -9,10 +9,10 @@
  * The structure is fetched from Supabase (`curriculum_chapters` +
  * `curriculum_nodes`, seeded once by the deployment).
  */
-import { esc, fmtNum } from "../dom.js?v=mwz23oco";
-import { chip, sectionCard } from "../components.js?v=mwz23oco";
-import { visibleIds, selectionKey } from "../selection.js?v=mwz23oco";
-import { selectRows } from "../../core/supabase.js?v=mwz23oco";
+import { esc, fmtNum } from "../dom.js?v=mwz6nuk5";
+import { chip, sectionCard } from "../components.js?v=mwz6nuk5";
+import { visibleIds, selectionKey } from "../selection.js?v=mwz6nuk5";
+import { selectRows } from "../../core/supabase.js?v=mwz6nuk5";
 
 const SCOPE_LABEL = { optional: "not in board paper", internal: "formative / practical" };
 

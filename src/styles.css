@@ -766,6 +766,49 @@ a.card:hover, .metric-link:hover, .tile:hover, .suggest-item:hover {
 .btn-group .btn.active { background: var(--accent); color: var(--on-accent); box-shadow: none; }
 .btn-group .btn.active:hover { transform: none; }
 
+/* ------------------------------------------------------------ google button */
+/* Follows Google's sign-in button guidelines: white face, grey border,
+   Google-blue text/icon, clean hover states. Safe to use alongside the
+   primary/ghost buttons already in the UI. */
+.btn.google {
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  box-shadow: var(--shadow);
+  font-weight: 500;
+}
+.btn.google:hover {
+  background: #f8f9fa;
+  border-color: #dadce0;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
+}
+.btn.google:active {
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-none);
+  background: #f1f3f4;
+}
+.btn.google[disabled], .btn.google[aria-disabled="true"] {
+  opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; background: #f8f9fa;
+}
+.google-g {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  background: conic-gradient(
+    #4285f4 0deg 102deg,
+    #ea4335 102deg 196deg,
+    #fbbc05 196deg 288deg,
+    #34a853 288deg 360deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, #000 70%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 70%, transparent 72%);
+  mask-size: 100% 100%;
+}
+.auth-google-row { display: flex; flex-direction: column; gap: var(--sp-2); }
+.auth-divider { display: block; margin-top: -2px; }
+
 /* -------------------------------------------------------------- 6. forms -- */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--sp-4); }
 .field > label {

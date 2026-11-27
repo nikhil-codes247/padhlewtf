@@ -1,10 +1,10 @@
-import { esc, fmtNum, fmtPct } from "../dom.js?v=mwz23oco";
-import { bar, chip, emptyState, meter, sectionCard, subjectMark } from "../components.js?v=mwz23oco";
-import { chapterFiltersHtml, chapterRow, filterChapters, scopeNote } from "./_shared.js?v=mwz23oco";
-import { fmtDuration } from "../../core/dates.js?v=mwz23oco";
+import { esc, fmtNum, fmtPct } from "../dom.js?v=mwz6nuk5";
+import { bar, chip, emptyState, meter, sectionCard, subjectMark } from "../components.js?v=mwz6nuk5";
+import { chapterFiltersHtml, chapterRow, filterChapters, scopeNote } from "./_shared.js?v=mwz6nuk5";
+import { fmtDuration } from "../../core/dates.js?v=mwz6nuk5";
 import {
   currentSelection, visibleSubjects, visibleChapters, scopedScopes, filterBySubject, isVisibleSubject,
-} from "../selection.js?v=mwz23oco";
+} from "../selection.js?v=mwz6nuk5";
 
 export default {
   id: "syllabus",

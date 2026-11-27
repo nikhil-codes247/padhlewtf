@@ -7,19 +7,19 @@
  * Signed-in PAID students see the same landing with no buy panel and a
  * "full access" badge instead.
  */
-import { esc, fmtNum } from "../dom.js?v=mwz23oco";
-import { chip } from "../components.js?v=mwz23oco";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz23oco";
-import { isSignedIn, hasPaidAccess } from "../../core/account.js?v=mwz23oco";
-import { config } from "../../core/config.js?v=mwz23oco";
-import { claimPurchase } from "../../core/entitlement.js?v=mwz23oco";
-import { startCheckout } from "../checkout.js?v=mwz23oco";
-import { ALL_SUBJECT_IDS } from "../../core/subjects.js?v=mwz23oco";
-import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js?v=mwz23oco";
-import { mascot } from "../mascot.js?v=mwz23oco";
-import { toast } from "../app-toasts.js?v=mwz23oco";
-import { shell } from "../app-state.js?v=mwz23oco";
-import { openModal } from "../app-modals.js?v=mwz23oco";
+import { esc, fmtNum } from "../dom.js?v=mwz6nuk5";
+import { chip } from "../components.js?v=mwz6nuk5";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz6nuk5";
+import { isSignedIn, hasPaidAccess } from "../../core/account.js?v=mwz6nuk5";
+import { config } from "../../core/config.js?v=mwz6nuk5";
+import { claimPurchase } from "../../core/entitlement.js?v=mwz6nuk5";
+import { startCheckout } from "../checkout.js?v=mwz6nuk5";
+import { ALL_SUBJECT_IDS } from "../../core/subjects.js?v=mwz6nuk5";
+import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js?v=mwz6nuk5";
+import { mascot } from "../mascot.js?v=mwz6nuk5";
+import { toast } from "../app-toasts.js?v=mwz6nuk5";
+import { shell } from "../app-state.js?v=mwz6nuk5";
+import { openModal } from "../app-modals.js?v=mwz6nuk5";
 
 const FEATURES = [
   { ico: "▤", title: "Whole syllabus, mapped", text: "Every CBSE subject, unit and chapter in one checklist." },
@@ -316,7 +316,10 @@ export default {
         <div class="row gap-2 mt-3">
           ${signedIn
             ? ``
-            : `<button class="btn wide" type="button" data-act="padhle-google-signin">Continue with Google</button>`}
+            : `<button class="btn google wide" type="button" data-act="padhle-google-signin">
+                 <span class="google-g" aria-hidden="true"></span>
+                 Continue with Google
+               </button>`}
         </div>
         <div class="row gap-2 mt-3">
           <span class="small muted">Need help?</span>

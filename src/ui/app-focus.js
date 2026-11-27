@@ -5,7 +5,7 @@
  * restoreFocus() puts focus back afterward. Uses shared state from
  * app-state.js (viewEl).
  */
-import { shell } from "./app-state.js?v=mwz23oco";
+import { shell } from "./app-state.js?v=mwz6nuk5";
 
 export function captureFocus() {
   const el = document.activeElement;

@@ -6,10 +6,10 @@
  * aggregate would need a shared backend; until one exists the page says so
  * rather than fabricating a number.
  */
-import { esc } from "../dom.js?v=mwz23oco";
-import { chip, sectionCard } from "../components.js?v=mwz23oco";
-import { ROADMAP_ITEMS, STATUS_LABEL, STATUS_ORDER, STATUS_TONE } from "../../data/roadmap.js?v=mwz23oco";
-import { EXCITEMENT_OPTIONS, summariseVotes, optionPercent } from "../../core/excitement.js?v=mwz23oco";
+import { esc } from "../dom.js?v=mwz6nuk5";
+import { chip, sectionCard } from "../components.js?v=mwz6nuk5";
+import { ROADMAP_ITEMS, STATUS_LABEL, STATUS_ORDER, STATUS_TONE } from "../../data/roadmap.js?v=mwz6nuk5";
+import { EXCITEMENT_OPTIONS, summariseVotes, optionPercent } from "../../core/excitement.js?v=mwz6nuk5";
 
 function pollSection(ctx) {
   const s = ctx.store.state.settings;

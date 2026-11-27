@@ -1,8 +1,8 @@
-import { esc, fmtPct, groupBy } from "../dom.js?v=mwz23oco";
-import { emptyState, sectionCard, table, deadlineChip } from "../components.js?v=mwz23oco";
-import { chapterFiltersHtml, chapterRow, filterChapters, scopeNote, subjectSummary } from "./_shared.js?v=mwz23oco";
-import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz23oco";
-import { isVisibleSubject } from "../selection.js?v=mwz23oco";
+import { esc, fmtPct, groupBy } from "../dom.js?v=mwz6nuk5";
+import { emptyState, sectionCard, table, deadlineChip } from "../components.js?v=mwz6nuk5";
+import { chapterFiltersHtml, chapterRow, filterChapters, scopeNote, subjectSummary } from "./_shared.js?v=mwz6nuk5";
+import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz6nuk5";
+import { isVisibleSubject } from "../selection.js?v=mwz6nuk5";
 
 function outsideSelection() {
   return emptyState({

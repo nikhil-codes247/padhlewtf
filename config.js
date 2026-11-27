@@ -4,5 +4,6 @@ window.PADHLE_CONFIG = {
   "supabaseAnonKey": "sb_publishable_F6F_T7yq2Mg3ptS1TN59ig_I3eaH79A",
   "siteUrl": "https://padhle.wtf",
   "environment": "production",
-  "razorpayKeyId": "rzp_test_U4KNjocoNfom30"
+  "razorpayKeyId": "rzp_test_U4KNjocoNfom30",
+  "googleClientId": ""
 };

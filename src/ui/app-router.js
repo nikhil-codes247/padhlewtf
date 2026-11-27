@@ -10,8 +10,8 @@
  * is shown behind a blur + lock + skeleton overlay (no real data) until they
  * upgrade.
  */
-import { account } from "../core/account.js?v=mwz23oco";
-import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js?v=mwz23oco";
+import { account } from "../core/account.js?v=mwz6nuk5";
+import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js?v=mwz6nuk5";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup", "privacy", "terms"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
@@ -55,6 +55,11 @@ export function gateTarget(name) {
   if (name === "login" || name === "signup") {
     return hasPaidAccess() ? "welcome" : "dashboard";
   }
+
+  // An existing user who has already completed onboarding (profile + subjects)
+  // should not land on the welcome tour — send them straight to the dashboard.
+  if (name === "welcome" && isSignedIn() && hasProfile() && hasSelection())
+    return "dashboard";
 
   // No profile → complete the profile step first. A signed-in account must
   // have a profile row, otherwise its username and paid entitlement have
