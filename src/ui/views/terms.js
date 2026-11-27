@@ -5,9 +5,9 @@
  * account responsibilities, payment terms, intellectual property and
  * limitations of liability. Written in plain language.
  */
-import { esc } from "../dom.js?v=mwz6nuk5";
-import { sectionCard } from "../components.js?v=mwz6nuk5";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz6nuk5";
+import { esc } from "../dom.js?v=mwz7i9p1";
+import { sectionCard } from "../components.js?v=mwz7i9p1";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz7i9p1";
 
 const TERMS_EFFECTIVE_DATE = "26 November 2026";
 

@@ -1,10 +1,10 @@
-import { esc, fmtPct } from "../dom.js?v=mwz6nuk5";
-import { chip, emptyState, metricCard, progressBlock, sectionCard, statusChip, tagChips, priorityChip, tierChip, scopeChip, deadlineChip } from "../components.js?v=mwz6nuk5";
-import { sessionRow, revisionHistory, noteCard } from "./_shared.js?v=mwz6nuk5";
-import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz6nuk5";
-import { chapterEstimate } from "../../core/recommend.js?v=mwz6nuk5";
-import { STATUSES } from "../../core/validate.js?v=mwz6nuk5";
-import { isVisibleSubject } from "../selection.js?v=mwz6nuk5";
+import { esc, fmtPct } from "../dom.js?v=mwz7i9p1";
+import { chip, emptyState, metricCard, progressBlock, sectionCard, statusChip, tagChips, priorityChip, tierChip, scopeChip, deadlineChip } from "../components.js?v=mwz7i9p1";
+import { sessionRow, revisionHistory, noteCard } from "./_shared.js?v=mwz7i9p1";
+import { fmtDuration, fmtShort } from "../../core/dates.js?v=mwz7i9p1";
+import { chapterEstimate } from "../../core/recommend.js?v=mwz7i9p1";
+import { STATUSES } from "../../core/validate.js?v=mwz7i9p1";
+import { isVisibleSubject } from "../selection.js?v=mwz7i9p1";
 
 export default {
   id: "chapter",

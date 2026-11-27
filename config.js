@@ -5,5 +5,5 @@ window.PADHLE_CONFIG = {
   "siteUrl": "https://padhle.wtf",
   "environment": "production",
   "razorpayKeyId": "rzp_test_U4KNjocoNfom30",
-  "googleClientId": ""
+  "googleClientId": "102926858240-jphclj4q5hblpqu8mt8o3plckr69k9t8.apps.googleusercontent.com"
 };

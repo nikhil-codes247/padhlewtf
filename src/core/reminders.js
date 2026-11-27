@@ -12,8 +12,8 @@ import {
   parseClock, notificationState as nativeNotificationState,
   requestNotifications as nativeRequestNotifications,
   notify as nativeNotify,
-} from "./native.js?v=mwz6nuk5";
-import { todayISO } from "./dates.js?v=mwz6nuk5";
+} from "./native.js?v=mwz7i9p1";
+import { todayISO } from "./dates.js?v=mwz7i9p1";
 
 /**
  * Clearing the end-of-block alarm is a plain mechanism, but the callers are all

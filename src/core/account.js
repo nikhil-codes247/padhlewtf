@@ -13,8 +13,8 @@ import {
   signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js?v=mwz6nuk5";
-import { validateSubjectSelection } from "./subjects.js?v=mwz6nuk5";
+} from "./supabase.js?v=mwz7i9p1";
+import { validateSubjectSelection } from "./subjects.js?v=mwz7i9p1";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";

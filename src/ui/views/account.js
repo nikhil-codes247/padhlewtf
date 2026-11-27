@@ -4,15 +4,15 @@
  * Shows the student's identity, the subjects they chose, and a plain-language
  * summary of what is stored against their account.
  */
-import { esc } from "../dom.js?v=mwz6nuk5";
-import { chip, metricCard } from "../components.js?v=mwz6nuk5";
-import { account, accountEmail, hasPaidAccess } from "../../core/account.js?v=mwz6nuk5";
-import { config } from "../../core/config.js?v=mwz6nuk5";
-import { claimPurchase } from "../../core/entitlement.js?v=mwz6nuk5";
-import { startCheckout } from "../checkout.js?v=mwz6nuk5";
-import { CORE_SUBJECT_IDS, selectionSubjectIds } from "../../core/subjects.js?v=mwz6nuk5";
-import { toast } from "../app-toasts.js?v=mwz6nuk5";
-import { shell } from "../app-state.js?v=mwz6nuk5";
+import { esc } from "../dom.js?v=mwz7i9p1";
+import { chip, metricCard } from "../components.js?v=mwz7i9p1";
+import { account, accountEmail, hasPaidAccess } from "../../core/account.js?v=mwz7i9p1";
+import { config } from "../../core/config.js?v=mwz7i9p1";
+import { claimPurchase } from "../../core/entitlement.js?v=mwz7i9p1";
+import { startCheckout } from "../checkout.js?v=mwz7i9p1";
+import { CORE_SUBJECT_IDS, selectionSubjectIds } from "../../core/subjects.js?v=mwz7i9p1";
+import { toast } from "../app-toasts.js?v=mwz7i9p1";
+import { shell } from "../app-state.js?v=mwz7i9p1";
 
 function supabasePanel(ctx) {
   const store = ctx.store;

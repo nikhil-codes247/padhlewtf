@@ -1,10 +1,10 @@
-import { esc, fmtNum, sum, sortBy } from "../dom.js?v=mwz6nuk5";
-import { emptyState, metricCard, sectionCard, table, meter, bar } from "../components.js?v=mwz6nuk5";
-import { donut, legend, barChart, lineChart, hBars } from "../charts.js?v=mwz6nuk5";
-import { addDays, fmtDuration, fmtShort, diffDays } from "../../core/dates.js?v=mwz6nuk5";
-import { chapterEstimate } from "../../core/recommend.js?v=mwz6nuk5";
-import { summariseFlashcards, summariseQuestions } from "../../core/revisionStats.js?v=mwz6nuk5";
-import { scopedTime, scopedScopes, currentSelection, visibleSubjects, visibleChapters, filterBySubject, taskSubjectId, isVisibleSubject } from "../selection.js?v=mwz6nuk5";
+import { esc, fmtNum, sum, sortBy } from "../dom.js?v=mwz7i9p1";
+import { emptyState, metricCard, sectionCard, table, meter, bar } from "../components.js?v=mwz7i9p1";
+import { donut, legend, barChart, lineChart, hBars } from "../charts.js?v=mwz7i9p1";
+import { addDays, fmtDuration, fmtShort, diffDays } from "../../core/dates.js?v=mwz7i9p1";
+import { chapterEstimate } from "../../core/recommend.js?v=mwz7i9p1";
+import { summariseFlashcards, summariseQuestions } from "../../core/revisionStats.js?v=mwz7i9p1";
+import { scopedTime, scopedScopes, currentSelection, visibleSubjects, visibleChapters, filterBySubject, taskSubjectId, isVisibleSubject } from "../selection.js?v=mwz7i9p1";
 
 const ACTIVITY_COLOR = { learn: "var(--accent)", practice: "var(--accent-2)", revision: "var(--warn)", doubt: "var(--bad)" };
 const ACTIVITY_LABEL = { learn: "Initial learning", practice: "Practice", revision: "Revision", doubt: "Doubt resolution" };

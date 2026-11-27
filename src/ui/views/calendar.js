@@ -1,10 +1,10 @@
-import { esc, sum } from "../dom.js?v=mwz6nuk5";
-import { bar, sectionCard, subjectMark } from "../components.js?v=mwz6nuk5";
-import { fmtDuration, fmtShort, monthGrid, monthName, weekdayName } from "../../core/dates.js?v=mwz6nuk5";
+import { esc, sum } from "../dom.js?v=mwz7i9p1";
+import { bar, sectionCard, subjectMark } from "../components.js?v=mwz7i9p1";
+import { fmtDuration, fmtShort, monthGrid, monthName, weekdayName } from "../../core/dates.js?v=mwz7i9p1";
 import {
   scopedTime, filterBySubject, taskSubjectId, isVisibleSubject,
-} from "../selection.js?v=mwz6nuk5";
-import { getExams } from "../../core/boardExams.js?v=mwz6nuk5";
+} from "../selection.js?v=mwz7i9p1";
+import { getExams } from "../../core/boardExams.js?v=mwz7i9p1";
 
 const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 

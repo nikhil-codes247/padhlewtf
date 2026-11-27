@@ -17,8 +17,8 @@
  *
  * Nothing here reads or writes the store. It is a presentation-only layer.
  */
-import { esc } from "./dom.js?v=mwz6nuk5";
-import { mascot } from "./mascot.js?v=mwz6nuk5";
+import { esc } from "./dom.js?v=mwz7i9p1";
+import { mascot } from "./mascot.js?v=mwz7i9p1";
 
 /* --------------------------------------------------------------- copy ----- */
 const LINES = {

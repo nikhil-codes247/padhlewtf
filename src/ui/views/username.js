@@ -6,9 +6,9 @@
  * simultaneous claim is rejected there, not here. The same screen doubles as
  * "edit profile" from the account page.
  */
-import { esc, debounce } from "../dom.js?v=mwz6nuk5";
-import { AVATARS } from "../onboarding.js?v=mwz6nuk5";
-import { account, accountEmail, accountUsername, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz6nuk5";
+import { esc, debounce } from "../dom.js?v=mwz7i9p1";
+import { AVATARS } from "../onboarding.js?v=mwz7i9p1";
+import { account, accountEmail, accountUsername, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz7i9p1";
 
 function avatarChoices(selected) {
   return AVATARS.map((a) => `<label class="onb-avatar ${a === selected ? "on" : ""}">
