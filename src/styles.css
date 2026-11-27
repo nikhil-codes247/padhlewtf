@@ -809,6 +809,16 @@ a.card:hover, .metric-link:hover, .tile:hover, .suggest-item:hover {
 .auth-google-row { display: flex; flex-direction: column; gap: var(--sp-2); }
 .auth-divider { display: block; margin-top: -2px; }
 
+/* Container for Google One Tap prompt — must be visible and have dimensions
+   so Google can render the iframe inside it. */
+.one-tap-container {
+  position: relative;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: 0;
+}
+
 /* -------------------------------------------------------------- 6. forms -- */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--sp-4); }
 .field > label {

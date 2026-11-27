@@ -1,7 +1,7 @@
-import { esc, fmtNum } from "../dom.js?v=mwz855jx";
-import { chip, emptyState, sectionCard, subjectMark } from "../components.js?v=mwz855jx";
-import { fmtDuration } from "../../core/dates.js?v=mwz855jx";
-import { filterBySubject, taskSubjectId } from "../selection.js?v=mwz855jx";
+import { esc, fmtNum } from "../dom.js?v=mwz8hppl";
+import { chip, emptyState, sectionCard, subjectMark } from "../components.js?v=mwz8hppl";
+import { fmtDuration } from "../../core/dates.js?v=mwz8hppl";
+import { filterBySubject, taskSubjectId } from "../selection.js?v=mwz8hppl";
 
 const KINDS = [
   { id: "chapters", label: "Chapters" },

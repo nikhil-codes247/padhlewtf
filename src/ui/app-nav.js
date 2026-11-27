@@ -8,10 +8,10 @@
  * integration test counts `#nav > a` (eleven items), so grouping is expressed
  * with data attributes and CSS separators rather than wrapper elements.
  */
-import { esc } from "./dom.js?v=mwz855jx";
-import { store } from "../core/store.js?v=mwz855jx";
-import { todayISO } from "../core/dates.js?v=mwz855jx";
-import { parseHash } from "./app-router.js?v=mwz855jx";
+import { esc } from "./dom.js?v=mwz8hppl";
+import { store } from "../core/store.js?v=mwz8hppl";
+import { todayISO } from "../core/dates.js?v=mwz8hppl";
+import { parseHash } from "./app-router.js?v=mwz8hppl";
 
 export const NAV = [
   { hash: "#/dashboard", label: "Dashboard", ico: "◧", routes: ["dashboard"], group: "Overview" },

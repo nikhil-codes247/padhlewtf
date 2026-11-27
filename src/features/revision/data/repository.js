@@ -17,9 +17,9 @@
 
 import {
   selectRows, upsertRows, deleteRows, currentUser,
-} from "../../../core/supabase.js?v=mwz855jx";
-import { config } from "../../../core/config.js?v=mwz855jx";
-import { normalizeDifficulty } from "./models.js?v=mwz855jx";
+} from "../../../core/supabase.js?v=mwz8hppl";
+import { config } from "../../../core/config.js?v=mwz8hppl";
+import { normalizeDifficulty } from "./models.js?v=mwz8hppl";
 
 /* --------------------------------------------------------------- helpers --- */
 

@@ -17,7 +17,7 @@
  * same award can never be minted twice (a double-click or a replayed import cannot
  * inflate a total). Pure and DOM-free so it can be unit-tested in plain Node.
  */
-import { DAILY_CHECKLIST_POINT_CAP, MIN_POINTS_SESSION_MINUTES, POINTS, LEVEL_STEP } from "./constants.js?v=mwz855jx";
+import { DAILY_CHECKLIST_POINT_CAP, MIN_POINTS_SESSION_MINUTES, POINTS, LEVEL_STEP } from "./constants.js?v=mwz8hppl";
 
 export const POINT_RULES = [
   { kind: "STUDY_SESSION", points: POINTS.STUDY_SESSION.points, label: POINTS.STUDY_SESSION.label, dedupe: "one award per saved session" },

@@ -13,9 +13,9 @@ import {
   signOut as supabaseSignOut,
   selectRows, insertRows, updateRows, upsertRows, callRpc, clearSession, refreshUser, consumeAuthCallback,
   resetPasswordForEmail,
-} from "./supabase.js?v=mwz855jx";
-import { validateSubjectSelection } from "./subjects.js?v=mwz855jx";
-import { store } from "./store.js?v=mwz855jx";
+} from "./supabase.js?v=mwz8hppl";
+import { validateSubjectSelection } from "./subjects.js?v=mwz8hppl";
+import { store } from "./store.js?v=mwz8hppl";
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
 const PROFILE_FIELDS = "id,username,display_name,avatar,created_at,plan,plan_expires_at";

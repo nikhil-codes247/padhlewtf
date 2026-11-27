@@ -12,12 +12,12 @@
  *
  * The choice is saved to the student's own account rows in Supabase.
  */
-import { esc } from "../dom.js?v=mwz855jx";
-import { subjectMark } from "../components.js?v=mwz855jx";
-import { account, isSignedIn } from "../../core/account.js?v=mwz855jx";
-import { ALL_SUBJECT_IDS, SUBJECT_MIN } from "../../core/subjects.js?v=mwz855jx";
-import { subjectMeta } from "../../core/subjectCatalog.js?v=mwz855jx";
-import { currentSelection } from "../selection.js?v=mwz855jx";
+import { esc } from "../dom.js?v=mwz8hppl";
+import { subjectMark } from "../components.js?v=mwz8hppl";
+import { account, isSignedIn } from "../../core/account.js?v=mwz8hppl";
+import { ALL_SUBJECT_IDS, SUBJECT_MIN } from "../../core/subjects.js?v=mwz8hppl";
+import { subjectMeta } from "../../core/subjectCatalog.js?v=mwz8hppl";
+import { currentSelection } from "../selection.js?v=mwz8hppl";
 
 /**
  * One subject card.

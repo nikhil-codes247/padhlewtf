@@ -10,72 +10,72 @@
  * modules, wires them together in main(), and exports renderRoute for use by
  * split-out modules (clocks, events, shells).
  */
-import { store } from "./core/store.js?v=mwz855jx";
-import { todayISO } from "./core/dates.js?v=mwz855jx";
-import { esc, h } from "./ui/dom.js?v=mwz855jx";
-import { ACTIONS } from "./ui/actions.js?v=mwz855jx";
+import { store } from "./core/store.js?v=mwz8hppl";
+import { todayISO } from "./core/dates.js?v=mwz8hppl";
+import { esc, h } from "./ui/dom.js?v=mwz8hppl";
+import { ACTIONS } from "./ui/actions.js?v=mwz8hppl";
 Object.assign(ACTIONS, FlashcardActions.ACTIONS, QuestionActions.ACTIONS, BoardExamActions);
-import { brand, TAGLINE } from "./core/branding.js?v=mwz855jx";
-import { nativeTheme } from "./core/native.js?v=mwz855jx";
+import { brand, TAGLINE } from "./core/branding.js?v=mwz8hppl";
+import { nativeTheme } from "./core/native.js?v=mwz8hppl";
 import {
   account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess, hasProfile, hasSelection, signOutAccount,
-} from "./core/account.js?v=mwz855jx";
-import { isPaidRoute } from "./ui/app-router.js?v=mwz855jx";
-import { recoverPurchase } from "./core/entitlement.js?v=mwz855jx";
-import { getOAuthError } from "./core/supabase.js?v=mwz855jx";
-import { startCheckout } from "./ui/checkout.js?v=mwz855jx";
+} from "./core/account.js?v=mwz8hppl";
+import { isPaidRoute } from "./ui/app-router.js?v=mwz8hppl";
+import { recoverPurchase } from "./core/entitlement.js?v=mwz8hppl";
+import { getOAuthError } from "./core/supabase.js?v=mwz8hppl";
+import { startCheckout } from "./ui/checkout.js?v=mwz8hppl";
 /* ------------------------------------------------------------- views --- */
-import dashboardView from "./ui/views/dashboard.js?v=mwz855jx";
-import syllabusView from "./ui/views/syllabus.js?v=mwz855jx";
-import curriculumView from "./ui/views/curriculum.js?v=mwz855jx";
-import subjectView from "./ui/views/subject.js?v=mwz855jx";
-import chapterView from "./ui/views/chapter.js?v=mwz855jx";
-import plannerView from "./ui/views/planner.js?v=mwz855jx";
-import timerView from "./ui/views/timer.js?v=mwz855jx";
-import FlashcardsView from "./features/revision/ui/flashcards-view.js?v=mwz855jx";
-import QuestionsView from "./features/revision/ui/questions-view.js?v=mwz855jx";
-import * as FlashcardActions from "./features/revision/ui/flashcards-view.js?v=mwz855jx";
-import * as QuestionActions from "./features/revision/ui/questions-view.js?v=mwz855jx";
-import revisionView from "./ui/views/revision.js?v=mwz855jx";
-import analyticsView from "./ui/views/analytics.js?v=mwz855jx";
-import calendarView from "./ui/views/calendar.js?v=mwz855jx";
-import settingsView from "./ui/views/settings.js?v=mwz855jx";
-import searchView from "./ui/views/search.js?v=mwz855jx";
-import profileView from "./ui/views/profile.js?v=mwz855jx";
-import pyqView from "./ui/views/pyq.js?v=mwz855jx";
-import roadmapView from "./ui/views/roadmap.js?v=mwz855jx";
-import accountView from "./ui/views/account.js?v=mwz855jx";
-import welcomeView from "./ui/views/welcome.js?v=mwz855jx";
-import authView from "./ui/views/auth.js?v=mwz855jx";
-import usernameView from "./ui/views/username.js?v=mwz855jx";
-import chooseSubjectsView from "./ui/views/chooseSubjects.js?v=mwz855jx";
-import privacyView from "./ui/views/privacy.js?v=mwz855jx";
-import termsView from "./ui/views/terms.js?v=mwz855jx";
-import siteNoticeView from "./ui/views/site-notice.js?v=mwz855jx";
-import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js?v=mwz855jx";
-import { renderOnboarding } from "./ui/onboarding.js?v=mwz855jx";
-import notesView from "./ui/views/notes.js?v=mwz855jx";
+import dashboardView from "./ui/views/dashboard.js?v=mwz8hppl";
+import syllabusView from "./ui/views/syllabus.js?v=mwz8hppl";
+import curriculumView from "./ui/views/curriculum.js?v=mwz8hppl";
+import subjectView from "./ui/views/subject.js?v=mwz8hppl";
+import chapterView from "./ui/views/chapter.js?v=mwz8hppl";
+import plannerView from "./ui/views/planner.js?v=mwz8hppl";
+import timerView from "./ui/views/timer.js?v=mwz8hppl";
+import FlashcardsView from "./features/revision/ui/flashcards-view.js?v=mwz8hppl";
+import QuestionsView from "./features/revision/ui/questions-view.js?v=mwz8hppl";
+import * as FlashcardActions from "./features/revision/ui/flashcards-view.js?v=mwz8hppl";
+import * as QuestionActions from "./features/revision/ui/questions-view.js?v=mwz8hppl";
+import revisionView from "./ui/views/revision.js?v=mwz8hppl";
+import analyticsView from "./ui/views/analytics.js?v=mwz8hppl";
+import calendarView from "./ui/views/calendar.js?v=mwz8hppl";
+import settingsView from "./ui/views/settings.js?v=mwz8hppl";
+import searchView from "./ui/views/search.js?v=mwz8hppl";
+import profileView from "./ui/views/profile.js?v=mwz8hppl";
+import pyqView from "./ui/views/pyq.js?v=mwz8hppl";
+import roadmapView from "./ui/views/roadmap.js?v=mwz8hppl";
+import accountView from "./ui/views/account.js?v=mwz8hppl";
+import welcomeView from "./ui/views/welcome.js?v=mwz8hppl";
+import authView from "./ui/views/auth.js?v=mwz8hppl";
+import usernameView from "./ui/views/username.js?v=mwz8hppl";
+import chooseSubjectsView from "./ui/views/chooseSubjects.js?v=mwz8hppl";
+import privacyView from "./ui/views/privacy.js?v=mwz8hppl";
+import termsView from "./ui/views/terms.js?v=mwz8hppl";
+import siteNoticeView from "./ui/views/site-notice.js?v=mwz8hppl";
+import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js?v=mwz8hppl";
+import { renderOnboarding } from "./ui/onboarding.js?v=mwz8hppl";
+import notesView from "./ui/views/notes.js?v=mwz8hppl";
 
 /* ------------------------------------------------------------- ui infra --- */
-import { ui, shell } from "./ui/app-state.js?v=mwz855jx";
-import { parseHash, gateTarget } from "./ui/app-router.js?v=mwz855jx";
-import { renderNav } from "./ui/app-nav.js?v=mwz855jx";
+import { ui, shell } from "./ui/app-state.js?v=mwz8hppl";
+import { parseHash, gateTarget } from "./ui/app-router.js?v=mwz8hppl";
+import { renderNav } from "./ui/app-nav.js?v=mwz8hppl";
 import {
   ensureShell, shellFor, renderAccountGate,
-} from "./ui/app-shell.js?v=mwz855jx";
-import { openModal, closeModal, confirm } from "./ui/app-modals.js?v=mwz855jx";
-import { toast } from "./ui/app-toasts.js?v=mwz855jx";
-import { captureFocus, restoreFocus } from "./ui/app-focus.js?v=mwz855jx";
-import { tickGlobalTimer, startClocks } from "./ui/app-clocks.js?v=mwz855jx";
+} from "./ui/app-shell.js?v=mwz8hppl";
+import { openModal, closeModal, confirm } from "./ui/app-modals.js?v=mwz8hppl";
+import { toast } from "./ui/app-toasts.js?v=mwz8hppl";
+import { captureFocus, restoreFocus } from "./ui/app-focus.js?v=mwz8hppl";
+import { tickGlobalTimer, startClocks } from "./ui/app-clocks.js?v=mwz8hppl";
 import {
   hydrateRemoteSettings, scheduleSettingsPush, resetSettingsSync, remoteSettingsReady,
-} from "./ui/app-settings-sync.js?v=mwz855jx";
-import { connectNativeShell } from "./ui/app-native.js?v=mwz855jx";
-import { renderFatal } from "./ui/app-fatal.js?v=mwz855jx";
-import { initEvents } from "./ui/app-events.js?v=mwz855jx";
-import { initSkin } from "./ui/app-skin.js?v=mwz855jx";
-import { initDelight, resetDelight } from "./ui/app-delight.js?v=mwz855jx";
-import { resetMoments } from "./ui/app-moments.js?v=mwz855jx";
+} from "./ui/app-settings-sync.js?v=mwz8hppl";
+import { connectNativeShell } from "./ui/app-native.js?v=mwz8hppl";
+import { renderFatal } from "./ui/app-fatal.js?v=mwz8hppl";
+import { initEvents } from "./ui/app-events.js?v=mwz8hppl";
+import { initSkin } from "./ui/app-skin.js?v=mwz8hppl";
+import { initDelight, resetDelight } from "./ui/app-delight.js?v=mwz8hppl";
+import { resetMoments } from "./ui/app-moments.js?v=mwz8hppl";
 
 /* --------------------------------------------------------------- boot ----- */
 const ROUTES = {

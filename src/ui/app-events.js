@@ -5,12 +5,12 @@
  * and the runAction dispatcher. All UI interactions flow through data-act
  * attributes handled here.
  */
-import { ACTIONS, handleFormSubmit } from "./actions.js?v=mwz855jx";
-import { toast } from "./app-toasts.js?v=mwz855jx";
-import { afterAction } from "./app-moments.js?v=mwz855jx";
-import { closeModal, submitModal } from "./app-modals.js?v=mwz855jx";
-import { ui, shell } from "./app-state.js?v=mwz855jx";
-import { renderRoute } from "../app.js?v=mwz855jx";
+import { ACTIONS, handleFormSubmit } from "./actions.js?v=mwz8hppl";
+import { toast } from "./app-toasts.js?v=mwz8hppl";
+import { afterAction } from "./app-moments.js?v=mwz8hppl";
+import { closeModal, submitModal } from "./app-modals.js?v=mwz8hppl";
+import { ui, shell } from "./app-state.js?v=mwz8hppl";
+import { renderRoute } from "../app.js?v=mwz8hppl";
 
 const isControl = (el) => ["INPUT", "SELECT", "TEXTAREA"].includes(el.tagName) || el.isContentEditable;
 

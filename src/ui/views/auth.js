@@ -9,10 +9,10 @@
  * Rather than dumping the visitor back on the landing page, the view switches
  * to a "check your inbox" state and remembers the address for this tab.
  */
-import { debounce, esc } from "../dom.js?v=mwz855jx";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz855jx";
-import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz855jx";
-import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz855jx";
+import { debounce, esc } from "../dom.js?v=mwz8hppl";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz8hppl";
+import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz8hppl";
+import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz8hppl";
 
 const BENEFITS = [
   "Your subjects, saved to your account",
@@ -36,7 +36,7 @@ function googleButtonHtml() {
 /** Empty div where Google One Tap renders (only when a client ID is configured). */
 function googleOneTapHtml() {
   return Boolean(googleClientId())
-    ? `<div id="padhle-g-id-onload" aria-hidden="true"></div>`
+    ? `<div id="padhle-g-id-onload" class="one-tap-container"></div>`
     : "";
 }
 
@@ -143,6 +143,10 @@ export default {
         <p class="small muted auth-swap">${swap}</p>
         ${!isSignup && !isForgot ? `<button class="link-btn small" type="button" data-act="auth-forgot">Forgot your password?</button>` : ""}
         <p class="small faint auth-back"><a href="#/welcome">← Back to the home page</a></p>
+        <p class="small faint auth-policies mt-2">
+          <a class="small" href="/privacy.html">Privacy Policy</a><span class="faint"> · </span>
+          <a class="small" href="/terms.html">Terms of Service</a>
+        </p>
       </section>
 
       <aside class="auth-side" aria-label="Why create an account">

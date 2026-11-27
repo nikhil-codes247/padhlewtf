@@ -3,28 +3,28 @@
  * Views declare intent with `data-act`; this module owns the behaviour, so the
  * views stay declarative and there is exactly one code path per action.
  */
-import { esc, option } from "./dom.js?v=mwz855jx";
-import { store } from "../core/store.js?v=mwz855jx";
-import { exportBundle, validateBundle, downloadJson, downloadCsv, readJsonFile } from "../core/exportimport.js?v=mwz855jx";
-import { todayISO, fmtShort, fmtDuration } from "../core/dates.js?v=mwz855jx";
-import { PRIORITIES, ACTIVITIES } from "../core/validate.js?v=mwz855jx";
-import { isNative } from "../core/native.js?v=mwz855jx";
+import { esc, option } from "./dom.js?v=mwz8hppl";
+import { store } from "../core/store.js?v=mwz8hppl";
+import { exportBundle, validateBundle, downloadJson, downloadCsv, readJsonFile } from "../core/exportimport.js?v=mwz8hppl";
+import { todayISO, fmtShort, fmtDuration } from "../core/dates.js?v=mwz8hppl";
+import { PRIORITIES, ACTIVITIES } from "../core/validate.js?v=mwz8hppl";
+import { isNative } from "../core/native.js?v=mwz8hppl";
 import {
   syncTimerAlarm, syncDailyReminder, clearTimerEndAlarm,
   requestReminderPermission, sendTestReminder,
-} from "../core/reminders.js?v=mwz855jx";
-import { buildShareCard, shareCardKinds } from "../core/shareCard.js?v=mwz855jx";
-import { renderCardPng, renderCardGif } from "./shareRender.js?v=mwz855jx";
-import { onboardingSteps, readProfileStep } from "./onboarding.js?v=mwz855jx";
-import { startCheckout } from "./checkout.js?v=mwz855jx";
+} from "../core/reminders.js?v=mwz8hppl";
+import { buildShareCard, shareCardKinds } from "../core/shareCard.js?v=mwz8hppl";
+import { renderCardPng, renderCardGif } from "./shareRender.js?v=mwz8hppl";
+import { onboardingSteps, readProfileStep } from "./onboarding.js?v=mwz8hppl";
+import { startCheckout } from "./checkout.js?v=mwz8hppl";
 import {
   signUpAccount, signInAccount, signInWithGoogleOAuth, signOutAccount, createProfile,
   hasProfile, initAccount, setPendingEmail, clearPendingEmail,
   validateUsername, checkUsernameAvailability, resetAccountData, deleteAccount,
   isSignedIn, account, resetPassword,
-} from "../core/account.js?v=mwz855jx";
-import { validateSubjectChoice, CORE_SUBJECT_IDS } from "../core/subjects.js?v=mwz855jx";
-import { currentSelection, saveSelection } from "./selection.js?v=mwz855jx";
+} from "../core/account.js?v=mwz8hppl";
+import { validateSubjectChoice, CORE_SUBJECT_IDS } from "../core/subjects.js?v=mwz8hppl";
+import { currentSelection, saveSelection } from "./selection.js?v=mwz8hppl";
 
 /** Write a form-level error where the view provided a slot for it. */
 function formError(form, message) {
