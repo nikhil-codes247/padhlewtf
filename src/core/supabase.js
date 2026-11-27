@@ -17,9 +17,9 @@
  * Every failure is surfaced as a `SupabaseError` with a human message, a status
  * and the provider's code where there is one.
  */
-import { config, accountsAvailable } from "./config.js?v=mwz1jos9";
-import { enqueue } from "./requestQueue.js?v=mwz1jos9";
-import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js?v=mwz1jos9";
+import { config, accountsAvailable } from "./config.js?v=mwz1qwqk";
+import { enqueue } from "./requestQueue.js?v=mwz1qwqk";
+import { cacheGet, cacheInvalidate, cacheClear } from "./requestCache.js?v=mwz1qwqk";
 
 const SESSION_KEY = "padhle.auth.v1";
 const REFRESH_WINDOW_MS = 60 * 1000;
@@ -313,14 +313,21 @@ export async function signInWithPassword(email, password) {
  * `/#/login#access_token=…`, which the parser read as one meaningless key.
  * Returning to the site root lets the normal gate send the student onward.
  */
-export async function signInWithGoogle() {
-  requireBackend();
+/**
+ * The Supabase authorize URL for Google sign-in. Kept separate from the
+ * navigation so it can be asserted in tests (jsdom cannot follow a redirect).
+ */
+export function googleOAuthUrl() {
   const root = String(config.siteUrl || (typeof location !== "undefined" ? location.origin : "")).replace(/\/+$/, "");
-  const redirectTo = `${root}/`;
   const url = new URL(base("/auth/v1/authorize"));
   url.searchParams.set("provider", "google");
-  url.searchParams.set("redirect_to", redirectTo);
-  window.location.assign(url.toString());
+  url.searchParams.set("redirect_to", `${root}/`);
+  return url.toString();
+}
+
+export async function signInWithGoogle() {
+  requireBackend();
+  window.location.assign(googleOAuthUrl());
 }
 
 export async function refreshUser() {

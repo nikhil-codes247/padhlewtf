@@ -19,15 +19,15 @@
  * Everything is pure HTML strings from data; interaction is via `data-act`.
  */
 
-import { esc } from "../dom.js?v=mwz1jos9";
-import { bar, chip } from "../components.js?v=mwz1jos9";
-import { fmtShort, addDays } from "../../core/dates.js?v=mwz1jos9";
-import { currentSelection } from "../selection.js?v=mwz1jos9";
+import { esc } from "../dom.js?v=mwz1qwqk";
+import { bar, chip } from "../components.js?v=mwz1qwqk";
+import { fmtShort, addDays } from "../../core/dates.js?v=mwz1qwqk";
+import { currentSelection } from "../selection.js?v=mwz1qwqk";
 import {
   getExams, getNextExam, getExamsForSelection,
   getCircular, getInstructions, getAnnouncements, getStats,
   EXAM_SCHEDULE_DATA,
-} from "../../core/boardExams.js?v=mwz1jos9";
+} from "../../core/boardExams.js?v=mwz1qwqk";
 
 
 function progressForSubject(store, subjectId) {

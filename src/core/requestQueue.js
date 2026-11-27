@@ -13,7 +13,7 @@
  * upstream failures) so a brief spike doesn't permanently fail a user's action.
  *
  * Usage:
- *   import { enqueue } from "./requestQueue.js?v=mwz1jos9";
+ *   import { enqueue } from "./requestQueue.js?v=mwz1qwqk";
  *   await enqueue(() => fetchJson(url, opts));
  */
 

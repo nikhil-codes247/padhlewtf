@@ -15,8 +15,8 @@
  * (click to replay the count-up + confetti) is attached separately.
  */
 
-import { GIFEncoder, quantize, applyPalette } from "../vendor/gifenc.js?v=mwz1jos9";
-import { SHARE_THEME_SPECS, shareDimensions, themeBackground } from "../core/shareThemes.js?v=mwz1jos9";
+import { GIFEncoder, quantize, applyPalette } from "../vendor/gifenc.js?v=mwz1qwqk";
+import { SHARE_THEME_SPECS, shareDimensions, themeBackground } from "../core/shareThemes.js?v=mwz1qwqk";
 
 /* ------------------------------------------------------------- palette ----- */
 

@@ -173,6 +173,29 @@ PATCH their own `plan` column directly.
 6. Replace the test `razorpayKeyId` in the build config with the live public
    key id (the secret stays server-side).
 
+### Supabase Auth URL configuration (required for Google sign-in)
+
+In Supabase → Authentication → URL Configuration:
+
+| Setting | Value |
+|---|---|
+| Site URL | `https://padhle.wtf/` |
+| Redirect URLs | `https://padhle.wtf/` |
+| | `https://padhlewtf.pages.dev/` |
+| | `http://localhost:4173/` |
+
+The app sends `redirect_to=https://padhle.wtf/` (no `#/route`) so Supabase's
+own `#access_token=…` fragment is not appended behind a second hash. If a
+redirect is not on this allowlist, Supabase silently falls back to the Site URL,
+which makes sign-in look broken. In Google Cloud → Credentials → OAuth client,
+the only Authorized redirect URI is Supabase's callback:
+`https://joyzfnsppohprpfuhsyd.supabase.co/auth/v1/callback` — never the app
+domain.
+
+While the Google consent screen is in **Testing** publishing status, only
+accounts listed under Test users can sign in. Add the addresses you will use,
+or publish the app.
+
 ### Google OAuth verification
 
 Submit the clean, crawlable URLs (not hash routes):

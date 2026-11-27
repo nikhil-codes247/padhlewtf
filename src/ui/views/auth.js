@@ -9,9 +9,9 @@
  * Rather than dumping the visitor back on the landing page, the view switches
  * to a "check your inbox" state and remembers the address for this tab.
  */
-import { debounce, esc } from "../dom.js?v=mwz1jos9";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz1jos9";
-import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz1jos9";
+import { debounce, esc } from "../dom.js?v=mwz1qwqk";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz1qwqk";
+import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz1qwqk";
 
 const BENEFITS = [
   "Your subjects, saved to your account",
