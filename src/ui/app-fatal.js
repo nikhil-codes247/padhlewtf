@@ -4,8 +4,8 @@
  * Rendered when the store cannot initialize (for example the Supabase project is
  * unreachable or a migration has not been applied yet).
  */
-import { esc } from "./dom.js?v=mwz8hppl";
-import { brand } from "../core/branding.js?v=mwz8hppl";
+import { esc } from "./dom.js?v=mwz8yitl";
+import { brand } from "../core/branding.js?v=mwz8yitl";
 
 export function renderFatal(err) {
   const app = document.getElementById("app");

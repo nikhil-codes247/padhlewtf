@@ -5,9 +5,9 @@
  * back after a short debounce. Uses shared state from app-state.js (store,
  * ctx) and functions from core/account.js.
  */
-import { store } from "../core/store.js?v=mwz8hppl";
-import { isSignedIn, loadUserSettings, saveUserSettings } from "../core/account.js?v=mwz8hppl";
-import { syncDailyReminder } from "../core/reminders.js?v=mwz8hppl";
+import { store } from "../core/store.js?v=mwz8yitl";
+import { isSignedIn, loadUserSettings, saveUserSettings } from "../core/account.js?v=mwz8yitl";
+import { syncDailyReminder } from "../core/reminders.js?v=mwz8yitl";
 
 const REMOTE_SETTINGS_KEYS = [
   "theme", "reduceMotion", "reminderEnabled", "reminderTime", "notifyTimerEnd",

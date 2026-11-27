@@ -9,14 +9,14 @@
  * router, tests and keyboard shortcuts (#nav, #main, #global-search, …) never
  * move.
  */
-import { esc, debounce } from "./dom.js?v=mwz8hppl";
-import { brand, TAGLINE } from "../core/branding.js?v=mwz8hppl";
-import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js?v=mwz8hppl";
-import { store } from "../core/store.js?v=mwz8hppl";
-import { renderNav } from "./app-nav.js?v=mwz8hppl";
-import { shell, ui } from "./app-state.js?v=mwz8hppl";
-import { inkUnderline } from "./ink.js?v=mwz8hppl";
-import { bootDoodles } from "./boot-doodles.js?v=mwz8hppl";
+import { esc, debounce } from "./dom.js?v=mwz8yitl";
+import { brand, TAGLINE } from "../core/branding.js?v=mwz8yitl";
+import { account, isSignedIn, hasProfile, hasSelection, accountUsername, accountEmail } from "../core/account.js?v=mwz8yitl";
+import { store } from "../core/store.js?v=mwz8yitl";
+import { renderNav } from "./app-nav.js?v=mwz8yitl";
+import { shell, ui } from "./app-state.js?v=mwz8yitl";
+import { inkUnderline } from "./ink.js?v=mwz8yitl";
+import { bootDoodles } from "./boot-doodles.js?v=mwz8yitl";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup"]);
 const SETUP_ROUTES = new Set(["set-username", "choose-subjects"]);
@@ -210,11 +210,28 @@ export function renderShell(renderRoute) {
   shell.viewEl = document.getElementById("main");
 
   const gs = document.getElementById("global-search");
-  gs?.addEventListener("input", debounce(() => {
-    ui.q = gs.value;
-    if (location.hash === "#/search" || location.hash === "") renderRoute("search");
-    else location.hash = "#/search";
-  }, 220));
+  if (gs) {
+    // Keep the input in sync with ui.q (e.g. when arriving via #/search?q=…)
+    gs.value = ui.q || "";
+
+    gs.addEventListener("input", debounce(() => {
+      ui.q = gs.value;
+      // Always navigate to the search page so results render there.
+      const next = ui.q ? `#/search?q=${encodeURIComponent(ui.q)}` : "#/search";
+      const wasSearch = location.hash.replace(/\?.*$/, "") === "#/search";
+      location.hash = next;
+      // If already on /search, hashchange won't fire — force a re-render.
+      if (wasSearch) renderRoute("search");
+    }, 220));
+
+    gs.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        ui.q = gs.value;
+        location.hash = ui.q ? `#/search?q=${encodeURIComponent(ui.q)}` : "#/search";
+      }
+    });
+  }
 
   renderNav();
 }

@@ -9,9 +9,9 @@
  * Pure logic — no DOM, no framework. Can be unit-tested independently.
  */
 
-import { makeQuestionSession } from "../data/models.js?v=mwz8hppl";
-import { saveQuestionSession } from "../data/repository.js?v=mwz8hppl";
-import { currentUser } from "../../../core/supabase.js?v=mwz8hppl";
+import { makeQuestionSession } from "../data/models.js?v=mwz8yitl";
+import { saveQuestionSession } from "../data/repository.js?v=mwz8yitl";
+import { currentUser } from "../../../core/supabase.js?v=mwz8yitl";
 
 /** Create a new question session state. */
 export function createQuestionState(questions, options = {}) {

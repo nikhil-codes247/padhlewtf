@@ -9,10 +9,10 @@
  * Rather than dumping the visitor back on the landing page, the view switches
  * to a "check your inbox" state and remembers the address for this tab.
  */
-import { debounce, esc } from "../dom.js?v=mwz8hppl";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz8hppl";
-import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz8hppl";
-import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz8hppl";
+import { debounce, esc } from "../dom.js?v=mwz8yitl";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz8yitl";
+import { account, checkUsernameAvailability, pendingSignup } from "../../core/account.js?v=mwz8yitl";
+import { signInWithGoogleIdToken, loadGsiScript, googleClientId } from "../../core/supabase.js?v=mwz8yitl";
 
 const BENEFITS = [
   "Your subjects, saved to your account",

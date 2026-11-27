@@ -3,9 +3,9 @@
  * views stay declarative; interaction is wired once by the app's event layer
  * (`data-act` / `data-*`), never by per-component listeners.
  */
-import { esc, fmtPct, fmtNum, initials, pctTone } from "./dom.js?v=mwz8hppl";
-import { deadlineStatus, relative, fmtShort } from "../core/dates.js?v=mwz8hppl";
-import { mascot } from "./mascot.js?v=mwz8hppl";
+import { esc, fmtPct, fmtNum, initials, pctTone } from "./dom.js?v=mwz8yitl";
+import { deadlineStatus, relative, fmtShort } from "../core/dates.js?v=mwz8yitl";
+import { mascot } from "./mascot.js?v=mwz8yitl";
 
 /* --------------------------------------------------------------- quests --- */
 /**

@@ -15,7 +15,7 @@
  * card always shows meaningful work rather than a single number. The `kind`
  * only changes the headline, accent and caption.
  */
-import { STREAK_MILESTONES } from "./constants.js?v=mwz8hppl";
+import { STREAK_MILESTONES } from "./constants.js?v=mwz8yitl";
 
 export const SHARE_CARD_KIND_LABEL = {
   SNAPSHOT: "Full snapshot",

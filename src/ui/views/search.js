@@ -1,7 +1,7 @@
-import { esc, fmtNum } from "../dom.js?v=mwz8hppl";
-import { chip, emptyState, sectionCard, subjectMark } from "../components.js?v=mwz8hppl";
-import { fmtDuration } from "../../core/dates.js?v=mwz8hppl";
-import { filterBySubject, taskSubjectId } from "../selection.js?v=mwz8hppl";
+import { esc, fmtNum } from "../dom.js?v=mwz8yitl";
+import { chip, emptyState, sectionCard, subjectMark } from "../components.js?v=mwz8yitl";
+import { fmtDuration } from "../../core/dates.js?v=mwz8yitl";
+import { filterBySubject, taskSubjectId } from "../selection.js?v=mwz8yitl";
 
 const KINDS = [
   { id: "chapters", label: "Chapters" },
@@ -23,17 +23,23 @@ export default {
     const needle = q.toLowerCase();
     const hit = (...vals) => vals.filter(Boolean).join(" ").toLowerCase().includes(needle);
 
+    const chapters = Array.isArray(store.state.chapters) ? store.state.chapters : [];
+    const nodes = Array.isArray(store.state.nodes) ? store.state.nodes : [];
+    const notes = Array.isArray(store.state.notes) ? store.state.notes : [];
+    const sessions = Array.isArray(store.state.sessions) ? store.state.sessions : [];
+    const planner = Array.isArray(store.state.planner) ? store.state.planner : [];
+
     const results = {
-      chapters: filterBySubject(store, store.state.chapters, (c) => c.subjectId)
-        .filter((c) => hit(c.name, c.unit, c.ruleNote, c.nextAction, ...(c.tags || []))),
-      items: filterBySubject(store, store.state.nodes, (n) => store.chapter(n.chapterId)?.subjectId)
-        .filter((n) => hit(n.name, n.notes, ...(n.tags || []))),
-      notes: filterBySubject(store, store.state.notes, (n) => n.subjectId)
-        .filter((n) => hit(n.text)),
-      sessions: filterBySubject(store, store.state.sessions, (s) => s.subjectId)
-        .filter((s) => hit(s.notes, s.outcome)),
-      planner: filterBySubject(store, store.state.planner, (p) => taskSubjectId(store, p))
-        .filter((p) => hit(p.title, p.task, p.target, p.topicLabel)),
+      chapters: filterBySubject(store, chapters, (c) => c?.subjectId)
+        .filter((c) => c && hit(c.name, c.unit, c.ruleNote, c.nextAction, ...(c.tags || []))),
+      items: filterBySubject(store, nodes, (n) => n?.chapterId ? store.chapter(n.chapterId)?.subjectId : null)
+        .filter((n) => n && hit(n.name, n.notes, ...(n.tags || []))),
+      notes: filterBySubject(store, notes, (n) => n?.subjectId)
+        .filter((n) => n && hit(n.text)),
+      sessions: filterBySubject(store, sessions, (s) => s?.subjectId)
+        .filter((s) => s && hit(s.notes, s.outcome)),
+      planner: filterBySubject(store, planner, (p) => p ? taskSubjectId(store, p) : null)
+        .filter((p) => p && hit(p.title, p.task, p.target, p.topicLabel)),
     };
     const total = Object.values(results).reduce((a, r) => a + r.length, 0);
 

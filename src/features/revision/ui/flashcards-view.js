@@ -14,22 +14,22 @@
  * All interactions wired through `data-act` (delegated by app.js).
  */
 
-import { esc } from "../../../ui/dom.js?v=mwz8hppl";
-import { sectionCard, emptyState, bar, chip, metricCard } from "../../../ui/components.js?v=mwz8hppl";
-import { renderMath } from "../math/katex.js?v=mwz8hppl";
+import { esc } from "../../../ui/dom.js?v=mwz8yitl";
+import { sectionCard, emptyState, bar, chip, metricCard } from "../../../ui/components.js?v=mwz8yitl";
+import { renderMath } from "../math/katex.js?v=mwz8yitl";
 import {
   createFlashcardState, getCurrentCard, getProgressPct,
   isComplete, flipCard, prevCard, assessCard, saveSessionSummary,
-} from "../logic/flashcard-flow.js?v=mwz8hppl";
-import { ensureRevisionContent } from "../data/repository.js?v=mwz8hppl";
+} from "../logic/flashcard-flow.js?v=mwz8yitl";
+import { ensureRevisionContent } from "../data/repository.js?v=mwz8yitl";
 import {
   loadCatalogueIndex,
   loadChapterFlashcards,
   getSubjects,
   getChaptersForSubject,
   getChapterCounts,
-} from "../data/catalogue.js?v=mwz8hppl";
-import { currentUser } from "../../../core/supabase.js?v=mwz8hppl";
+} from "../data/catalogue.js?v=mwz8yitl";
+import { currentUser } from "../../../core/supabase.js?v=mwz8yitl";
 
 const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard"];
 

@@ -22,26 +22,26 @@
 import {
   selectRows, insertRows, upsertRows, deleteRows, currentUser,
   SupabaseError,
-} from "./supabase.js?v=mwz8hppl";
-import { DEFAULT_SETTINGS } from "./settings.js?v=mwz8hppl";
-import { computeProgress, aggregateTime, buildNodeIndex } from "./progress.js?v=mwz8hppl";
-import { recommendNext } from "./recommend.js?v=mwz8hppl";
-import { newId } from "./ids.js?v=mwz8hppl";
-import { todayISO, addDays, diffDays } from "./dates.js?v=mwz8hppl";
-import { exportBundle, validateBundle, bundleToStoreMap, SCHEMA_VERSION } from "./exportimport.js?v=mwz8hppl";
-import { requiredName, minutesOrNull, dateOrNull, parseTags, STATUSES, inSet, validateSession, clampSessionMinutes } from "./validate.js?v=mwz8hppl";
-import { buildPlanEntries } from "./planLoader.js?v=mwz8hppl";
-import { computeStreaks, buildDayActivity, qualifiesForStreak, heatmapLevel } from "./streak.js?v=mwz8hppl";
-import { DEFAULT_TAGS, SEED_VERSION } from "./defaultTags.js?v=mwz8hppl";
+} from "./supabase.js?v=mwz8yitl";
+import { DEFAULT_SETTINGS } from "./settings.js?v=mwz8yitl";
+import { computeProgress, aggregateTime, buildNodeIndex } from "./progress.js?v=mwz8yitl";
+import { recommendNext } from "./recommend.js?v=mwz8yitl";
+import { newId } from "./ids.js?v=mwz8yitl";
+import { todayISO, addDays, diffDays } from "./dates.js?v=mwz8yitl";
+import { exportBundle, validateBundle, bundleToStoreMap, SCHEMA_VERSION } from "./exportimport.js?v=mwz8yitl";
+import { requiredName, minutesOrNull, dateOrNull, parseTags, STATUSES, inSet, validateSession, clampSessionMinutes } from "./validate.js?v=mwz8yitl";
+import { buildPlanEntries } from "./planLoader.js?v=mwz8yitl";
+import { computeStreaks, buildDayActivity, qualifiesForStreak, heatmapLevel } from "./streak.js?v=mwz8yitl";
+import { DEFAULT_TAGS, SEED_VERSION } from "./defaultTags.js?v=mwz8yitl";
 import {
   totalPoints, levelForPoints, pointsForSession, remainingChecklistAwards, shouldAwardDailyGoal,
   sessionDedupeKey, itemDedupeKey, revisionDedupeKey, doubtDedupeKey, dailyGoalDedupeKey,
-} from "./gamification.js?v=mwz8hppl";
-import { evaluateAchievements } from "./achievements.js?v=mwz8hppl";
-import { buildQuests, questDedupeKey } from "./quests.js?v=mwz8hppl";
-import { summariseFlashcards, summariseQuestions } from "./revisionStats.js?v=mwz8hppl";
-import { STREAK_MIN_ITEMS, STREAK_MIN_MINUTES, STREAK_MILESTONES, POINTS } from "./constants.js?v=mwz8hppl";
-import { brand } from "./branding.js?v=mwz8hppl";
+} from "./gamification.js?v=mwz8yitl";
+import { evaluateAchievements } from "./achievements.js?v=mwz8yitl";
+import { buildQuests, questDedupeKey } from "./quests.js?v=mwz8yitl";
+import { summariseFlashcards, summariseQuestions } from "./revisionStats.js?v=mwz8yitl";
+import { STREAK_MIN_ITEMS, STREAK_MIN_MINUTES, STREAK_MILESTONES, POINTS } from "./constants.js?v=mwz8yitl";
+import { brand } from "./branding.js?v=mwz8yitl";
 
 /* ----------------------------------------------------------- lazy-loading -- */
 

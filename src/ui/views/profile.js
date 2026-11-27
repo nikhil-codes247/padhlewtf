@@ -10,14 +10,14 @@
  * achievements → quests → rewards → share studio. The card always wears the
  * Looseleaf design, the same one the app ships.
  */
-import { esc, fmtNum } from "../dom.js?v=mwz8hppl";
-import { bar, chip, emptyState, metricCard, questBoard, sectionCard } from "../components.js?v=mwz8hppl";
-import { fmtDuration } from "../../core/dates.js?v=mwz8hppl";
-import { POINT_RULES_TEXT } from "../../core/gamification.js?v=mwz8hppl";
-import { HEATMAP_BUCKETS, STREAK_MILESTONES } from "../../core/constants.js?v=mwz8hppl";
-import { buildShareCard, shareCardKinds, SHARE_CARD_KIND_LABEL } from "../../core/shareCard.js?v=mwz8hppl";
-import { SHARE_THEME_SPECS, SHARE_FORMATS, SHARE_FORMAT_SPECS } from "../../core/shareThemes.js?v=mwz8hppl";
-import { drawCard, shareIntents } from "../shareRender.js?v=mwz8hppl";
+import { esc, fmtNum } from "../dom.js?v=mwz8yitl";
+import { bar, chip, emptyState, metricCard, questBoard, sectionCard } from "../components.js?v=mwz8yitl";
+import { fmtDuration } from "../../core/dates.js?v=mwz8yitl";
+import { POINT_RULES_TEXT } from "../../core/gamification.js?v=mwz8yitl";
+import { HEATMAP_BUCKETS, STREAK_MILESTONES } from "../../core/constants.js?v=mwz8yitl";
+import { buildShareCard, shareCardKinds, SHARE_CARD_KIND_LABEL } from "../../core/shareCard.js?v=mwz8yitl";
+import { SHARE_THEME_SPECS, SHARE_FORMATS, SHARE_FORMAT_SPECS } from "../../core/shareThemes.js?v=mwz8yitl";
+import { drawCard, shareIntents } from "../shareRender.js?v=mwz8yitl";
 
 const TONE_CLASS = { info: "info", ok: "ok", accent: "acc", bad: "bad", warn: "warn" };
 

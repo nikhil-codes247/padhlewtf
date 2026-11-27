@@ -6,9 +6,9 @@
  * Pure logic — no DOM, no framework. Can be unit-tested independently.
  */
 
-import { makeFlashcardProgress, makeFlashcardSession } from "../data/models.js?v=mwz8hppl";
-import { upsertFlashcardProgress, saveFlashcardSession } from "../data/repository.js?v=mwz8hppl";
-import { currentUser } from "../../../core/supabase.js?v=mwz8hppl";
+import { makeFlashcardProgress, makeFlashcardSession } from "../data/models.js?v=mwz8yitl";
+import { upsertFlashcardProgress, saveFlashcardSession } from "../data/repository.js?v=mwz8yitl";
+import { currentUser } from "../../../core/supabase.js?v=mwz8yitl";
 
 const ACTIONS = { KNOW_IT: "knowIt", NEED_PRACTICE: "needPractice", MARK_REVIEW: "markReview" };
 

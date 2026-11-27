@@ -7,19 +7,19 @@
  * Signed-in PAID students see the same landing with no buy panel and a
  * "full access" badge instead.
  */
-import { esc, fmtNum } from "../dom.js?v=mwz8hppl";
-import { chip } from "../components.js?v=mwz8hppl";
-import { brand, TAGLINE } from "../../core/branding.js?v=mwz8hppl";
-import { isSignedIn, hasPaidAccess } from "../../core/account.js?v=mwz8hppl";
-import { config } from "../../core/config.js?v=mwz8hppl";
-import { claimPurchase } from "../../core/entitlement.js?v=mwz8hppl";
-import { startCheckout } from "../checkout.js?v=mwz8hppl";
-import { ALL_SUBJECT_IDS } from "../../core/subjects.js?v=mwz8hppl";
-import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js?v=mwz8hppl";
-import { mascot } from "../mascot.js?v=mwz8hppl";
-import { toast } from "../app-toasts.js?v=mwz8hppl";
-import { shell } from "../app-state.js?v=mwz8hppl";
-import { openModal } from "../app-modals.js?v=mwz8hppl";
+import { esc, fmtNum } from "../dom.js?v=mwz8yitl";
+import { chip } from "../components.js?v=mwz8yitl";
+import { brand, TAGLINE } from "../../core/branding.js?v=mwz8yitl";
+import { isSignedIn, hasPaidAccess } from "../../core/account.js?v=mwz8yitl";
+import { config } from "../../core/config.js?v=mwz8yitl";
+import { claimPurchase } from "../../core/entitlement.js?v=mwz8yitl";
+import { startCheckout } from "../checkout.js?v=mwz8yitl";
+import { ALL_SUBJECT_IDS } from "../../core/subjects.js?v=mwz8yitl";
+import { subjectMeta, syllabusTotals, loadPublicCatalogue } from "../../core/subjectCatalog.js?v=mwz8yitl";
+import { mascot } from "../mascot.js?v=mwz8yitl";
+import { toast } from "../app-toasts.js?v=mwz8yitl";
+import { shell } from "../app-state.js?v=mwz8yitl";
+import { openModal } from "../app-modals.js?v=mwz8yitl";
 
 const FEATURES = [
   { ico: "▤", title: "Whole syllabus, mapped", text: "Every CBSE subject, unit and chapter in one checklist." },

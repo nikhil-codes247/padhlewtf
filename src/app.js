@@ -10,72 +10,72 @@
  * modules, wires them together in main(), and exports renderRoute for use by
  * split-out modules (clocks, events, shells).
  */
-import { store } from "./core/store.js?v=mwz8hppl";
-import { todayISO } from "./core/dates.js?v=mwz8hppl";
-import { esc, h } from "./ui/dom.js?v=mwz8hppl";
-import { ACTIONS } from "./ui/actions.js?v=mwz8hppl";
+import { store } from "./core/store.js?v=mwz8yitl";
+import { todayISO } from "./core/dates.js?v=mwz8yitl";
+import { esc, h } from "./ui/dom.js?v=mwz8yitl";
+import { ACTIONS } from "./ui/actions.js?v=mwz8yitl";
 Object.assign(ACTIONS, FlashcardActions.ACTIONS, QuestionActions.ACTIONS, BoardExamActions);
-import { brand, TAGLINE } from "./core/branding.js?v=mwz8hppl";
-import { nativeTheme } from "./core/native.js?v=mwz8hppl";
+import { brand, TAGLINE } from "./core/branding.js?v=mwz8yitl";
+import { nativeTheme } from "./core/native.js?v=mwz8yitl";
 import {
   account, initAccount, isSignedIn, subscribeAccount, hasPaidAccess, hasProfile, hasSelection, signOutAccount,
-} from "./core/account.js?v=mwz8hppl";
-import { isPaidRoute } from "./ui/app-router.js?v=mwz8hppl";
-import { recoverPurchase } from "./core/entitlement.js?v=mwz8hppl";
-import { getOAuthError } from "./core/supabase.js?v=mwz8hppl";
-import { startCheckout } from "./ui/checkout.js?v=mwz8hppl";
+} from "./core/account.js?v=mwz8yitl";
+import { isPaidRoute } from "./ui/app-router.js?v=mwz8yitl";
+import { recoverPurchase } from "./core/entitlement.js?v=mwz8yitl";
+import { getOAuthError } from "./core/supabase.js?v=mwz8yitl";
+import { startCheckout } from "./ui/checkout.js?v=mwz8yitl";
 /* ------------------------------------------------------------- views --- */
-import dashboardView from "./ui/views/dashboard.js?v=mwz8hppl";
-import syllabusView from "./ui/views/syllabus.js?v=mwz8hppl";
-import curriculumView from "./ui/views/curriculum.js?v=mwz8hppl";
-import subjectView from "./ui/views/subject.js?v=mwz8hppl";
-import chapterView from "./ui/views/chapter.js?v=mwz8hppl";
-import plannerView from "./ui/views/planner.js?v=mwz8hppl";
-import timerView from "./ui/views/timer.js?v=mwz8hppl";
-import FlashcardsView from "./features/revision/ui/flashcards-view.js?v=mwz8hppl";
-import QuestionsView from "./features/revision/ui/questions-view.js?v=mwz8hppl";
-import * as FlashcardActions from "./features/revision/ui/flashcards-view.js?v=mwz8hppl";
-import * as QuestionActions from "./features/revision/ui/questions-view.js?v=mwz8hppl";
-import revisionView from "./ui/views/revision.js?v=mwz8hppl";
-import analyticsView from "./ui/views/analytics.js?v=mwz8hppl";
-import calendarView from "./ui/views/calendar.js?v=mwz8hppl";
-import settingsView from "./ui/views/settings.js?v=mwz8hppl";
-import searchView from "./ui/views/search.js?v=mwz8hppl";
-import profileView from "./ui/views/profile.js?v=mwz8hppl";
-import pyqView from "./ui/views/pyq.js?v=mwz8hppl";
-import roadmapView from "./ui/views/roadmap.js?v=mwz8hppl";
-import accountView from "./ui/views/account.js?v=mwz8hppl";
-import welcomeView from "./ui/views/welcome.js?v=mwz8hppl";
-import authView from "./ui/views/auth.js?v=mwz8hppl";
-import usernameView from "./ui/views/username.js?v=mwz8hppl";
-import chooseSubjectsView from "./ui/views/chooseSubjects.js?v=mwz8hppl";
-import privacyView from "./ui/views/privacy.js?v=mwz8hppl";
-import termsView from "./ui/views/terms.js?v=mwz8hppl";
-import siteNoticeView from "./ui/views/site-notice.js?v=mwz8hppl";
-import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js?v=mwz8hppl";
-import { renderOnboarding } from "./ui/onboarding.js?v=mwz8hppl";
-import notesView from "./ui/views/notes.js?v=mwz8hppl";
+import dashboardView from "./ui/views/dashboard.js?v=mwz8yitl";
+import syllabusView from "./ui/views/syllabus.js?v=mwz8yitl";
+import curriculumView from "./ui/views/curriculum.js?v=mwz8yitl";
+import subjectView from "./ui/views/subject.js?v=mwz8yitl";
+import chapterView from "./ui/views/chapter.js?v=mwz8yitl";
+import plannerView from "./ui/views/planner.js?v=mwz8yitl";
+import timerView from "./ui/views/timer.js?v=mwz8yitl";
+import FlashcardsView from "./features/revision/ui/flashcards-view.js?v=mwz8yitl";
+import QuestionsView from "./features/revision/ui/questions-view.js?v=mwz8yitl";
+import * as FlashcardActions from "./features/revision/ui/flashcards-view.js?v=mwz8yitl";
+import * as QuestionActions from "./features/revision/ui/questions-view.js?v=mwz8yitl";
+import revisionView from "./ui/views/revision.js?v=mwz8yitl";
+import analyticsView from "./ui/views/analytics.js?v=mwz8yitl";
+import calendarView from "./ui/views/calendar.js?v=mwz8yitl";
+import settingsView from "./ui/views/settings.js?v=mwz8yitl";
+import searchView from "./ui/views/search.js?v=mwz8yitl";
+import profileView from "./ui/views/profile.js?v=mwz8yitl";
+import pyqView from "./ui/views/pyq.js?v=mwz8yitl";
+import roadmapView from "./ui/views/roadmap.js?v=mwz8yitl";
+import accountView from "./ui/views/account.js?v=mwz8yitl";
+import welcomeView from "./ui/views/welcome.js?v=mwz8yitl";
+import authView from "./ui/views/auth.js?v=mwz8yitl";
+import usernameView from "./ui/views/username.js?v=mwz8yitl";
+import chooseSubjectsView from "./ui/views/chooseSubjects.js?v=mwz8yitl";
+import privacyView from "./ui/views/privacy.js?v=mwz8yitl";
+import termsView from "./ui/views/terms.js?v=mwz8yitl";
+import siteNoticeView from "./ui/views/site-notice.js?v=mwz8yitl";
+import boardExamsView, { BoardExamActions } from "./ui/views/boardExams.js?v=mwz8yitl";
+import { renderOnboarding } from "./ui/onboarding.js?v=mwz8yitl";
+import notesView from "./ui/views/notes.js?v=mwz8yitl";
 
 /* ------------------------------------------------------------- ui infra --- */
-import { ui, shell } from "./ui/app-state.js?v=mwz8hppl";
-import { parseHash, gateTarget } from "./ui/app-router.js?v=mwz8hppl";
-import { renderNav } from "./ui/app-nav.js?v=mwz8hppl";
+import { ui, shell } from "./ui/app-state.js?v=mwz8yitl";
+import { parseHash, gateTarget } from "./ui/app-router.js?v=mwz8yitl";
+import { renderNav } from "./ui/app-nav.js?v=mwz8yitl";
 import {
   ensureShell, shellFor, renderAccountGate,
-} from "./ui/app-shell.js?v=mwz8hppl";
-import { openModal, closeModal, confirm } from "./ui/app-modals.js?v=mwz8hppl";
-import { toast } from "./ui/app-toasts.js?v=mwz8hppl";
-import { captureFocus, restoreFocus } from "./ui/app-focus.js?v=mwz8hppl";
-import { tickGlobalTimer, startClocks } from "./ui/app-clocks.js?v=mwz8hppl";
+} from "./ui/app-shell.js?v=mwz8yitl";
+import { openModal, closeModal, confirm } from "./ui/app-modals.js?v=mwz8yitl";
+import { toast } from "./ui/app-toasts.js?v=mwz8yitl";
+import { captureFocus, restoreFocus } from "./ui/app-focus.js?v=mwz8yitl";
+import { tickGlobalTimer, startClocks } from "./ui/app-clocks.js?v=mwz8yitl";
 import {
   hydrateRemoteSettings, scheduleSettingsPush, resetSettingsSync, remoteSettingsReady,
-} from "./ui/app-settings-sync.js?v=mwz8hppl";
-import { connectNativeShell } from "./ui/app-native.js?v=mwz8hppl";
-import { renderFatal } from "./ui/app-fatal.js?v=mwz8hppl";
-import { initEvents } from "./ui/app-events.js?v=mwz8hppl";
-import { initSkin } from "./ui/app-skin.js?v=mwz8hppl";
-import { initDelight, resetDelight } from "./ui/app-delight.js?v=mwz8hppl";
-import { resetMoments } from "./ui/app-moments.js?v=mwz8hppl";
+} from "./ui/app-settings-sync.js?v=mwz8yitl";
+import { connectNativeShell } from "./ui/app-native.js?v=mwz8yitl";
+import { renderFatal } from "./ui/app-fatal.js?v=mwz8yitl";
+import { initEvents } from "./ui/app-events.js?v=mwz8yitl";
+import { initSkin } from "./ui/app-skin.js?v=mwz8yitl";
+import { initDelight, resetDelight } from "./ui/app-delight.js?v=mwz8yitl";
+import { resetMoments } from "./ui/app-moments.js?v=mwz8yitl";
 
 /* --------------------------------------------------------------- boot ----- */
 const ROUTES = {
@@ -341,7 +341,12 @@ export function renderRoute(reason) {
 
   ui._tagIndex = new Map(store.state.tags.map((t) => [t.label, t]));
   ui._tags = store.state.tags;
-  if (route.name === "search" && route.query.get("q") !== null) ui.q = route.query.get("q");
+  if (route.name === "search" && route.query.get("q") !== null) {
+    ui.q = route.query.get("q");
+    // Keep the search input in sync when arriving via #/search?q=…
+    const gs = document.getElementById("global-search");
+    if (gs) gs.value = ui.q;
+  }
 
   shell.ctx = makeCtx(route);
   const snap = captureFocus();

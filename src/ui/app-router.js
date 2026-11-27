@@ -10,8 +10,8 @@
  * is shown behind a blur + lock + skeleton overlay (no real data) until they
  * upgrade.
  */
-import { account } from "../core/account.js?v=mwz8hppl";
-import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js?v=mwz8hppl";
+import { account } from "../core/account.js?v=mwz8yitl";
+import { isSignedIn, hasPaidAccess, hasProfile, hasSelection } from "../core/account.js?v=mwz8yitl";
 
 const PUBLIC_ROUTES = new Set(["welcome", "login", "signup", "privacy", "terms"]);
 // Routes that are fully accessible to free (non-paid) students without a lock.
